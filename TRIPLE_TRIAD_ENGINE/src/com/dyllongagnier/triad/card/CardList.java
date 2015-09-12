@@ -2,6 +2,7 @@ package com.dyllongagnier.triad.card;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +15,7 @@ import javax.json.JsonValue;
 
 public class CardList
 {
-	public static final Map<String, Card> allCards = CardList.getCardsFromJson("resources" + File.separator + "TripleTriadCardList.json");
-	
+	public static final Map<String, Card> allCards = CardList.getCardsFromJson("resources" + File.separator + "TripleTriadCardList.json");	
 	
 	protected CardList()
 	{
@@ -24,6 +24,11 @@ public class CardList
 	public static Card getCard(String name)
 	{
 		return CardList.allCards.get(name);
+	}
+	
+	public static Collection<Card> getAllCards()
+	{
+		return Collections.unmodifiableCollection(allCards.values());
 	}
 	
 	public static Map<String, Card> getCardsFromJson(String fileName)
