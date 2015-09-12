@@ -4,7 +4,7 @@ public class Card
 {
 	public static enum Type
 	{
-		BEASTMAN, PRIMAL, GARLEAN, SCION;
+		BEASTMAN, PRIMAL, GARLEAN, SCION, NONE;
 	}
 	
 	public final int north, east, south, west;
