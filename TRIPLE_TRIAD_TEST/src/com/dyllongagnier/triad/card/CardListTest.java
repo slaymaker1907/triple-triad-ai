@@ -15,6 +15,12 @@ public class CardListTest
 	{
 	}
 	
+	/**
+	 * This method is for testing and verifies that expected and actual are equal
+	 * for the purpose of verifying cards.
+	 * @param actual The actual card.
+	 * @param expected The expected card.
+	 */
 	public static void assertCardEqual(Card actual, Card expected)
 	{
 		assertEquals(actual, expected);
@@ -27,7 +33,7 @@ public class CardListTest
 	}
 
 	@Test
-	public void TestSingleCardLookup()
+	public void testSingleCardLookup()
 	{
 		Card retrieved = CardList.getCard("Dodo");
 		assertNotNull(retrieved);
@@ -36,7 +42,7 @@ public class CardListTest
 	}
 
 	@Test
-	public void TestCardTypeLookup()
+	public void testCardTypeLookup()
 	{
 		Card retrieved = CardList.getCard("Bahamut");
 		assertNotNull(retrieved);
@@ -45,7 +51,7 @@ public class CardListTest
 	}
 	
 	@Test
-	public void VerifyCardsUnique()
+	public void verifyCardsUnique()
 	{
 		Collection<Card> allCards = CardList.getAllCards();
 		HashSet<String> cards = new HashSet<String>();
@@ -54,6 +60,27 @@ public class CardListTest
 			String name = card.name;
 			assertFalse(cards.contains(name));
 			cards.add(name);
+		}
+	}
+	
+	@Test
+	public void verifyAllCardsLookup()
+	{
+		Collection<Card> allCards = CardList.getAllCards();
+		for(Card expected : allCards)
+		{
+			Card actual = CardList.getCard(expected.name);
+			assertEquals(actual, expected);
+		}
+	}
+	
+	@Test
+	public void verifyAllCardsNonNull()
+	{
+		Collection<Card> allCards = CardList.getAllCards();
+		for(Card card : allCards)
+		{
+			assertNotNull(card);
 		}
 	}
 }
