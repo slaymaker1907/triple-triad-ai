@@ -17,9 +17,9 @@ import com.dyllongagnier.triad.card.Player;
  */
 public class BoardState
 {
-	protected final EnumMap<Player, Set<Card>> playerHands = new EnumMap<>(
+	private final EnumMap<Player, Set<Card>> playerHands = new EnumMap<>(
 			Player.class);
-	protected final Card[][] playedCards;
+	private final Card[][] playedCards;
 
 	/**
 	 * Constructs a new BoardState. Unless doing something particular, the
