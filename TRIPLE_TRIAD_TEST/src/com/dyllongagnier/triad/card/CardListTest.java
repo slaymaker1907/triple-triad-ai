@@ -83,4 +83,11 @@ public class CardListTest
 			assertNotNull(card);
 		}
 	}
+	
+	@Test
+	public void numericalFieldsInOrder()
+	{
+		Card expected = new Card(2, 4, 3, 5, "Pudding", Card.Type.NONE, 1);
+		assertCardEqual(CardList.getCard("Pudding"), expected);
+	}
 }
