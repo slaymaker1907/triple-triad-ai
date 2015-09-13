@@ -35,13 +35,14 @@ public class GameControls
 	 */
 	public void playCard(Card card, int row, int col)
 	{
-		// This should be an invariant for cards held in hand.
-		assert card.holdingPlayer == currentPlayer;
-		
-		if (!this.currentTurn.getHand(this.currentPlayer).contains(card))
-			throw new IllegalArgumentException("Attempted to play a card not in hand.");
 		if (this.playedCard)
 			throw new IllegalArgumentException("This turn is already complete and can not be changed.");
+		if (!this.currentTurn.getHand(this.currentPlayer).contains(card))
+			throw new IllegalArgumentException("Attempted to play a card not in hand.");
+		if (!this.currentTurn.spotEmpty(row, col))
+			throw new IllegalArgumentException();
+		// This should be an invariant for cards held in hand.
+		assert card.holdingPlayer == currentPlayer;
 		
 		this.nextTurn.playCardAndCapture(this.currentPlayer, card, row, col);
 		this.playedCard = true;
