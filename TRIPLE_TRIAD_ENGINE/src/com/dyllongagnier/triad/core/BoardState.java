@@ -61,6 +61,17 @@ public class BoardState
 	}
 	
 	/**
+	 * This method returns if the specified spot on the board is currently empty.
+	 * @param row The row of the specified spot.
+	 * @param col The column of the specified spot.
+	 * @return True if and only if the specified spot is empty.
+	 */
+	public boolean spotEmpty(int row, int col)
+	{
+		return this.getPlayedCard(row, col) == null;
+	}
+	
+	/**
 	 * This class is usedto construct BoardStates and is mutable.
 	 */
 	public static class Builder
