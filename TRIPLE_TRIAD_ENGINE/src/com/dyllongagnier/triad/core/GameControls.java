@@ -43,7 +43,7 @@ public class GameControls
 		if (this.playedCard)
 			throw new IllegalArgumentException("This turn is already complete and can not be changed.");
 		
-		this.nextTurn.playCardFromHand(this.currentPlayer, card, row, col);
+		this.nextTurn.playCardAndCapture(this.currentPlayer, card, row, col);
 		this.playedCard = true;
 	}
 	
