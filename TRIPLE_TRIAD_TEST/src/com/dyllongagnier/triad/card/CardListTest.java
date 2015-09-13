@@ -2,6 +2,9 @@ package com.dyllongagnier.triad.card;
 
 import static org.junit.Assert.*;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,5 +42,18 @@ public class CardListTest
 		assertNotNull(retrieved);
 		Card expected = new Card(9, 5, 9, 6, "Bahamut", Card.Type.PRIMAL, 5);
 		assertCardEqual(retrieved, expected);
+	}
+	
+	@Test
+	public void VerifyCardsUnique()
+	{
+		Collection<Card> allCards = CardList.getAllCards();
+		HashSet<String> cards = new HashSet<String>();
+		for(Card card : allCards)
+		{
+			String name = card.name;
+			assertFalse(cards.contains(name));
+			cards.add(name);
+		}
 	}
 }
