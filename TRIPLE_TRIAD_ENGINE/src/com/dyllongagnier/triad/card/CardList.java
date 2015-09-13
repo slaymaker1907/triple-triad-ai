@@ -13,25 +13,37 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
+/**
+ * This is a listing of all implemented cards. It can not be instantiated and is a static class.
+ */
 public class CardList
 {
-	public static final Map<String, Card> allCards = CardList.getCardsFromJson("resources" + File.separator + "TripleTriadCardList.json");	
+	private static final Map<String, Card> allCards = CardList.getCardsFromJson("resources" + File.separator + "TripleTriadCardList.json");	
 	
 	protected CardList()
 	{
 	}
 	
+	/**
+	 * This method returns the card with a given name. This is the preferred way to access cards.
+	 * @param name The name of the  card to return.
+	 * @return The Card object with a given name.
+	 */
 	public static Card getCard(String name)
 	{
 		return CardList.allCards.get(name);
 	}
 	
+	/**
+	 * This method returns a collection with all implemented cards. This collection is immutable.
+	 * @return All implemented cards.
+	 */
 	public static Collection<Card> getAllCards()
 	{
 		return Collections.unmodifiableCollection(allCards.values());
 	}
 	
-	public static Map<String, Card> getCardsFromJson(String fileName)
+	private static Map<String, Card> getCardsFromJson(String fileName)
 	{
 		HashMap<String, Card> result = new HashMap<>();
 		try
