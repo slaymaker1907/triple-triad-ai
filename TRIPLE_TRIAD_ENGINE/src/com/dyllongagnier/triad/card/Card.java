@@ -52,11 +52,35 @@ public class Card
 		try
 		{
 			Card otherCard = (Card)other;
-			return this.name.equals(otherCard.name);
+			return this.toString().equals(otherCard.toString());
 		}
 		catch (Exception e)
 		{
 			return false;
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder("name;");
+		builder.append(this.cardType);
+		builder.append(';');
+		builder.append(this.cardRarity);
+		builder.append(';');
+		builder.append(this.north);
+		builder.append(';');
+		builder.append(this.east);
+		builder.append(';');
+		builder.append(this.south);
+		builder.append(';');
+		builder.append(this.west);
+		return builder.toString();
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return this.toString().hashCode();
 	}
 }
