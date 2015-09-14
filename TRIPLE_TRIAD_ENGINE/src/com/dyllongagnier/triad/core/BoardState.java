@@ -9,6 +9,7 @@ import java.util.function.BiConsumer;
 
 import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.card.UndeployedCard;
 
 /**
  * This class represents an immutable BoardState for triple triad. This is
@@ -17,7 +18,7 @@ import com.dyllongagnier.triad.card.Player;
  */
 public class BoardState
 {
-	private final EnumMap<Player, Set<Card>> playerHands = new EnumMap<>(
+	private final EnumMap<Player, Set<UndeployedCard>> playerHands = new EnumMap<>(
 			Player.class);
 	private final Card[][] playedCards;
 
@@ -34,12 +35,12 @@ public class BoardState
 	 *            directly stores this array, so any modifications to the input
 	 *            array will be reflected in this state.
 	 */
-	protected BoardState(EnumMap<Player, Set<Card>> playerHands,
+	protected BoardState(EnumMap<Player, Set<UndeployedCard>> playerHands,
 			Card[][] playedCards)
 	{
-		Set<Card> opponentCards = Collections.unmodifiableSet(playerHands
+		Set<UndeployedCard> opponentCards = Collections.unmodifiableSet(playerHands
 				.get(Player.OPPONENT));
-		Set<Card> selfCards = Collections.unmodifiableSet(playerHands
+		Set<UndeployedCard> selfCards = Collections.unmodifiableSet(playerHands
 				.get(Player.SELF));
 		this.playerHands.put(Player.OPPONENT, opponentCards);
 		this.playerHands.put(Player.SELF, selfCards);
@@ -54,7 +55,7 @@ public class BoardState
 	 *            not Player.NONE.
 	 * @return An unmodifiable set view of the hand.
 	 */
-	public Set<Card> getHand(Player player)
+	public Set<UndeployedCard> getHand(Player player)
 	{
 		if (player == Player.NONE)
 			throw new IllegalArgumentException();
@@ -180,7 +181,7 @@ public class BoardState
 	 */
 	public static class Builder
 	{
-		protected final EnumMap<Player, Set<Card>> playerHands;
+		protected final EnumMap<Player, Set<UndeployedCard>> playerHands;
 		protected final Card[][] playedCards = new Card[9][9];
 
 		/**
@@ -253,7 +254,8 @@ public class BoardState
 
 		/**
 		 * This method plays a given card from a player's hand at (row,col)
-		 * using the playCardSafely method.
+		 * using the playCardSafely method. It will get the card by calling
+		 * card.deploy().
 		 * 
 		 * @param player
 		 *            The player to take the card from.
@@ -263,13 +265,15 @@ public class BoardState
 		 *            The row to play the card at.
 		 * @param col
 		 *            The column to play the card at.
-		 * @return This object.
+		 * @return This card that deploy was called upon.
 		 */
-		public Builder playCardFromHand(Player player, Card card, int row,
+		public Card playCardFromHand(Player player, UndeployedCard card, int row,
 				int col)
 		{
-			return this.removeFromHand(player, card).placeCardSafely(card, row,
-					col);
+			this.removeFromHand(player, card);
+			Card actualCard = card.deploy();
+			this.placeCardSafely(actualCard, row, col);
+			return actualCard;
 		}
 
 		/**
@@ -281,14 +285,14 @@ public class BoardState
 		 *            The cards to set the hand as.
 		 * @return This object.
 		 */
-		public Builder setHand(Player player, Card... cards)
+		public Builder setHand(Player player, UndeployedCard... cards)
 		{
 			if (player == null || cards == null)
 				throw new NullPointerException();
 			if (player == Player.NONE)
 				throw new IllegalArgumentException();
 
-			Set<Card> playerCards = playerHands.get(player);
+			Set<UndeployedCard> playerCards = playerHands.get(player);
 			playerCards.clear();
 			playerCards.addAll(Arrays.asList(cards));
 			return this;
@@ -303,14 +307,14 @@ public class BoardState
 		 *            The cards to add to the player's hand.
 		 * @return This object.
 		 */
-		public Builder addToHand(Player player, Card... cards)
+		public Builder addToHand(Player player, UndeployedCard... cards)
 		{
 			if (player == null || cards == null)
 				throw new NullPointerException();
 			if (player == Player.NONE)
 				throw new IllegalArgumentException();
 
-			Set<Card> playerCards = playerHands.get(player);
+			Set<UndeployedCard> playerCards = playerHands.get(player);
 			playerCards.addAll(Arrays.asList(cards));
 			return this;
 		}
@@ -324,15 +328,15 @@ public class BoardState
 		 *            The cards to remove from the player's hand.
 		 * @return This object.
 		 */
-		public Builder removeFromHand(Player player, Card... cards)
+		public Builder removeFromHand(Player player, UndeployedCard... cards)
 		{
 			if (player == null || cards == null)
 				throw new NullPointerException();
 			if (player == Player.NONE)
 				throw new IllegalArgumentException();
 
-			Set<Card> playerCards = playerHands.get(player);
-			for (Card card : cards)
+			Set<UndeployedCard> playerCards = playerHands.get(player);
+			for (UndeployedCard card : cards)
 				if (!playerCards.contains(card))
 					throw new IllegalArgumentException("Hand does not contain:"
 							+ card);
@@ -341,9 +345,11 @@ public class BoardState
 			return this;
 		}
 
-		public Builder playCardAndCapture(Player player, Card card, int row,
+		public Builder playCardAndCapture(Player player, UndeployedCard undeployedCard, int row,
 				int col)
 		{
+			Card card = this.playCardFromHand(player, undeployedCard, row, col);
+			
 			CardReplacementFunc tryToCapture = (otherCard, otherRow, otherCol) ->
 			{
 				if (BoardState.compareCardStrengths(card, otherCard, row, col, otherRow, otherCol))
@@ -351,8 +357,8 @@ public class BoardState
 				else
 					return otherCard;
 			};
-			this.playCardFromHand(player, card, row, col);
 			this.replaceNeighboringSquares(row, col, tryToCapture);
+			
 			return this;
 		}
 

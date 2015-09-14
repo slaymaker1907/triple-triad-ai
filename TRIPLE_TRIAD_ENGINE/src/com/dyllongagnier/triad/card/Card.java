@@ -3,7 +3,7 @@ package com.dyllongagnier.triad.card;
 /**
  * An immutable representation of a card.
  */
-public class Card
+public class Card implements UndeployedCard
 {
 	/**
 	 * The type/tribe of a card. Most of the time, this field does not matter. However, this field is used in ascension.
@@ -127,5 +127,11 @@ public class Card
 	public Card setHoldingPlayer(Player input)
 	{
 		return new Card(this.north, this.east, this.south, this.west, this.name, this.cardType, this.cardRarity, input);
+	}
+
+	@Override
+	public Card deploy() 
+	{
+		return this;
 	}
 }
