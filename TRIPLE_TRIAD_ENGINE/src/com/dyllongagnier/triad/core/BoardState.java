@@ -345,6 +345,15 @@ public class BoardState
 			return this;
 		}
 
+		/**
+		 * This method deploys the undeployedCard, plays that result on the board at the specified position,
+		 * and then captures adjacent cards if necessary.
+		 * @param player The player who owns undeployedCard in their hand.
+		 * @param undeployedCard The card to play.
+		 * @param row The row to play the card at.
+		 * @param col The column to play the card at.s
+		 * @return This object.
+		 */
 		public Builder playCardAndCapture(Player player, UndeployedCard undeployedCard, int row,
 				int col)
 		{
@@ -362,6 +371,14 @@ public class BoardState
 			return this;
 		}
 
+		/**
+		 * This method uses the input function to replace cards neighboring the row, col square
+		 * with new cards.
+		 * @param row The row to check adjacent squares of.
+		 * @param col The column to check adjacent squares of.
+		 * @param replacementFunc The function to use for replacing these cards.
+		 * @return This object.
+		 */
 		public Builder replaceNeighboringSquares(int row, int col,
 				CardReplacementFunc replacementFunc)
 		{
@@ -383,8 +400,7 @@ public class BoardState
 
 		/**
 		 * This method constructs a BoardState given this object.
-		 * 
-		 * @return
+		 * @return A new BoardState using the input parameters to this object.
 		 */
 		public BoardState build()
 		{
