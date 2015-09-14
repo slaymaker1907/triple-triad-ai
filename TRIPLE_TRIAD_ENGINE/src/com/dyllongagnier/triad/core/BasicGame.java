@@ -1,7 +1,7 @@
 package com.dyllongagnier.triad.core;
 
-import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.card.UndeployedCard;
 
 public class BasicGame
 {
@@ -14,8 +14,8 @@ public class BasicGame
 	 * @param opponentAgent The agent for OPPONENT. The agent to use for playing Player.OPPONENT.
 	 * @return The final BoardState of the game.
 	 */
-	public static BoardState runGame(Player firstPlayer, Card[] selfCards, Card[] opponentCards, GameAgent selfAgent,
-			GameAgent opponentAgent)
+	public static BoardState runGame(Player firstPlayer, UndeployedCard[] selfCards, UndeployedCard[] opponentCards,
+			GameAgent selfAgent, GameAgent opponentAgent)
 	{
 		if (firstPlayer == Player.NONE)
 			throw new IllegalArgumentException();
@@ -49,14 +49,10 @@ public class BasicGame
 	 * @param opponentCards The cards of Player.OPPONENT. Must be 5 cards.
 	 * @return A board state with no cards played and the input cards in the appropriate hands.
 	 */
-	public static BoardState getInitialState(Card[] selfCards, Card[] opponentCards)
+	public static BoardState getInitialState(UndeployedCard[] selfCards, UndeployedCard[] opponentCards)
 	{
 		if (selfCards.length != 5 || opponentCards.length != 5)
 			throw new IllegalArgumentException("selfCards.length:" + selfCards.length + " opponentCards.length:" + opponentCards.length);
-		for(int i = 0; i < selfCards.length; i++)
-			selfCards[i] = selfCards[i].setHoldingPlayer(Player.SELF);
-		for(int i = 0; i < opponentCards.length; i++)
-			opponentCards[i] = opponentCards[i].setHoldingPlayer(Player.OPPONENT);
 		return new BoardState.Builder()
 			.setHand(Player.SELF, selfCards)
 			.setHand(Player.OPPONENT, opponentCards)

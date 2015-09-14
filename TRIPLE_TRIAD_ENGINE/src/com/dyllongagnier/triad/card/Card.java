@@ -134,4 +134,10 @@ public class Card implements UndeployedCard
 	{
 		return this;
 	}
+	
+	@Override
+	public boolean isVisible()
+	{
+		return true;
+	}
 }
