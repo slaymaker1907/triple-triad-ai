@@ -5,6 +5,7 @@ package com.dyllongagnier.triad.card;
  * The engine hashes these objects, so implementing classes should override the hashCode and
  * equals methods.
  */
+@FunctionalInterface
 public interface UndeployedCard 
 {
 	/**
