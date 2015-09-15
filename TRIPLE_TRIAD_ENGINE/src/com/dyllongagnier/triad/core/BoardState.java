@@ -7,10 +7,12 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
+import com.dyllongagnier.triad.core.functions.DeployedCardComparators;
 
 /**
  * This class represents an immutable BoardState for triple triad. This is
@@ -21,7 +23,7 @@ public class BoardState
 {
 	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands = new EnumMap<>(
 			Player.class);
-	private final Card[][] playedCards;
+	private final DeployedCard[][] playedCards;
 
 	/**
 	 * Constructs a new BoardState. Unless doing something particular, the
@@ -37,7 +39,7 @@ public class BoardState
 	 *            array will be reflected in this state.
 	 */
 	protected BoardState(EnumMap<Player, SortedSet<UndeployedCard>> playerHands,
-			Card[][] playedCards)
+			DeployedCard[][] playedCards)
 	{
 		SortedSet<UndeployedCard> opponentCards = Collections.unmodifiableSortedSet(playerHands
 				.get(Player.OPPONENT));
@@ -75,7 +77,7 @@ public class BoardState
 	 * @return null if the slot is empty or a Card if there is a card played
 	 *         there.
 	 */
-	public Card getPlayedCard(int row, int col)
+	public DeployedCard getPlayedCard(int row, int col)
 	{
 		// The played card array can either be null if no card or non-null if
 		// not empty.
@@ -132,10 +134,10 @@ public class BoardState
 		EnumMap<Player, Integer> holdingCount = new EnumMap<>(Player.class);
 		holdingCount.put(Player.SELF, 0);
 		holdingCount.put(Player.OPPONENT, 0);
-		for(Card[] row : this.playedCards)
+		for(DeployedCard[] row : this.playedCards)
 		{
-			for(Card card : row)
-				holdingCount.compute(card.holdingPlayer, (player, currentVal) -> currentVal + 1);
+			for(DeployedCard card : row)
+				holdingCount.compute(card.card.holdingPlayer, (player, currentVal) -> currentVal + 1);
 		}
 		
 		int playerCards = holdingCount.get(Player.SELF);
@@ -183,7 +185,7 @@ public class BoardState
 	public static class Builder
 	{
 		protected final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
-		protected final Card[][] playedCards = new Card[9][9];
+		protected final DeployedCard[][] playedCards = new DeployedCard[9][9];
 
 		/**
 		 * Constructs a new state with no cards in hands and no played cards.
@@ -216,68 +218,6 @@ public class BoardState
 		}
 
 		/**
-		 * This places a card and throws an exception if card[row][col] is
-		 * already filled.
-		 * 
-		 * @param card
-		 *            The card to place.
-		 * @param row
-		 *            The row to place the card at.
-		 * @param col
-		 *            The column to place the card at.
-		 * @return This object.
-		 */
-		public Builder placeCardSafely(Card card, int row, int col)
-		{
-			if (playedCards[row][col] != null)
-				throw new IllegalArgumentException("Row:" + row + " Col:" + col);
-			playedCards[row][col] = card;
-			return this;
-		}
-
-		/**
-		 * This method flips the possession of the card a (row,col) from
-		 * SELF->OPPONENT or vice versa.
-		 * 
-		 * @param row
-		 *            The row to change the card possession of.
-		 * @param col
-		 *            The column to chagne the card possesion of.
-		 * @return This object.
-		 */
-		public Builder changeCardPossession(int row, int col)
-		{
-			Card oldCard = playedCards[row][col];
-			playedCards[row][col] = oldCard
-					.setHoldingPlayer(oldCard.holdingPlayer.swapPlayer());
-			return this;
-		}
-
-		/**
-		 * This method plays a given card from a player's hand at (row,col)
-		 * using the playCardSafely method. It will get the card by calling
-		 * card.deploy().
-		 * 
-		 * @param player
-		 *            The player to take the card from.
-		 * @param card
-		 *            The card to play.
-		 * @param row
-		 *            The row to play the card at.
-		 * @param col
-		 *            The column to play the card at.
-		 * @return This card that deploy was called upon.
-		 */
-		public Card playCardFromHand(Player player, UndeployedCard card, int row,
-				int col)
-		{
-			this.removeFromHand(player, card);
-			Card actualCard = card.deploy();
-			this.placeCardSafely(actualCard, row, col);
-			return actualCard;
-		}
-
-		/**
 		 * This method sets a given player's hand.
 		 * 
 		 * @param player
@@ -295,27 +235,6 @@ public class BoardState
 
 			Set<UndeployedCard> playerCards = playerHands.get(player);
 			playerCards.clear();
-			playerCards.addAll(Arrays.asList(cards));
-			return this;
-		}
-
-		/**
-		 * This method adds cards to a player's hand.
-		 * 
-		 * @param player
-		 *            The player whose hand will be added to.
-		 * @param cards
-		 *            The cards to add to the player's hand.
-		 * @return This object.
-		 */
-		public Builder addToHand(Player player, UndeployedCard... cards)
-		{
-			if (player == null || cards == null)
-				throw new NullPointerException();
-			if (player == Player.NONE)
-				throw new IllegalArgumentException();
-
-			Set<UndeployedCard> playerCards = playerHands.get(player);
 			playerCards.addAll(Arrays.asList(cards));
 			return this;
 		}
@@ -358,12 +277,17 @@ public class BoardState
 		public Builder playCardAndCapture(Player player, UndeployedCard undeployedCard, int row,
 				int col)
 		{
-			Card card = this.playCardFromHand(player, undeployedCard, row, col);
+			if (playedCards[row][col] != null)
+				throw new IllegalArgumentException("Row:" + row + " Col:" + col);
+			this.removeFromHand(player, undeployedCard);
+			DeployedCard playedCard = new DeployedCard(undeployedCard, row, col);
+			this.playedCards[row][col] = playedCard;
 			
-			CardReplacementFunc tryToCapture = (otherCard, otherRow, otherCol) ->
+			// TODO Add in other game modes here.
+			Function<DeployedCard, DeployedCard> tryToCapture = (otherCard) ->
 			{
-				if (BoardState.compareCardStrengths(card, otherCard, row, col, otherRow, otherCol))
-					return otherCard.setHoldingPlayer(otherCard.holdingPlayer.swapPlayer());
+				if (DeployedCardComparators.regularCompare(playedCard, otherCard))
+					return otherCard.swapPlayer();
 				else
 					return otherCard;
 			};
@@ -380,17 +304,15 @@ public class BoardState
 		 * @param replacementFunc The function to use for replacing these cards.
 		 * @return This object.
 		 */
-		public Builder replaceNeighboringSquares(int row, int col,
-				CardReplacementFunc replacementFunc)
+		private Builder replaceNeighboringSquares(int row, int col,
+				Function<DeployedCard, DeployedCard> replacementFunc)
 		{
 			BiConsumer<Integer, Integer> checkNeighbor = (currentRow,
 					currentCol) ->
 			{
 				if (BoardState.isInBounds(currentRow, currentCol))
-					this.playedCards[currentRow][currentCol] = replacementFunc
-							.replaceCard(
-									this.playedCards[currentRow][currentCol],
-									row, col);
+					this.playedCards[currentRow][currentCol] =
+						replacementFunc.apply(this.playedCards[currentRow][currentCol]);
 			};
 			checkNeighbor.accept(row + 1, col);
 			checkNeighbor.accept(row - 1, col);

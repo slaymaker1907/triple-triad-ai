@@ -54,4 +54,10 @@ public class DeployedCard
 		else
 			return Direction.WEST;
 	}
+	
+	public DeployedCard swapPlayer()
+	{
+		Card newCard = this.card.setHoldingPlayer(this.card.holdingPlayer.swapPlayer());
+		return new DeployedCard(newCard, row, col);
+	}
 }
