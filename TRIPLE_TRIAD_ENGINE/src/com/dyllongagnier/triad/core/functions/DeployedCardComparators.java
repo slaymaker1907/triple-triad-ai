@@ -23,6 +23,44 @@ public class DeployedCardComparators
 	}
 	
 	/**
+	 * This function compares playedCard with otherCard normally except that 1 beats 10 (A).
+	 * @param playedCard The card just played.
+	 * @param otherCard The card already on the field.
+	 * @return Whether the played card captures the other card.
+	 */
+	public static boolean fallenAceCompare(DeployedCard playedCard, DeployedCard otherCard)
+	{
+		Comparator<Integer> comp = (i1, i2) ->
+		{
+			// If played card is 1 and other card is 10 (A) then return 1 since 1 beats ten.
+			if (i1 == 1 && i2 == 10)
+				return 1;
+			else
+				return Integer.compare(i1, i2);
+		};
+		return DeployedCardComparators.compareCards(playedCard, otherCard, comp);
+	}
+	
+	/**
+	 * This function compares playedCard with otherCard using reverse rules except that 10 (A) beats 1.
+	 * @param playedCard The card just played.
+	 * @param otherCard The card already on the field.
+	 * @return Whether the played card captures the other card.
+	 */
+	public static boolean fallenAceReverseCompare(DeployedCard playedCard, DeployedCard otherCard)
+	{
+		Comparator<Integer> comp = (i1, i2) ->
+		{
+			// If played card is 10 and other card is 1 (A) then return 1 since 10 beats 1.
+			if (i1 == 10 && i2 == 1)
+				return 1;
+			else
+				return -1 * Integer.compare(i1, i2);
+		};
+		return DeployedCardComparators.compareCards(playedCard, otherCard, comp);
+	}
+	
+	/**
 	 * This function compares playedCard with otherCard normally with higher numbers beating smaller ones.
 	 * @param playedCard The card just played.
 	 * @param otherCard The card already on the field.
