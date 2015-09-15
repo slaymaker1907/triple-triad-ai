@@ -97,7 +97,8 @@ public class Card implements UndeployedCard
 	@Override
 	public String toString()
 	{
-		StringBuilder builder = new StringBuilder("name;");
+		StringBuilder builder = new StringBuilder(this.name);
+		builder.append(";");
 		builder.append(this.cardType);
 		builder.append(';');
 		builder.append(this.cardRarity);
@@ -139,5 +140,11 @@ public class Card implements UndeployedCard
 	public boolean isVisible()
 	{
 		return true;
+	}
+
+	@Override
+	public int compareTo(UndeployedCard o)
+	{
+		return this.toString().compareTo(o.toString());
 	}
 }
