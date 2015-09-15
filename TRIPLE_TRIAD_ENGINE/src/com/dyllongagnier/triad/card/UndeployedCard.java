@@ -2,10 +2,11 @@ package com.dyllongagnier.triad.card;
 
 /**
  * This interface is provided so that players/npcs can have hidden cards as well in their hands.
- * The engine hashes these objects, so implementing classes should override the hashCode and
- * equals methods. The Card returned by this method should 
+ * The engine uses a sorted set for this object, so implementing classes must implement a comparator
+ * and if the Order rule is used, this comparator will also be used to determine the order in which cards
+ * must be played.
  */
-public interface UndeployedCard 
+public interface UndeployedCard extends Comparable<UndeployedCard>
 {
 	/**
 	 * This method is only guaranteed to return a valid card once. Subsequent calls have no
