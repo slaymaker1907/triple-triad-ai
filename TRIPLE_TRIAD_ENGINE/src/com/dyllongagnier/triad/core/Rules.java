@@ -1,6 +1,7 @@
 package com.dyllongagnier.triad.core;
 
 import com.dyllongagnier.triad.card.UndeployedCard;
+import com.dyllongagnier.triad.core.functions.AscensionTransform;
 import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 
 /**
@@ -54,5 +55,20 @@ public class Rules
 			return DeployedCardComparator::fallenAceCompare;
 		else
 			return DeployedCardComparator::regularCompare;
+	}
+	
+	/**
+	 * This method returns the correct AscensionTransform function for the given rules.
+	 * @return A method for ascension.
+	 */
+	public AscensionTransform getAscensionFunc()
+	{
+		assert (this.isAscension ^ this.isDescension) || (!this.isAscension && !this.isDescension);
+		if (this.isAscension)
+			return AscensionTransform::ascension;
+		else if (this.isDescension)
+			return AscensionTransform::descension;
+		else
+			return AscensionTransform::noAscension;
 	}
 }

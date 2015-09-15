@@ -129,6 +129,36 @@ public class Card implements UndeployedCard
 	{
 		return new Card(this.north, this.east, this.south, this.west, this.name, this.cardType, this.cardRarity, input);
 	}
+	
+	/**
+	 * This method increases all stats (north, east, south, and west) by the indicated amount truncating
+	 * any values greater than 10 to 10 and increasing any value < 1 to 1.
+	 * @param amount The amount to increase by.
+	 * @return A new card with the new stats that is otherwise identical to this card.
+	 */
+	public Card increaseAllStats(int amount)
+	{
+		return new Card(checkedIncrease(this.north, amount), checkedIncrease(this.east, amount),
+				checkedIncrease(this.south, amount), checkedIncrease(this.west, amount), this.name, this.cardType,
+				this.cardRarity, this.holdingPlayer);
+	}
+	
+	/**
+	 * This method returns original + increase but truncates any result > 10 to 10 and any result < 1 to 1.
+	 * @param original The original amount.
+	 * @param increase The amount to plus the original by.
+	 * @return original + increase truncated to be 10 or less.
+	 */
+	private static int checkedIncrease(int original, int increase)
+	{
+		int result = original + increase;
+		if (result >= 10)
+			return 10;
+		else if (result <= 1)
+			return 1;
+		else
+			return result;
+	}
 
 	@Override
 	public Card deploy() 
