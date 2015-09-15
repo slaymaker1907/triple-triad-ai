@@ -124,6 +124,10 @@ public class BoardState
 		return true;
 	}
 	
+	/**
+	 * This method returns the current winner. Game should be complete before this method is called.
+	 * @return The winner of the game.
+	 */
 	public Player getWinner()
 	{
 		assert this.gameComplete();
@@ -145,6 +149,18 @@ public class BoardState
 			return Player.OPPONENT;
 		else
 			return Player.NONE;
+	}
+	
+	/**
+	 * This method returns the first card in the input player's hand.
+	 * @param player The player to get the first card of. This player should be non-null and not Player.NONE.
+	 * @return The first card in the input player's hand.
+	 */
+	public UndeployedCard getFirstCardInHand(Player player)
+	{
+		assert player != null;
+		assert player != Player.NONE;
+		return this.playerHands.get(player).first();
 	}
 
 	/**
