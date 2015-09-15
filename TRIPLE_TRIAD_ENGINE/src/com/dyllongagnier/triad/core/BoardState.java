@@ -164,6 +164,28 @@ public class BoardState
 		assert player != Player.NONE;
 		return this.playerHands.get(player).first();
 	}
+	
+	/**
+	 * This method plays the input card following all rules.
+	 * @param player The player of the card.
+	 * @param card The card to play.
+	 * @param row The row to play the card at.
+	 * @param col The column to play the card at.
+	 * @return The resulting board state.
+	 */
+	public BoardState playCard(Player player, UndeployedCard card, int row, int col)
+	{
+		// TODO Implement me.
+		assert playedCards[row][col] == null;
+		assert player != Player.NONE;
+		assert player != null;
+		assert card != null;
+		assert this.playerHands.get(player).contains(card);
+		
+		SortedSet<UndeployedCard> newHand = 
+		DeployedCard playedCard = new DeployedCard(card.deploy(), row, col);
+		return null;
+	}
 
 	/**
 	 * This class is used to construct BoardStates and is mutable.

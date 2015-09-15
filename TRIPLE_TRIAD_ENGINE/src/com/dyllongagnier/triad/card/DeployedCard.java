@@ -54,9 +54,19 @@ public class DeployedCard
 			return Direction.WEST;
 	}
 	
-	public DeployedCard swapPlayer()
+	/**
+	 * This method sets the player of the deployed card.
+	 * @param player The player to set the owner of.
+	 * @return The new DeployedCard.
+	 */
+	public DeployedCard setPlayer(Player player)
 	{
-		Card newCard = this.card.setHoldingPlayer(this.card.holdingPlayer.swapPlayer());
-		return new DeployedCard(newCard, row, col);
+		if (player != this.card.holdingPlayer)
+		{
+			Card newCard = this.card.setHoldingPlayer(player);
+			return new DeployedCard(newCard, row, col);
+		}
+		else
+			return this;
 	}
 }
