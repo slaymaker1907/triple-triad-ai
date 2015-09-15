@@ -183,7 +183,7 @@ public class BoardState
 			this.playerHands = new EnumMap<>(Player.class);
 			this.playerHands.put(Player.SELF, new TreeSet<>());
 			this.playerHands.put(Player.OPPONENT, new TreeSet<>());
-			this.cardComparator = ruleSet.getComparator();
+			this.cardComparator = ruleSet.cardComparator;
 		}
 
 		/**

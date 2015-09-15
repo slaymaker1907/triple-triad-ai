@@ -12,10 +12,15 @@ public class Rules
 	public final boolean isSuddenDeath;
 	public final boolean isOrder;
 	public final boolean isChaos;
-	public final boolean isReverse;
-	public final boolean isFallenAce;
-	public final boolean isAscension;
-	public final boolean isDescension;
+	public final AscensionRule ascensionRule;
+	
+	public static enum AscensionRule
+	{
+		NONE, NORMAL, DESCENSION
+	}
+	
+	public final AscensionTransform ascensionFunc;
+	public final DeployedCardComparator cardComparator;
 		
 	/**
 	 * This method initializes an immutable Rules object.
@@ -24,34 +29,34 @@ public class Rules
 	 * @param isChaos This indicates the chaos rule.
 	 * @param isReverse This indicates the reverse rule.
 	 * @param isFallenAce This indicates the fallen ace rule.
-	 * @param isAscension This indicates the ascension rule.
-	 * @param isDescension This indicates the descension rule.
-	 * @param selfCards This is the card order to be used for isOrder for self. This may be null if order is false.
-	 * @param opponentCards This is the card order to be used for isOrder for opponent. This may be null if order is false.
+	 * @param ascensionRule The way to handle ascension.
+	 * @param selfCards This is the card order to be used for isOrder for self.
+	 * @param opponentCards This is the card order to be used for isOrder for opponent.
 	 */
 	public Rules(boolean isSuddenDeath, boolean isOrder, boolean isChaos, boolean isReverse, boolean isFallenAce,
-			boolean isAscension, boolean isDescension, UndeployedCard[] selfCards, UndeployedCard[] opponentCards)
+			AscensionRule ascensionRule, UndeployedCard[] selfCards, UndeployedCard[] opponentCards)
 	{
 		this.isSuddenDeath = isSuddenDeath;
 		this.isOrder = isOrder;
 		this.isChaos = isChaos;
-		this.isReverse = isReverse;
-		this.isFallenAce = isFallenAce;
-		this.isAscension = isAscension;
-		this.isDescension = isDescension;
+		this.ascensionFunc = getAscensionFunc(ascensionRule);
+		this.cardComparator = getComparator(isReverse, isFallenAce);
+		this.ascensionRule = ascensionRule;
 	}
 	
 	/**
 	 * This method returns the comparator associated with this rule set.
-	 * @return A comparator associated with this rule set.
+	 * @boolean isReverse Indicates that the Reverse rule is in place.
+	 * @boolean isFallenAce Indicates that the Fallen Ace rule is in place.
+	 * @return A comparator associated with the input rules.
 	 */
-	public DeployedCardComparator getComparator()
+	private static DeployedCardComparator getComparator(boolean isReverse, boolean isFallenAce)
 	{
-		if (this.isReverse && this.isFallenAce)
+		if (isReverse && isFallenAce)
 			return DeployedCardComparator::fallenAceReverseCompare;
-		else if (this.isReverse)
+		else if (isReverse)
 			return DeployedCardComparator::reverseCompare;
-		else if (this.isFallenAce)
+		else if (isFallenAce)
 			return DeployedCardComparator::fallenAceCompare;
 		else
 			return DeployedCardComparator::regularCompare;
@@ -61,14 +66,18 @@ public class Rules
 	 * This method returns the correct AscensionTransform function for the given rules.
 	 * @return A method for ascension.
 	 */
-	public AscensionTransform getAscensionFunc()
+	private static AscensionTransform getAscensionFunc(AscensionRule rule)
 	{
-		assert (this.isAscension ^ this.isDescension) || (!this.isAscension && !this.isDescension);
-		if (this.isAscension)
-			return AscensionTransform::ascension;
-		else if (this.isDescension)
-			return AscensionTransform::descension;
-		else
+		switch(rule)
+		{
+		case  NONE:
 			return AscensionTransform::noAscension;
+		case NORMAL:
+			return AscensionTransform::ascension;
+		case DESCENSION:
+			return AscensionTransform::descension;
+		default:
+			throw new IllegalArgumentException();
+		}
 	}
 }
