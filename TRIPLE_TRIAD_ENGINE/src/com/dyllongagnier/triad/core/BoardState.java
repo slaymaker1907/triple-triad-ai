@@ -60,10 +60,8 @@ public class BoardState
 	 */
 	public SortedSet<UndeployedCard> getHand(Player player)
 	{
-		if (player == Player.NONE)
-			throw new IllegalArgumentException();
-		if (player == null)
-			throw new NullPointerException();
+		assert player != Player.NONE;
+		assert player == null;
 		return this.playerHands.get(player);
 	}
 
@@ -128,8 +126,7 @@ public class BoardState
 	
 	public Player getWinner()
 	{
-		if (!this.gameComplete())
-			throw new IllegalArgumentException("Game is not yet complete.");
+		assert this.gameComplete();
 		
 		EnumMap<Player, Integer> holdingCount = new EnumMap<>(Player.class);
 		holdingCount.put(Player.SELF, 0);
@@ -148,35 +145,6 @@ public class BoardState
 			return Player.OPPONENT;
 		else
 			return Player.NONE;
-	}
-
-	/**
-	 * This method compares the relevant attributes of the cards depending on their positions.
-	 * @param primaryCard The primary card for comparison.
-	 * @param otherCard The other card for comparison.
-	 * @param primRow The row of the primary card.
-	 * @param primCol The column of the primary card.
-	 * @param oRow The row of the other card.
-	 * @param oCol The column of the other card.
-	 * @return True if the primary card's stat is > the other card's relevant stat.
-	 */
-	public static boolean compareCardStrengths(Card primaryCard,
-			Card otherCard, int primRow, int primCol, int oRow, int oCol)
-	{
-		if (!isInBounds(primRow, primCol))
-			throw new IllegalArgumentException();
-		if (!isInBounds(oRow, oCol))
-			throw new IllegalArgumentException();
-
-		if (primRow > oRow)
-			return primaryCard.north > otherCard.south;
-		else if (primRow < oRow)
-			return primaryCard.south > otherCard.north;
-		else if (primCol > oCol)
-			return primaryCard.west > otherCard.east;
-		else if (primCol < oCol)
-			return primaryCard.east > otherCard.west;
-		return false;
 	}
 
 	/**
@@ -228,10 +196,9 @@ public class BoardState
 		 */
 		public Builder setHand(Player player, UndeployedCard... cards)
 		{
-			if (player == null || cards == null)
-				throw new NullPointerException();
-			if (player == Player.NONE)
-				throw new IllegalArgumentException();
+			assert player != null;
+			assert cards != null;
+			assert player != Player.NONE;
 
 			Set<UndeployedCard> playerCards = playerHands.get(player);
 			playerCards.clear();
@@ -250,16 +217,13 @@ public class BoardState
 		 */
 		public Builder removeFromHand(Player player, UndeployedCard... cards)
 		{
-			if (player == null || cards == null)
-				throw new NullPointerException();
-			if (player == Player.NONE)
-				throw new IllegalArgumentException();
+			assert player != null;
+			assert cards != null;
+			assert cards.length > 0;
+			assert player != Player.NONE;
 
 			Set<UndeployedCard> playerCards = playerHands.get(player);
-			for (UndeployedCard card : cards)
-				if (!playerCards.contains(card))
-					throw new IllegalArgumentException("Hand does not contain:"
-							+ card);
+			assert playerCards.containsAll(Arrays.asList(cards));
 
 			playerCards.removeAll(Arrays.asList(cards));
 			return this;
@@ -277,8 +241,8 @@ public class BoardState
 		public Builder playCardAndCapture(Player player, UndeployedCard undeployedCard, int row,
 				int col)
 		{
-			if (playedCards[row][col] != null)
-				throw new IllegalArgumentException("Row:" + row + " Col:" + col);
+			assert playedCards[row][col] == null;
+			
 			this.removeFromHand(player, undeployedCard);
 			DeployedCard playedCard = new DeployedCard(undeployedCard, row, col);
 			this.playedCards[row][col] = playedCard;

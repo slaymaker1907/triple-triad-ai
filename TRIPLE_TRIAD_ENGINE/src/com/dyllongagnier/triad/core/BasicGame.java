@@ -17,8 +17,8 @@ public class BasicGame
 	public static BoardState runGame(Player firstPlayer, UndeployedCard[] selfCards, UndeployedCard[] opponentCards,
 			GameAgent selfAgent, GameAgent opponentAgent)
 	{
-		if (firstPlayer == Player.NONE)
-			throw new IllegalArgumentException();
+		assert firstPlayer != Player.NONE;
+		
 		BoardState currentState = BasicGame.getInitialState(selfCards, opponentCards);
 		Player currentPlayer = firstPlayer;
 		for(int turn = 1; turn <= 9; turn++)
@@ -51,8 +51,7 @@ public class BasicGame
 	 */
 	public static BoardState getInitialState(UndeployedCard[] selfCards, UndeployedCard[] opponentCards)
 	{
-		if (selfCards.length != 5 || opponentCards.length != 5)
-			throw new IllegalArgumentException("selfCards.length:" + selfCards.length + " opponentCards.length:" + opponentCards.length);
+		assert selfCards.length == 5 && opponentCards.length == 5;
 		return new BoardState.Builder()
 			.setHand(Player.SELF, selfCards)
 			.setHand(Player.OPPONENT, opponentCards)

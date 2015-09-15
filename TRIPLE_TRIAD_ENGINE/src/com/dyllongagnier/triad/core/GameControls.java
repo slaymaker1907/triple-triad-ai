@@ -45,7 +45,15 @@ public class GameControls
 		assert card.holdingPlayer == currentPlayer;
 		
 		this.nextTurn.playCardAndCapture(this.currentPlayer, card, row, col);
+		
+		// This is hacky so that it only triggers when assertions are on.
+		assert this.setPlayedCard();
+	}
+	
+	private boolean setPlayedCard()
+	{
 		this.playedCard = true;
+		return true;
 	}
 	
 	/**
@@ -55,8 +63,7 @@ public class GameControls
 	 */
 	public BoardState getNextTurn()
 	{
-		if (!this.playedCard)
-			throw new IllegalArgumentException();
+		assert !this.playedCard;
 		return this.nextTurn.build();
 	}
 }
