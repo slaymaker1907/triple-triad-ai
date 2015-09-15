@@ -1,7 +1,7 @@
 package com.dyllongagnier.triad.core;
 
 import com.dyllongagnier.triad.card.UndeployedCard;
-import com.dyllongagnier.triad.core.functions.DeployedCardComparators;
+import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 
 /**
  * This is an immutable object for the purpose of conveying rules.
@@ -44,15 +44,15 @@ public class Rules
 	 * This method returns the comparator associated with this rule set.
 	 * @return A comparator associated with this rule set.
 	 */
-	public DeployedCardComparators getComparator()
+	public DeployedCardComparator getComparator()
 	{
 		if (this.isReverse && this.isFallenAce)
-			return DeployedCardComparators::fallenAceReverseCompare;
+			return DeployedCardComparator::fallenAceReverseCompare;
 		else if (this.isReverse)
-			return DeployedCardComparators::reverseCompare;
+			return DeployedCardComparator::reverseCompare;
 		else if (this.isFallenAce)
-			return DeployedCardComparators::fallenAceCompare;
+			return DeployedCardComparator::fallenAceCompare;
 		else
-			return DeployedCardComparators::regularCompare;
+			return DeployedCardComparator::regularCompare;
 	}
 }

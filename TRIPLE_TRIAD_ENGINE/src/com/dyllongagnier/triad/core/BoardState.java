@@ -12,7 +12,7 @@ import java.util.function.Function;
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
-import com.dyllongagnier.triad.core.functions.DeployedCardComparators;
+import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 
 /**
  * This class represents an immutable BoardState for triple triad. This is
@@ -24,7 +24,7 @@ public class BoardState
 	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands = new EnumMap<>(
 			Player.class);
 	private final DeployedCard[][] playedCards;
-	private final DeployedCardComparators cardComparator;
+	private final DeployedCardComparator cardComparator;
 
 	/**
 	 * Constructs a new BoardState. Unless doing something particular, the
@@ -40,7 +40,7 @@ public class BoardState
 	 *            array will be reflected in this state.
 	 */
 	protected BoardState(EnumMap<Player, SortedSet<UndeployedCard>> playerHands,
-			DeployedCard[][] playedCards, DeployedCardComparators cardComparator)
+			DeployedCard[][] playedCards, DeployedCardComparator cardComparator)
 	{
 		SortedSet<UndeployedCard> opponentCards = Collections.unmodifiableSortedSet(playerHands
 				.get(Player.OPPONENT));
@@ -172,7 +172,7 @@ public class BoardState
 	{
 		protected final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
 		protected final DeployedCard[][] playedCards = new DeployedCard[9][9];
-		private final DeployedCardComparators cardComparator;
+		private final DeployedCardComparator cardComparator;
 
 		/**
 		 * Constructs a new state with no cards in hands and no played cards.

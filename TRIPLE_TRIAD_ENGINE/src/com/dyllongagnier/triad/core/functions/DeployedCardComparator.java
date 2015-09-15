@@ -9,7 +9,7 @@ import com.dyllongagnier.triad.card.DeployedCard;
  * This class contains various comparators for deployed cards for different rule sets.
  */
 @FunctionalInterface
-public interface DeployedCardComparators extends BiFunction<DeployedCard, DeployedCard, Boolean>
+public interface DeployedCardComparator extends BiFunction<DeployedCard, DeployedCard, Boolean>
 {
 	/**
 	 * This function compares playedCard with otherCard normally except that lower numbers beat
@@ -21,7 +21,7 @@ public interface DeployedCardComparators extends BiFunction<DeployedCard, Deploy
 	public static boolean reverseCompare(DeployedCard playedCard, DeployedCard otherCard)
 	{
 		Comparator<Integer> comp = (i1, i2) -> -1 * Integer.compare(i1, i2);
-		return DeployedCardComparators.compareCards(playedCard, otherCard, comp);
+		return DeployedCardComparator.compareCards(playedCard, otherCard, comp);
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public interface DeployedCardComparators extends BiFunction<DeployedCard, Deploy
 			else
 				return Integer.compare(i1, i2);
 		};
-		return DeployedCardComparators.compareCards(playedCard, otherCard, comp);
+		return DeployedCardComparator.compareCards(playedCard, otherCard, comp);
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public interface DeployedCardComparators extends BiFunction<DeployedCard, Deploy
 			else
 				return -1 * Integer.compare(i1, i2);
 		};
-		return DeployedCardComparators.compareCards(playedCard, otherCard, comp);
+		return DeployedCardComparator.compareCards(playedCard, otherCard, comp);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public interface DeployedCardComparators extends BiFunction<DeployedCard, Deploy
 	 */
 	public static boolean regularCompare(DeployedCard playedCard, DeployedCard otherCard)
 	{
-		return DeployedCardComparators.compareCards(playedCard, otherCard, Integer::compare);
+		return DeployedCardComparator.compareCards(playedCard, otherCard, Integer::compare);
 	}
 	
 	/**
