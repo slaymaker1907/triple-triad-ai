@@ -3,8 +3,9 @@ package com.dyllongagnier.triad.core;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.BiConsumer;
 
 import com.dyllongagnier.triad.card.Card;
@@ -18,7 +19,7 @@ import com.dyllongagnier.triad.card.UndeployedCard;
  */
 public class BoardState
 {
-	private final EnumMap<Player, Set<UndeployedCard>> playerHands = new EnumMap<>(
+	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands = new EnumMap<>(
 			Player.class);
 	private final Card[][] playedCards;
 
@@ -35,12 +36,12 @@ public class BoardState
 	 *            directly stores this array, so any modifications to the input
 	 *            array will be reflected in this state.
 	 */
-	protected BoardState(EnumMap<Player, Set<UndeployedCard>> playerHands,
+	protected BoardState(EnumMap<Player, SortedSet<UndeployedCard>> playerHands,
 			Card[][] playedCards)
 	{
-		Set<UndeployedCard> opponentCards = Collections.unmodifiableSet(playerHands
+		SortedSet<UndeployedCard> opponentCards = Collections.unmodifiableSortedSet(playerHands
 				.get(Player.OPPONENT));
-		Set<UndeployedCard> selfCards = Collections.unmodifiableSet(playerHands
+		SortedSet<UndeployedCard> selfCards = Collections.unmodifiableSortedSet(playerHands
 				.get(Player.SELF));
 		this.playerHands.put(Player.OPPONENT, opponentCards);
 		this.playerHands.put(Player.SELF, selfCards);
@@ -53,9 +54,9 @@ public class BoardState
 	 * @param player
 	 *            The player whose hand will be returned. Must be non-null and
 	 *            not Player.NONE.
-	 * @return An unmodifiable set view of the hand.
+	 * @return An unmodifiable list view of the hand.
 	 */
-	public Set<UndeployedCard> getHand(Player player)
+	public SortedSet<UndeployedCard> getHand(Player player)
 	{
 		if (player == Player.NONE)
 			throw new IllegalArgumentException();
@@ -181,7 +182,7 @@ public class BoardState
 	 */
 	public static class Builder
 	{
-		protected final EnumMap<Player, Set<UndeployedCard>> playerHands;
+		protected final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
 		protected final Card[][] playedCards = new Card[9][9];
 
 		/**
@@ -190,8 +191,8 @@ public class BoardState
 		public Builder()
 		{
 			this.playerHands = new EnumMap<>(Player.class);
-			this.playerHands.put(Player.SELF, new HashSet<>());
-			this.playerHands.put(Player.OPPONENT, new HashSet<>());
+			this.playerHands.put(Player.SELF, new TreeSet<>());
+			this.playerHands.put(Player.OPPONENT, new TreeSet<>());
 		}
 
 		/**
@@ -205,9 +206,9 @@ public class BoardState
 		{
 			this.playerHands = new EnumMap<>(Player.class);
 			this.playerHands.put(Player.SELF,
-					new HashSet<>(oldState.getHand(Player.SELF)));
+					new TreeSet<>(oldState.getHand(Player.SELF)));
 			this.playerHands.put(Player.OPPONENT,
-					new HashSet<>(oldState.getHand(Player.OPPONENT)));
+					new TreeSet<>(oldState.getHand(Player.OPPONENT)));
 			for (int row = 0; row < 3; row++)
 				for (int col = 0; col < 3; col++)
 					this.playedCards[row][col] = oldState.getPlayedCard(row,
