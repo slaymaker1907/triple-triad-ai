@@ -2,7 +2,7 @@ package com.dyllongagnier.triad.core.functions;
 
 import java.util.Comparator;
 
-import com.dyllongagnier.triad.core.DeployedCard;
+import com.dyllongagnier.triad.card.DeployedCard;
 
 /**
  * This class contains various comparators for deployed cards for different rule sets.

@@ -1,7 +1,6 @@
-package com.dyllongagnier.triad.core;
+package com.dyllongagnier.triad.card;
 
-import com.dyllongagnier.triad.card.Card;
-import com.dyllongagnier.triad.card.UndeployedCard;
+import com.dyllongagnier.triad.core.BoardState;
 
 /**
  * This class represents a card that has been played on the board.
