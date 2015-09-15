@@ -19,7 +19,7 @@ public class Field
 	 */
 	public Field(DeployedCardComparator cardComparator)
 	{
-		this.playedCards = new DeployedCard[0][0];
+		this.playedCards = new DeployedCard[3][3];
 		this.cardComparator = cardComparator;
 	}
 	
