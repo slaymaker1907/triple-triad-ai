@@ -24,6 +24,7 @@ public class BoardState
 	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands = new EnumMap<>(
 			Player.class);
 	private final DeployedCard[][] playedCards;
+	private final DeployedCardComparators cardComparator;
 
 	/**
 	 * Constructs a new BoardState. Unless doing something particular, the
@@ -39,7 +40,7 @@ public class BoardState
 	 *            array will be reflected in this state.
 	 */
 	protected BoardState(EnumMap<Player, SortedSet<UndeployedCard>> playerHands,
-			DeployedCard[][] playedCards)
+			DeployedCard[][] playedCards, DeployedCardComparators cardComparator)
 	{
 		SortedSet<UndeployedCard> opponentCards = Collections.unmodifiableSortedSet(playerHands
 				.get(Player.OPPONENT));
@@ -48,6 +49,7 @@ public class BoardState
 		this.playerHands.put(Player.OPPONENT, opponentCards);
 		this.playerHands.put(Player.SELF, selfCards);
 		this.playedCards = playedCards;
+		this.cardComparator = cardComparator;
 	}
 
 	/**
@@ -170,15 +172,18 @@ public class BoardState
 	{
 		protected final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
 		protected final DeployedCard[][] playedCards = new DeployedCard[9][9];
+		private final DeployedCardComparators cardComparator;
 
 		/**
 		 * Constructs a new state with no cards in hands and no played cards.
+		 * @param ruleSet The rules to use for this game.
 		 */
-		public Builder()
+		public Builder(Rules ruleSet)
 		{
 			this.playerHands = new EnumMap<>(Player.class);
 			this.playerHands.put(Player.SELF, new TreeSet<>());
 			this.playerHands.put(Player.OPPONENT, new TreeSet<>());
+			this.cardComparator = ruleSet.getComparator();
 		}
 
 		/**
@@ -199,6 +204,7 @@ public class BoardState
 				for (int col = 0; col < 3; col++)
 					this.playedCards[row][col] = oldState.getPlayedCard(row,
 							col);
+			this.cardComparator = oldState.cardComparator;
 		}
 
 		/**
@@ -266,7 +272,7 @@ public class BoardState
 			// TODO Add in other game modes here.
 			Function<DeployedCard, DeployedCard> tryToCapture = (otherCard) ->
 			{
-				if (DeployedCardComparators.regularCompare(playedCard, otherCard))
+				if (this.cardComparator.apply(playedCard, otherCard))
 					return otherCard.swapPlayer();
 				else
 					return otherCard;
@@ -307,7 +313,7 @@ public class BoardState
 		 */
 		public BoardState build()
 		{
-			return new BoardState(this.playerHands, this.playedCards);
+			return new BoardState(this.playerHands, this.playedCards, this.cardComparator);
 		}
 	}
 }

@@ -1,13 +1,15 @@
 package com.dyllongagnier.triad.core.functions;
 
 import java.util.Comparator;
+import java.util.function.BiFunction;
 
 import com.dyllongagnier.triad.card.DeployedCard;
 
 /**
  * This class contains various comparators for deployed cards for different rule sets.
  */
-public class DeployedCardComparators 
+@FunctionalInterface
+public interface DeployedCardComparators extends BiFunction<DeployedCard, DeployedCard, Boolean>
 {
 	/**
 	 * This function compares playedCard with otherCard normally except that lower numbers beat
@@ -78,7 +80,7 @@ public class DeployedCardComparators
 	 * @param otherCard The card already on the field.
 	 * @return Whether the played card captures the other card.
 	 */
-	private static boolean compareCards(DeployedCard playedCard, DeployedCard otherCard, Comparator<Integer> comp)
+	public static boolean compareCards(DeployedCard playedCard, DeployedCard otherCard, Comparator<Integer> comp)
 	{
 		DeployedCard.Direction dir = playedCard.getDirectionOfOther(otherCard);
 		switch(dir)
@@ -95,4 +97,13 @@ public class DeployedCardComparators
 			throw new RuntimeException("Unsupported enum value.");
 		}
 	}
+
+	/**
+	 * This method compares playedCard to otherCard and returns true if playedCard captures otherCard.
+	 * @param playedCard The card just played.
+	 * @param otherCard A neighboring card that is already in play.
+	 * @return True if playedCard captures otherCard.
+	 */
+	@Override
+	public Boolean apply(DeployedCard playedCard, DeployedCard otherCard);
 }

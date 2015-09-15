@@ -12,14 +12,15 @@ public class BasicGame
 	 * @param opponentCards The cards for Player.OPPONENT. Must contain 5 cards.
 	 * @param selfAgent The agent for self. The agent to use for playing Player.SELF.
 	 * @param opponentAgent The agent for OPPONENT. The agent to use for playing Player.OPPONENT.
+	 * @param gameRules The rules to use for playing this game.
 	 * @return The final BoardState of the game.
 	 */
 	public static BoardState runGame(Player firstPlayer, UndeployedCard[] selfCards, UndeployedCard[] opponentCards,
-			GameAgent selfAgent, GameAgent opponentAgent)
+			GameAgent selfAgent, GameAgent opponentAgent, Rules gameRules)
 	{
 		assert firstPlayer != Player.NONE;
 		
-		BoardState currentState = BasicGame.getInitialState(selfCards, opponentCards);
+		BoardState currentState = BasicGame.getInitialState(selfCards, opponentCards, gameRules);
 		Player currentPlayer = firstPlayer;
 		for(int turn = 1; turn <= 9; turn++)
 		{
@@ -49,10 +50,10 @@ public class BasicGame
 	 * @param opponentCards The cards of Player.OPPONENT. Must be 5 cards.
 	 * @return A board state with no cards played and the input cards in the appropriate hands.
 	 */
-	public static BoardState getInitialState(UndeployedCard[] selfCards, UndeployedCard[] opponentCards)
+	public static BoardState getInitialState(UndeployedCard[] selfCards, UndeployedCard[] opponentCards, Rules gameRules)
 	{
 		assert selfCards.length == 5 && opponentCards.length == 5;
-		return new BoardState.Builder()
+		return new BoardState.Builder(gameRules)
 			.setHand(Player.SELF, selfCards)
 			.setHand(Player.OPPONENT, opponentCards)
 			.build();
