@@ -74,6 +74,25 @@ public interface DeployedCardComparator extends BiFunction<DeployedCard, Deploye
 	}
 	
 	/**
+	 * This method captures otherCard if it's relevant stat is equal to playedCard's relevant stat.
+	 * @param playedCard The card just played.
+	 * @param otherCard The other card adjacent to just played.
+	 * @return True if playedCard captures otherCard.
+	 */
+	public static boolean equalCompare(DeployedCard playedCard, DeployedCard otherCard)
+	{
+		assert playedCard.cardAdjacent(otherCard);
+		return DeployedCardComparator.compareCards(playedCard, otherCard, (i1, i2) -> 
+		{
+			// Hacky way to get the compareCards function to work since it captures when i1 > i2.
+			if (i1 == i2)
+				return 1;
+			else
+				return -1;
+		});
+	}
+	
+	/**
 	 * This function compares playedCard with otherCard using the supplied comparator to compare relevant
 	 * integer attributes of the cards.
 	 * @param playedCard The card just played.

@@ -2,12 +2,14 @@ package com.dyllongagnier.triad.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.function.Function;
 
 import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
+import com.dyllongagnier.triad.core.functions.CardPlayFunction;
 import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 
 /**
@@ -17,15 +19,17 @@ public class Field
 {
 	protected final DeployedCard[][] playedCards;
 	protected final DeployedCardComparator cardComparator;
+	protected final CardPlayFunction playFunc;
 	
 	/**
 	 * Creates an empty field that will use the input cardComparator.
 	 * @param cardComparator The comparator to use for determining victories.
 	 */
-	public Field(DeployedCardComparator cardComparator)
+	public Field(DeployedCardComparator cardComparator, CardPlayFunction playFunc)
 	{
 		this.playedCards = new DeployedCard[3][3];
 		this.cardComparator = cardComparator;
+		this.playFunc = playFunc;
 	}
 	
 	/**
@@ -33,10 +37,11 @@ public class Field
 	 * @param playedCards The cards of the field.
 	 * @param cardComparator The comparator to use in comparing cards.
 	 */
-	protected Field(DeployedCard[][] playedCards, DeployedCardComparator cardComparator)
+	protected Field(DeployedCard[][] playedCards, DeployedCardComparator cardComparator, CardPlayFunction playFunc)
 	{
 		this.playedCards = playedCards;
 		this.cardComparator = cardComparator;
+		this.playFunc = playFunc;
 	}
 	
 	/**
@@ -63,13 +68,16 @@ public class Field
 		int col = cardToPlay.col;
 		assert !this.isCardInPos(row, col);
 		
+		Set<DeployedCard> takeOver = this.playFunc.updateField(this, cardToPlay, this.cardComparator);
 		DeployedCard[][] newPlayedCards = Arrays.copyOf(playedCards, playedCards.length);
 		newPlayedCards[row][col] = cardToPlay;
-		this.applyFunctionToPos(row + 1, col, newPlayedCards, cardToPlay);
-		this.applyFunctionToPos(row - 1, col, newPlayedCards, cardToPlay);
-		this.applyFunctionToPos(row, col + 1, newPlayedCards, cardToPlay);
-		this.applyFunctionToPos(row, col - 1, newPlayedCards, cardToPlay);
-		return new Field(newPlayedCards, this.cardComparator);
+		for(DeployedCard card : takeOver)
+		{
+			DeployedCard newCard = card.setPlayer(cardToPlay.card.holdingPlayer);
+			newPlayedCards[newCard.row][newCard.col] = newCard;
+		}
+		
+		return new Field(newPlayedCards, this.cardComparator, this.playFunc);
 	}
 	
 	/**
@@ -92,25 +100,6 @@ public class Field
 	public boolean isInBounds(int row, int col)
 	{
 		return row >= 0 && row < 3 && col >= 0 && col < 3;
-	}
-	
-	/**
-	 * This method applies the cardComparator to the card at row/col if it exists in newPlayedCards
-	 * and then stores that into the same position in newPlayedCards.
-	 * @param row The row to transform.
-	 * @param col The column to transform.
-	 * @param newPlayedCards The array to mutate.
-	 * @param cardToPlay The card that was just played.
-	 */
-	protected void applyFunctionToPos(int row, int col, DeployedCard[][] newPlayedCards, DeployedCard cardToPlay)
-	{
-		assert (Math.abs(cardToPlay.row - row) == 1 && col == cardToPlay.col) || (Math.abs(col - cardToPlay.col) == 1
-				&& row == cardToPlay.row);
-		if (this.isCardInPos(row, col))
-		{
-			if(this.cardComparator.apply(cardToPlay, newPlayedCards[row][col]))
-				newPlayedCards[row][col] = newPlayedCards[row][col].setPlayer(cardToPlay.card.holdingPlayer);
-		}
 	}
 	
 	/**

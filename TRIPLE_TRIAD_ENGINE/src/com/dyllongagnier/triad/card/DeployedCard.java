@@ -67,4 +67,36 @@ public class DeployedCard
 		else
 			return this;
 	}
+	
+	/**
+	 * This method returns true if other is an adjacent square to this card.
+	 * @param other The potentially adjacent card to this one.
+	 * @return True if the other card is north, east, south, or west of this card.
+	 */
+	public boolean cardAdjacent(DeployedCard other)
+	{
+		return (Math.abs(other.row - this.row) == 1 && other.col == this.col) ||
+				(Math.abs(this.col - other.col) == 1 && this.row == other.row);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return this.card.hashCode() ^ (this.row * 31) ^ (this.col * 17);
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		try
+		{
+			DeployedCard other = (DeployedCard)o;
+			return this.card.equals(other.card) && this.row == other.row && this.col == other.col;
+		}
+		catch (Exception e)
+		{
+			assert false;
+			return false;
+		}
+	}
 }

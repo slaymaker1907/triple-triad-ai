@@ -84,12 +84,14 @@ public class Card implements UndeployedCard
 	}
 	
 	@Override
-	public boolean equals(Object other)
+	public boolean equals(Object o)
 	{
 		try
 		{
-			Card otherCard = (Card)other;
-			return this.toString().equals(otherCard.toString());
+			Card other = (Card)o;
+			return this.name.equals(other.name) && this.cardRarity == other.cardRarity && this.cardType == other.cardType
+					&& this.east == other.east && this.holdingPlayer == other.holdingPlayer && this.north == other.north &&
+					this.south == other.south && this.west == other.west;
 		}
 		catch (Exception e)
 		{
@@ -119,7 +121,9 @@ public class Card implements UndeployedCard
 	@Override
 	public int hashCode()
 	{
-		return this.toString().hashCode();
+		// Most of the time, there should only be two cards with different players. The stats will generally
+		// be the same, though, for the same card so it is not productive to use those values.
+		return this.name.hashCode() ^ (31 * this.holdingPlayer.hashCode());
 	}
 	
 	/**

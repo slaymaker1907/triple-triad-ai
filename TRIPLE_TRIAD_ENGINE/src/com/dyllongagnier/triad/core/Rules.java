@@ -2,6 +2,7 @@ package com.dyllongagnier.triad.core;
 
 import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.functions.AscensionTransform;
+import com.dyllongagnier.triad.core.functions.CardPlayFunction;
 import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 import com.dyllongagnier.triad.core.functions.MoveValidator;
 
@@ -13,6 +14,7 @@ public class Rules
 	public final boolean isSuddenDeath;
 	public final AscensionRule ascensionRule;
 	public final MoveValidator moveValidator;
+	public final CardPlayFunction playFunc;
 	
 	public static enum AscensionRule
 	{
@@ -33,6 +35,7 @@ public class Rules
 	 * @param opponentCards This is the card order to be used for isOrder for opponent.
 	 */
 	public Rules(boolean isSuddenDeath, boolean isOrder, boolean isReverse, boolean isFallenAce,
+			boolean isPlus, boolean isSame, boolean isCombo,
 			AscensionRule ascensionRule, UndeployedCard[] selfCards, UndeployedCard[] opponentCards)
 	{
 		this.isSuddenDeath = isSuddenDeath;
@@ -40,6 +43,7 @@ public class Rules
 		this.ascensionFunc = getAscensionFunc(ascensionRule);
 		this.cardComparator = getComparator(isReverse, isFallenAce);
 		this.ascensionRule = ascensionRule;
+		this.playFunc = getPlayFunction(isPlus, isSame, isCombo);
 	}
 	
 	/**
@@ -77,6 +81,33 @@ public class Rules
 		default:
 			throw new IllegalArgumentException();
 		}
+	}
+	
+	/**
+	 * This method gets the relevant play function for the input options.
+	 * @param isPlus Indicates the Plus rule.
+	 * @param isSame Indicates the Same rule.
+	 * @param isCombo Indicates the Combo rule. This can only be selected with isPlus or isSame.
+	 * @return The appropriate play function.
+	 */
+	private static CardPlayFunction getPlayFunction(boolean isPlus, boolean isSame, boolean isCombo)
+	{
+		if (!isPlus && !isSame && !isCombo)
+			return CardPlayFunction::basicCapture;
+		else if (isPlus && !isSame && !isCombo)
+			return CardPlayFunction::plusCapture;
+		else if (!isPlus && isSame && !isCombo)
+			return CardPlayFunction::sameCapture;
+		else if (isPlus && isSame && !isCombo)
+			return CardPlayFunction::samePlus;
+		else if (isPlus && !isSame && isCombo)
+			return CardPlayFunction::plusCombo;
+		else if (!isPlus && isSame && isCombo)
+			return CardPlayFunction::sameCombo;
+		else if (isPlus && isSame && isCombo)
+			return CardPlayFunction::samePlusCombo;
+		else
+			throw new IllegalArgumentException("Must select isPlus and/or isSame with isCombo.");
 	}
 	
 	/**

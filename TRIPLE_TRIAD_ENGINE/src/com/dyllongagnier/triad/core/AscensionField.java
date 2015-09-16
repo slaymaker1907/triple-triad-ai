@@ -2,10 +2,12 @@ package com.dyllongagnier.triad.core;
 
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.Set;
 
 import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.core.functions.AscensionTransform;
+import com.dyllongagnier.triad.core.functions.CardPlayFunction;
 import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 
 /**
@@ -21,9 +23,10 @@ public class AscensionField extends Field
 	 * @param cardComparator The comparator to use for battles.
 	 * @param ascensionTransform The ascension function to use.
 	 */
-	public AscensionField(DeployedCardComparator cardComparator, AscensionTransform ascensionTransform)
+	public AscensionField(DeployedCardComparator cardComparator, AscensionTransform ascensionTransform,
+			CardPlayFunction playFunc)
 	{
-		super(cardComparator);
+		super(cardComparator, playFunc);
 		this.typeMap = initTypeMap();
 		this.ascensionTransform = ascensionTransform;
 	}
@@ -50,9 +53,10 @@ public class AscensionField extends Field
 	 * @param ascensionTransform The ascension function to use.
 	 */
 	public AscensionField(DeployedCard[][] playedCards, DeployedCardComparator cardComparator,
-			EnumMap<Card.Type, DeployedCard[]> typeMap, AscensionTransform ascensionTransform)
+			EnumMap<Card.Type, DeployedCard[]> typeMap, AscensionTransform ascensionTransform, 
+			CardPlayFunction playFunc)
 	{
-		super(playedCards, cardComparator);
+		super(playedCards, cardComparator, playFunc);
 		this.typeMap = typeMap;
 		this.ascensionTransform = ascensionTransform;
 	}
@@ -77,12 +81,17 @@ public class AscensionField extends Field
 		else
 			newPlayedCards = this.playedCards.clone();
 		
+		Set<DeployedCard> takeOver = this.playFunc.updateField(this, cardToPlay, this.cardComparator);
 		newPlayedCards[row][col] = cardToPlay;
-		this.applyFunctionToPos(row + 1, col, newPlayedCards, cardToPlay);
-		this.applyFunctionToPos(row - 1, col, newPlayedCards, cardToPlay);
-		this.applyFunctionToPos(row, col + 1, newPlayedCards, cardToPlay);
-		this.applyFunctionToPos(row, col - 1, newPlayedCards, cardToPlay);
-		return new AscensionField(newPlayedCards, this.cardComparator, newTypeMap, this.ascensionTransform);
+		for(DeployedCard card : takeOver)
+		{
+			DeployedCard newCard = card.setPlayer(cardToPlay.card.holdingPlayer);
+			newPlayedCards[newCard.row][newCard.col] = newCard;
+		}
+		
+		newPlayedCards[row][col] = cardToPlay;
+		return new AscensionField(newPlayedCards, this.cardComparator, newTypeMap, this.ascensionTransform,
+				this.playFunc);
 	}
 	
 	/**

@@ -189,9 +189,9 @@ public class BoardState
 			this.playerHands.put(Player.SELF, new TreeSet<>());
 			this.playerHands.put(Player.OPPONENT, new TreeSet<>());
 			if (ruleSet.ascensionRule != Rules.AscensionRule.NONE)
-				this.fieldToUse = new AscensionField(ruleSet.cardComparator, ruleSet.ascensionFunc);
+				this.fieldToUse = new AscensionField(ruleSet.cardComparator, ruleSet.ascensionFunc, ruleSet.playFunc);
 			else
-				this.fieldToUse = new Field(ruleSet.cardComparator);
+				this.fieldToUse = new Field(ruleSet.cardComparator, ruleSet.playFunc);
 		}
 
 		/**
