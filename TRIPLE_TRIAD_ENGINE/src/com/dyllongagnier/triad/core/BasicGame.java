@@ -1,5 +1,7 @@
 package com.dyllongagnier.triad.core;
 
+import java.util.function.Function;
+
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
 
@@ -24,7 +26,7 @@ public class BasicGame
 		Player currentPlayer = firstPlayer;
 		for(int turn = 1; turn <= 9; turn++)
 		{
-			GameControls currentControls = new GameControls(currentState, currentPlayer);
+			GameControls currentControls = new GameControls(currentState, currentPlayer, gameRules.moveValidator);
 			switch(currentPlayer)
 			{
 				case SELF:
@@ -41,6 +43,18 @@ public class BasicGame
 		}
 		
 		assert currentState.gameComplete();
+		
+		if (gameRules.isSuddenDeath)
+		{
+			Player winner = currentState.getWinner();
+			if (winner == Player.NONE)
+			{
+				Function<Player, UndeployedCard[]> cardFunc = currentState.getCardsUnderPlayers();
+				return BasicGame.runGame(firstPlayer, cardFunc.apply(Player.SELF), cardFunc.apply(Player.SELF),
+						selfAgent, opponentAgent, gameRules);
+			}
+		}
+		
 		return currentState;
 	}
 	

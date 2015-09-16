@@ -3,6 +3,7 @@ package com.dyllongagnier.triad.core;
 import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.functions.AscensionTransform;
 import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
+import com.dyllongagnier.triad.core.functions.MoveValidator;
 
 /**
  * This is an immutable object for the purpose of conveying rules.
@@ -10,9 +11,8 @@ import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 public class Rules 
 {
 	public final boolean isSuddenDeath;
-	public final boolean isOrder;
-	public final boolean isChaos;
 	public final AscensionRule ascensionRule;
+	public final MoveValidator moveValidator;
 	
 	public static enum AscensionRule
 	{
@@ -26,19 +26,17 @@ public class Rules
 	 * This method initializes an immutable Rules object.
 	 * @param isSuddenDeath This indicates sudden death is in place.
 	 * @param isOrder This indicates that order is in place.
-	 * @param isChaos This indicates the chaos rule.
 	 * @param isReverse This indicates the reverse rule.
 	 * @param isFallenAce This indicates the fallen ace rule.
 	 * @param ascensionRule The way to handle ascension.
 	 * @param selfCards This is the card order to be used for isOrder for self.
 	 * @param opponentCards This is the card order to be used for isOrder for opponent.
 	 */
-	public Rules(boolean isSuddenDeath, boolean isOrder, boolean isChaos, boolean isReverse, boolean isFallenAce,
+	public Rules(boolean isSuddenDeath, boolean isOrder, boolean isReverse, boolean isFallenAce,
 			AscensionRule ascensionRule, UndeployedCard[] selfCards, UndeployedCard[] opponentCards)
 	{
 		this.isSuddenDeath = isSuddenDeath;
-		this.isOrder = isOrder;
-		this.isChaos = isChaos;
+		this.moveValidator = getValidator(isOrder);
 		this.ascensionFunc = getAscensionFunc(ascensionRule);
 		this.cardComparator = getComparator(isReverse, isFallenAce);
 		this.ascensionRule = ascensionRule;
@@ -79,5 +77,18 @@ public class Rules
 		default:
 			throw new IllegalArgumentException();
 		}
+	}
+	
+	/**
+	 * This method returns a validator for the given rule set.
+	 * @param isOrder Whether to use the Order rule.
+	 * @return A move validator for the relevant game.
+	 */
+	private static MoveValidator getValidator(boolean isOrder)
+	{
+		if(isOrder)
+			return MoveValidator::normalValidator;
+		else
+			return MoveValidator::orderValidator;
 	}
 }

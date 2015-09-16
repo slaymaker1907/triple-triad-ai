@@ -1,11 +1,13 @@
 package com.dyllongagnier.triad.core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
@@ -93,8 +95,9 @@ public class BoardState
 						this.playedCards.getCard(row, col).card.holdingPlayer, (player, currentVal) -> currentVal + 1);
 			}
 		
-		int playerCards = holdingCount.get(Player.SELF);
-		int opponentCards = holdingCount.get(Player.OPPONENT);
+		int playerCards = holdingCount.get(Player.SELF) + this.getHand(Player.SELF).size();
+		int opponentCards = holdingCount.get(Player.OPPONENT) + this.getHand(Player.OPPONENT).size();
+		assert playerCards + opponentCards == 10;
 		if (playerCards > opponentCards)
 			return Player.SELF;
 		else if (opponentCards> playerCards)
@@ -136,7 +139,40 @@ public class BoardState
 		Field newField = this.playedCards.playCard(cardToPlay);
 		return new BoardState(this.playerHands, newField);
 	}
-
+	
+	/**
+	 * This method returns a setup for a new game with UndeployedCards corresponding to each player.
+	 * This method should only be called after the end of the game. This should also only be called in the case of a draw.
+	 * @return A function that returns the cards for each player.
+	 */
+	public Function<Player, UndeployedCard[]> getCardsUnderPlayers()
+	{
+		assert this.gameComplete();
+		
+		Function<Player, ArrayList<UndeployedCard>> boardFunc = this.playedCards.getCardsUnderPlayers();
+		ArrayList<UndeployedCard> selfCards = boardFunc.apply(Player.SELF);
+		ArrayList<UndeployedCard> opponentCards = boardFunc.apply(Player.OPPONENT);
+		assert boardFunc.apply(Player.NONE).size() == 0;
+		selfCards.addAll(this.getHand(Player.SELF));
+		opponentCards.addAll(this.getHand(Player.OPPONENT));
+		
+		assert selfCards.size() == opponentCards.size();
+				
+		return (player) ->
+		{
+			switch(player)
+			{
+				case SELF:
+					return selfCards.toArray(new UndeployedCard[selfCards.size()]);
+				case OPPONENT:
+					return opponentCards.toArray(new UndeployedCard[opponentCards.size()]);
+				default:
+					assert false;
+					return new UndeployedCard[0];
+			}
+		};
+	}
+	
 	/**
 	 * This class is used to construct BoardStates and is mutable.
 	 */

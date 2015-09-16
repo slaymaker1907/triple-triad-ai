@@ -2,6 +2,7 @@ package com.dyllongagnier.triad.core;
 
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
+import com.dyllongagnier.triad.core.functions.MoveValidator;
 
 public class GameControls
 {
@@ -9,6 +10,7 @@ public class GameControls
 	
 	public final BoardState currentTurn;
 	private BoardState nextTurn;
+	public final MoveValidator moveValidator;
 	
 	/**
 	 * Constructs a new GameControls from the currentTurn as well as the currentPlayer who
@@ -16,11 +18,12 @@ public class GameControls
 	 * @param currentTurn The current state of the board for this turn.
 	 * @param currentPlayer The player taking this turn.
 	 */
-	public GameControls(BoardState currentTurn, Player currentPlayer)
+	public GameControls(BoardState currentTurn, Player currentPlayer, MoveValidator moveValidator)
 	{
 		this.currentTurn = currentTurn;
 		this.currentPlayer = currentPlayer;
 		this.nextTurn = null;
+		this.moveValidator = moveValidator;
 	}
 	
 	/**
@@ -34,11 +37,9 @@ public class GameControls
 	public void playCard(UndeployedCard card, int row, int col)
 	{
 		// These can may be replaced with assert statements to be compiled away.
-		if (this.nextTurn == null)
+		if (this.nextTurn != null)
 			throw new IllegalArgumentException("This turn is already complete and can not be changed.");
-		if (!this.currentTurn.getHand(this.currentPlayer).contains(card))
-			throw new IllegalArgumentException("Attempted to play a card not in hand.");
-		if (this.currentTurn.playedCards.isCardInPos(row, col))
+		if (this.moveValidator.apply(this.currentTurn, card, this.currentPlayer, row, col))
 			throw new IllegalArgumentException();
 		
 		this.nextTurn = this.currentTurn.playCard(this.currentPlayer, card, row, col);

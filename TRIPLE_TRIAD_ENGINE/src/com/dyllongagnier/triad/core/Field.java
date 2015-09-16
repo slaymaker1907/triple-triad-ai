@@ -1,8 +1,13 @@
 package com.dyllongagnier.triad.core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Function;
 
+import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.DeployedCard;
+import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 
 /**
@@ -106,5 +111,45 @@ public class Field
 			if(this.cardComparator.apply(cardToPlay, newPlayedCards[row][col]))
 				newPlayedCards[row][col] = newPlayedCards[row][col].setPlayer(cardToPlay.card.holdingPlayer);
 		}
+	}
+	
+	/**
+	 * This method returns a function that returns a list of all cards under the input player's control.
+	 * @return
+	 */
+	public Function<Player, ArrayList<UndeployedCard>> getCardsUnderPlayers()
+	{
+		ArrayList<UndeployedCard> selfCards = new ArrayList<>();
+		ArrayList<UndeployedCard> opponentCards = new ArrayList<>();
+		for(int row = 0; row < 3; row++)
+			for(int col = 0; col < 3; col++)
+			{
+				Card card = this.getCard(row, col).card;
+				switch(card.holdingPlayer)
+				{
+					case SELF:
+						selfCards.add(card);
+						break;
+					case OPPONENT:
+						opponentCards.add(card);
+						break;
+					default:
+						throw new RuntimeException("NONE player was owner of a card.");
+				}
+			}
+		
+		return (player) ->
+		{
+			switch(player)
+			{
+			case SELF:
+				return selfCards;
+			case OPPONENT:
+				return opponentCards;
+			default:
+				assert false;
+				return new ArrayList<>(0);
+			}
+		};
 	}
 }
