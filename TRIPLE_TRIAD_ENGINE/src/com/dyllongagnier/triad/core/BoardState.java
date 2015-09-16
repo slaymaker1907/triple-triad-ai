@@ -12,7 +12,6 @@ import java.util.function.Function;
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
-import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 
 /**
  * This class represents an immutable BoardState for triple triad. This is
@@ -128,7 +127,6 @@ public class BoardState
 	 */
 	public BoardState playCard(Player player, UndeployedCard card, int row, int col)
 	{
-		// TODO Implement me.
 		assert player != Player.NONE;
 		assert player != null;
 		assert card != null;
@@ -179,7 +177,7 @@ public class BoardState
 	public static class Builder
 	{
 		protected final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
-		private final DeployedCardComparator cardComparator;
+		private final Field fieldToUse;
 
 		/**
 		 * Constructs a new state with no cards in hands and no played cards.
@@ -190,7 +188,10 @@ public class BoardState
 			this.playerHands = new EnumMap<>(Player.class);
 			this.playerHands.put(Player.SELF, new TreeSet<>());
 			this.playerHands.put(Player.OPPONENT, new TreeSet<>());
-			this.cardComparator = ruleSet.cardComparator;
+			if (ruleSet.ascensionRule != Rules.AscensionRule.NONE)
+				this.fieldToUse = new AscensionField(ruleSet.cardComparator, ruleSet.ascensionFunc);
+			else
+				this.fieldToUse = new Field(ruleSet.cardComparator);
 		}
 
 		/**
@@ -220,7 +221,7 @@ public class BoardState
 		 */
 		public BoardState build()
 		{
-			return new BoardState(this.playerHands, new Field(this.cardComparator));
+			return new BoardState(this.playerHands, this.fieldToUse);
 		}
 	}
 }

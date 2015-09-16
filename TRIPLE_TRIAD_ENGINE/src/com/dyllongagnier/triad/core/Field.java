@@ -15,8 +15,8 @@ import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
  */
 public class Field 
 {
-	private final DeployedCard[][] playedCards;
-	private final DeployedCardComparator cardComparator;
+	protected final DeployedCard[][] playedCards;
+	protected final DeployedCardComparator cardComparator;
 	
 	/**
 	 * Creates an empty field that will use the input cardComparator.
@@ -102,7 +102,7 @@ public class Field
 	 * @param newPlayedCards The array to mutate.
 	 * @param cardToPlay The card that was just played.
 	 */
-	private void applyFunctionToPos(int row, int col, DeployedCard[][] newPlayedCards, DeployedCard cardToPlay)
+	protected void applyFunctionToPos(int row, int col, DeployedCard[][] newPlayedCards, DeployedCard cardToPlay)
 	{
 		assert (Math.abs(cardToPlay.row - row) == 1 && col == cardToPlay.col) || (Math.abs(col - cardToPlay.col) == 1
 				&& row == cardToPlay.row);

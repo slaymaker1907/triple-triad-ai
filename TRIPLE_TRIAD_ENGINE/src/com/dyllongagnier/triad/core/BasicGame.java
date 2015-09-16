@@ -1,6 +1,7 @@
 package com.dyllongagnier.triad.core;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
@@ -9,7 +10,7 @@ public class BasicGame
 {
 	/**
 	 * This method runs a game with the given inputs.
-	 * @param firstPlayer The first player to go.
+	 * @param firstPlayerGen A function to determine the first player to play.
 	 * @param selfCards The cards for Player.SELF. Must contain 5 cards.
 	 * @param opponentCards The cards for Player.OPPONENT. Must contain 5 cards.
 	 * @param selfAgent The agent for self. The agent to use for playing Player.SELF.
@@ -17,9 +18,10 @@ public class BasicGame
 	 * @param gameRules The rules to use for playing this game.
 	 * @return The final BoardState of the game.
 	 */
-	public static BoardState runGame(Player firstPlayer, UndeployedCard[] selfCards, UndeployedCard[] opponentCards,
+	public static BoardState runGame(Supplier<Player> firstPlayerGen, UndeployedCard[] selfCards, UndeployedCard[] opponentCards,
 			GameAgent selfAgent, GameAgent opponentAgent, Rules gameRules)
 	{
+		Player firstPlayer = firstPlayerGen.get();
 		assert firstPlayer != Player.NONE;
 		
 		BoardState currentState = BasicGame.getInitialState(selfCards, opponentCards, gameRules);
@@ -50,7 +52,7 @@ public class BasicGame
 			if (winner == Player.NONE)
 			{
 				Function<Player, UndeployedCard[]> cardFunc = currentState.getCardsUnderPlayers();
-				return BasicGame.runGame(firstPlayer, cardFunc.apply(Player.SELF), cardFunc.apply(Player.SELF),
+				return BasicGame.runGame(firstPlayerGen, cardFunc.apply(Player.SELF), cardFunc.apply(Player.SELF),
 						selfAgent, opponentAgent, gameRules);
 			}
 		}
