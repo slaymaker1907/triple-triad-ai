@@ -132,6 +132,7 @@ public class BoardState
 		assert this.playerHands.get(player).contains(card);
 		
 		DeployedCard cardToPlay = new DeployedCard(card.deploy(), row, col);
+		assert cardToPlay.card.holdingPlayer == player;
 		Field newField = this.playedCards.playCard(cardToPlay);
 		return new BoardState(this.playerHands, newField);
 	}

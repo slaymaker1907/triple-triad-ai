@@ -1,7 +1,5 @@
 package com.dyllongagnier.triad.card;
 
-import com.dyllongagnier.triad.core.BoardState;
-
 /**
  * This class represents a card that has been played on the board.
  */
@@ -27,7 +25,7 @@ public class DeployedCard
 	 */
 	public DeployedCard(UndeployedCard card, int row, int col)
 	{
-		assert BoardState.isInBounds(row, col);
+		assert row >= 0 && row < 3 && col >= 0 && col < 3;
 		assert card != null;
 		this.card = card.deploy();
 		this.row = row;

@@ -1,15 +1,14 @@
 package com.dyllongagnier.triad.core;
 
-import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.card.UndeployedCard;
 
 public class GameControls
 {
-	private final BoardState.Builder nextTurn;
 	private final Player currentPlayer;
-	private boolean playedCard;
 	
 	public final BoardState currentTurn;
+	private BoardState nextTurn;
 	
 	/**
 	 * Constructs a new GameControls from the currentTurn as well as the currentPlayer who
@@ -20,9 +19,8 @@ public class GameControls
 	public GameControls(BoardState currentTurn, Player currentPlayer)
 	{
 		this.currentTurn = currentTurn;
-		this.nextTurn = new BoardState.Builder(currentTurn);
 		this.currentPlayer = currentPlayer;
-		this.playedCard = false;
+		this.nextTurn = null;
 	}
 	
 	/**
@@ -33,27 +31,17 @@ public class GameControls
 	 * @param row The row to play the card at.
 	 * @param col The col to play the card at.
 	 */
-	public void playCard(Card card, int row, int col)
+	public void playCard(UndeployedCard card, int row, int col)
 	{
-		if (this.playedCard)
+		// These can may be replaced with assert statements to be compiled away.
+		if (this.nextTurn == null)
 			throw new IllegalArgumentException("This turn is already complete and can not be changed.");
 		if (!this.currentTurn.getHand(this.currentPlayer).contains(card))
 			throw new IllegalArgumentException("Attempted to play a card not in hand.");
-		if (!this.currentTurn.spotEmpty(row, col))
+		if (this.currentTurn.playedCards.isCardInPos(row, col))
 			throw new IllegalArgumentException();
-		// This should be an invariant for cards held in hand.
-		assert card.holdingPlayer == currentPlayer;
 		
-		this.nextTurn.playCardAndCapture(this.currentPlayer, card, row, col);
-		
-		// This is hacky so that it only triggers when assertions are on.
-		assert this.setPlayedCard();
-	}
-	
-	private boolean setPlayedCard()
-	{
-		this.playedCard = true;
-		return true;
+		this.nextTurn = this.currentTurn.playCard(this.currentPlayer, card, row, col);
 	}
 	
 	/**
@@ -63,7 +51,7 @@ public class GameControls
 	 */
 	public BoardState getNextTurn()
 	{
-		assert !this.playedCard;
-		return this.nextTurn.build();
+		assert this.nextTurn != null;
+		return this.nextTurn;
 	}
 }
