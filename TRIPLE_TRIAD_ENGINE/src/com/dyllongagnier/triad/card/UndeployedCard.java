@@ -1,5 +1,7 @@
 package com.dyllongagnier.triad.card;
 
+import java.util.List;
+
 /**
  * This interface is provided so that players/npcs can have hidden cards as well in their hands.
  * The engine uses a sorted set for this object, so implementing classes must implement a comparator
@@ -14,6 +16,12 @@ public interface UndeployedCard extends Comparable<UndeployedCard>
 	 * @return The card to play.
 	 */
 	public Card deploy();
+	
+	/**
+	 * This method returns a list of all possible cards that this card could be.
+	 * @return A list of all possibilities for this card.
+	 */
+	public List<ProbCard> getPossibleCards();
 	
 	/**
 	 * If this method returns true, then it is deploy is safe to call multiple times, even when a card

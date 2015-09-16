@@ -1,5 +1,8 @@
 package com.dyllongagnier.triad.card;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * An immutable representation of a card.
  */
@@ -176,5 +179,13 @@ public class Card implements UndeployedCard
 	public int compareTo(UndeployedCard o)
 	{
 		return this.toString().compareTo(o.toString());
+	}
+	
+	@Override
+	public List<ProbCard> getPossibleCards()
+	{
+		ArrayList<ProbCard> result = new ArrayList<>(1);
+		result.add(new ProbCard(this, 1));
+		return result;
 	}
 }
