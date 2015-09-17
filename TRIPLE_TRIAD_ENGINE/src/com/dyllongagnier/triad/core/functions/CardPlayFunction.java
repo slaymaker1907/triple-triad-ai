@@ -9,18 +9,36 @@ import java.util.Set;
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.core.Field;
 
+/**
+ * This class represents a function that is used to determine which cards are captured
+ * when a card is played.
+ */
 @FunctionalInterface
 public interface CardPlayFunction 
 {
+	/**
+	 * This is an internal class that will sum together the relevant stats of two cards and store
+	 * the second card as as it relates to the first one. cardsToCapture can then be called to see
+	 * get cards that were captured.
+	 */
 	static class SumPairCollection
 	{
 		private final Map<Integer, Set<DeployedCard>> mapOfSums;
 		
+		/**
+		 * Initializes an empty sum pair collection.
+		 */
 		public SumPairCollection()
 		{
 			this.mapOfSums = new HashMap<>();
 		}
 		
+		/**
+		 * This method adds the specified pair to this object (mapping the sum to the other card).
+		 * @param playedCard The card just played.
+		 * @param otherCard An adjacent card.
+		 * @return True if the pair was actually added.
+		 */
 		public boolean addPair(DeployedCard playedCard, DeployedCard otherCard)
 		{
 			assert playedCard.cardAdjacent(otherCard);
@@ -33,6 +51,10 @@ public interface CardPlayFunction
 			return true;
 		}
 		
+		/**
+		 * This method returns the resultant cards captured.
+		 * @return Captured cards.
+		 */
 		public Set<DeployedCard> cardsToCapture()
 		{
 			Set<DeployedCard> result = new HashSet<DeployedCard>();
@@ -45,9 +67,26 @@ public interface CardPlayFunction
 		}
 	}
 	
+	/**
+	 * This method takes in a field, a card to play, and card comparator and uses them
+	 * to determine which cards to capture, returning those as a set.
+	 * @param field The current state of the game.
+	 * @param toPlay The card just played (but not yet added to the state of the game).
+	 * @param cardComparator The comparator to use for comparing card values.
+	 * @return The captured cards.
+	 */
 	public Set<DeployedCard> updateField(Field field, DeployedCard toPlay,
 			DeployedCardComparator cardComparator);
 	
+	/**
+	 * This method takes in a field, a card to play, and card comparator and uses them
+	 * to determine which cards to capture, returning those as a set. This method assumes neither the Plus
+	 * nor the Same rule.
+	 * @param field The current state of the game.
+	 * @param toPlay The card just played (but not yet added to the state of the game).
+	 * @param cardComparator The comparator to use for comparing card values.
+	 * @return The captured cards.
+	 */
 	public static Set<DeployedCard> basicCapture(Field field, DeployedCard toPlay,
 			DeployedCardComparator cardComparator)
 	{
@@ -62,6 +101,15 @@ public interface CardPlayFunction
 		return result;
 	}
 	
+	/**
+	 * This method takes in a field, a card to play, and card comparator and uses them
+	 * to determine which cards to capture, returning those as a set. This function assumes the
+	 * Same rule but not the Combo or Plus rule.
+	 * @param field The current state of the game.
+	 * @param toPlay The card just played (but not yet added to the state of the game).
+	 * @param cardComparator The comparator to use for comparing card values.
+	 * @return The captured cards.
+	 */
 	public static Set<DeployedCard> sameCapture(Field field, DeployedCard toPlay,
 			DeployedCardComparator cardComparator)
 	{
@@ -72,13 +120,18 @@ public interface CardPlayFunction
 		return result;
 	}
 	
+	/**
+	 * This is an internal function that computes the sum of the played card and the other card.
+	 * @param toPlay The card just played. Must be non-null.
+	 * @param otherCard The other card. Must be non-null.
+	 * @return The sum of the two cards.
+	 */
 	static int computeSum(DeployedCard toPlay, DeployedCard otherCard)
 	{
 		assert toPlay.cardAdjacent(otherCard);
-		if (otherCard == null)
-		{
-			return -1;
-		}
+		assert toPlay != null;
+		assert otherCard != null;
+		
 		DeployedCard.Direction dir = toPlay.getDirectionOfOther(otherCard);
 		switch(dir)
 		{
@@ -95,6 +148,15 @@ public interface CardPlayFunction
 		}
 	}
 	
+	/**
+	 * This method takes in a field, a card to play, and card comparator and uses them
+	 * to determine which cards to capture, returning those as a set. This method assumes the Plus
+	 * rule, but not the Combo or Same rules.
+	 * @param field The current state of the game.
+	 * @param toPlay The card just played (but not yet added to the state of the game).
+	 * @param cardComparator The comparator to use for comparing card values.
+	 * @return The captured cards.
+	 */
 	public static Set<DeployedCard> plusCapture(Field field, DeployedCard toPlay,
 			DeployedCardComparator cardComparator)
 	{
@@ -113,6 +175,15 @@ public interface CardPlayFunction
 		return result;
 	}
 	
+	/**
+	 * This method takes in a field, a card to play, and card comparator and uses them
+	 * to determine which cards to capture, returning those as a set. This method assumes the Plus
+	 * and Combo rules but not the Same rule.
+	 * @param field The current state of the game.
+	 * @param toPlay The card just played (but not yet added to the state of the game).
+	 * @param cardComparator The comparator to use for comparing card values.
+	 * @return The captured cards.
+	 */
 	public static Set<DeployedCard> plusCombo(Field field, DeployedCard toPlay,
 			DeployedCardComparator cardComparator)
 	{
@@ -135,6 +206,15 @@ public interface CardPlayFunction
 		return capturedThroughBattle;
 	}
 	
+	/**
+	 * This method takes in a field, a card to play, and card comparator and uses them
+	 * to determine which cards to capture, returning those as a set. This method assumes the
+	 * Same and Combo rules but not not the Plus rule.
+	 * @param field The current state of the game.
+	 * @param toPlay The card just played (but not yet added to the state of the game).
+	 * @param cardComparator The comparator to use for comparing card values.
+	 * @return The captured cards.
+	 */
 	public static Set<DeployedCard> sameCombo(Field field, DeployedCard toPlay,
 			DeployedCardComparator cardComparator)
 	{
@@ -153,6 +233,15 @@ public interface CardPlayFunction
 		return sameCards;
 	}
 	
+	/**
+	 * This method takes in a field, a card to play, and card comparator and uses them
+	 * to determine which cards to capture, returning those as a set. This method assumes the
+	 * Same, Plus, and Combo rules.
+	 * @param field The current state of the game.
+	 * @param toPlay The card just played (but not yet added to the state of the game).
+	 * @param cardComparator The comparator to use for comparing card values.
+	 * @return The captured cards.
+	 */
 	public static Set<DeployedCard> samePlusCombo(Field field, DeployedCard toPlay,
 			DeployedCardComparator cardComparator)
 	{
@@ -163,6 +252,15 @@ public interface CardPlayFunction
 		return result;
 	}
 	
+	/**
+	 * This method takes in a field, a card to play, and card comparator and uses them
+	 * to determine which cards to capture, returning those as a set. This method assumes
+	 * the Same and Plus rules, but not the Combo rule.
+	 * @param field The current state of the game.
+	 * @param toPlay The card just played (but not yet added to the state of the game).
+	 * @param cardComparator The comparator to use for comparing card values.
+	 * @return The captured cards.
+	 */
 	public static Set<DeployedCard> samePlus(Field field, DeployedCard toPlay, DeployedCardComparator cardComparator)
 	{
 		Set<DeployedCard> result = CardPlayFunction.plusCapture(field, toPlay, cardComparator);
@@ -170,6 +268,14 @@ public interface CardPlayFunction
 		return result;
 	}
 	
+	/**
+	 * This method is identical to basicCapture except that it will recurse over captured cards
+	 * and return cards those cards would capture.
+	 * @param field The current state of the game.
+	 * @param toPlay The card just played.
+	 * @param cardComparator The comparator to use for comparing cards.
+	 * @return A set of captured cards by toPlay.
+	 */
 	static Set<DeployedCard> recursiveNormalCapture(Field field, DeployedCard toPlay,
 			DeployedCardComparator cardComparator)
 	{
@@ -183,11 +289,19 @@ public interface CardPlayFunction
 		return result;
 	}
 		
+	/**
+	 * This method trys to capture a card if it is non-null.
+	 * @param justPlayed The card just played.
+	 * @param toCapture The card to try and capture. This may be null.
+	 * @param cardComparator The comparator to use for comparing the two cards.
+	 * @param result The set to add toCapture to if justPlayed captures toCapture.
+	 */
 	static void tryCapture(DeployedCard justPlayed, DeployedCard toCapture, DeployedCardComparator
 			cardComparator, Set<DeployedCard> result)
 	{
 		if (toCapture == null)
 			return;
+		assert justPlayed != null;
 		assert justPlayed.cardAdjacent(toCapture);
 		if (cardComparator.apply(justPlayed, toCapture))
 			result.add(toCapture);
