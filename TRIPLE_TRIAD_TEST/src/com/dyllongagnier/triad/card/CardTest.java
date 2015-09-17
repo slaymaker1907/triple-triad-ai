@@ -59,6 +59,20 @@ public class CardTest
 	}
 	
 	@Test
+	public void setHoldingPlayerNoMutate()
+	{
+		testCard.setHoldingPlayer(Player.SELF);
+		assertEquals(testCard.cardRarity, 5);
+		assertEquals(testCard.north, 1);
+		assertEquals(testCard.east, 2);
+		assertEquals(testCard.south, 3);
+		assertEquals(testCard.west, 4);
+		assertEquals(testCard.name, "");
+		assertEquals(testCard.cardType, Card.Type.BEASTMAN);
+		assertEquals(testCard.holdingPlayer, Player.NONE);
+	}
+	
+	@Test
 	public void testIncreaseStats()
 	{
 		Card newCard = testCard.increaseAllStats(1);
@@ -98,6 +112,14 @@ public class CardTest
 		assertEquals(newCard.name, "");
 		assertEquals(newCard.cardType, Card.Type.BEASTMAN);
 		assertEquals(newCard.holdingPlayer, Player.NONE);
+	}
+	
+	@Test
+	public void testIncreaseStatsNoMutate()
+	{
+		testCard.increaseAllStats(-1);
+		Card expected = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5);
+		assertEquals(expected, testCard);
 	}
 	
 	@Test
