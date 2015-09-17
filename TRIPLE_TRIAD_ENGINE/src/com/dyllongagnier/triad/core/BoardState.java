@@ -14,9 +14,10 @@ import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
 
 /**
- * This class represents an immutable BoardState for triple triad. This is
+ * This class represents a (mostly) immutable BoardState for triple triad. This is
  * guaranteed to provide enough state for the Basic game, however, more complex
- * games may need to extend this class.
+ * games may need to extend this class. Player hands may not be completely immutable due
+ * to IO and thus need to be cloned if copying.
  */
 public class BoardState
 {
@@ -46,6 +47,23 @@ public class BoardState
 		this.playerHands.put(Player.OPPONENT, opponentCards);
 		this.playerHands.put(Player.SELF, selfCards);
 		this.playedCards = playedCards;
+	}
+	
+	@Override
+	public BoardState clone()
+	{
+		// Do a deep clone on the player hands to ensure immutability.
+		EnumMap<Player, SortedSet<UndeployedCard>> newPlayerHands = new EnumMap<>(Player.class);
+		SortedSet<UndeployedCard> selfHand = new TreeSet<>();
+		for(UndeployedCard card : this.playerHands.get(Player.SELF))
+			selfHand.add(card);
+		SortedSet<UndeployedCard> opponentHand = new TreeSet<>();
+		for(UndeployedCard card : this.playerHands.get(Player.OPPONENT))
+			opponentHand.add(card);
+		newPlayerHands.put(Player.SELF, selfHand);
+		newPlayerHands.put(Player.OPPONENT, opponentHand);
+		
+		return new BoardState(newPlayerHands, this.playedCards);
 	}
 
 	/**

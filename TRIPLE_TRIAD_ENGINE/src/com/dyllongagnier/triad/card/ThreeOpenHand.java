@@ -55,8 +55,11 @@ public class ThreeOpenHand
 		{
 			possibleCards.add(CardList.getCard(((JsonString)cardName).getString()).setHoldingPlayer(player));
 		}
-		result[i++] = new RandomCard(possibleCards);
-		result[i++] = new RandomCard(possibleCards);
+		
+		// Ensure that the random cards are a singleton.
+		RandomCard rand = new RandomCard(possibleCards);
+		result[i++] = rand;
+		result[i++] = rand;
 		assert i == 5;
 		return result;
 	}

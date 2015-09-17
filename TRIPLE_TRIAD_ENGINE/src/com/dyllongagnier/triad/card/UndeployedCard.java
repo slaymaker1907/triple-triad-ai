@@ -6,7 +6,7 @@ import java.util.List;
  * This interface is provided so that players/npcs can have hidden cards as well in their hands.
  * The engine uses a sorted set for this object, so implementing classes must implement a comparator
  * and if the Order rule is used, this comparator will also be used to determine the order in which cards can
- * be played.
+ * be played. Every UndeployedCard should also implement clone since this is an inherently mutable object.
  */
 public interface UndeployedCard extends Comparable<UndeployedCard>
 {

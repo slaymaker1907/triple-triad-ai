@@ -192,4 +192,11 @@ public class Card implements UndeployedCard
 		result.add(new ProbCard(this, 1));
 		return result;
 	}
+	
+	@Override
+	public Card clone()
+	{
+		// Since this is immutable, just return this object.
+		return this;
+	}
 }
