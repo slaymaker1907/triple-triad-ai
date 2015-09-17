@@ -77,4 +77,22 @@ public class CardList
 		}
 		return Collections.unmodifiableMap(result);
 	}
+	
+	/**
+	 * This method generates a Card[] from a list of card names.
+	 * @param player The owner of these cards.
+	 * @param cardNames The names of cards.
+	 * @return A Card[] of the input cards.
+	 */
+	public static Card[] generateHand(Player player, String ... cardNames)
+	{
+		assert cardNames.length == 5;
+		assert player != Player.NONE;
+		Card[] cards = new Card[5];
+		for(int i = 0; i < 5; i++)
+		{
+			cards[i] = CardList.getCard(cardNames[i]).setHoldingPlayer(player);
+		}
+		return cards;
+	}
 }
