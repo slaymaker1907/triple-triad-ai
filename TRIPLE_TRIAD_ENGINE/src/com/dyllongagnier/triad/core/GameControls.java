@@ -8,7 +8,7 @@ public class GameControls
 {
 	private final Player currentPlayer;
 	
-	public final BoardState currentTurn;
+	private final BoardState currentTurn;
 	private BoardState nextTurn;
 	public final MoveValidator moveValidator;
 	
@@ -43,6 +43,16 @@ public class GameControls
 			throw new IllegalArgumentException();
 		
 		this.nextTurn = this.currentTurn.playCard(this.currentPlayer, card, row, col);
+	}
+	
+	/**
+	 * Only return a clone since BoardState isn't truly immutable.
+	 * @return A clone of the current turn.
+	 */
+	public BoardState getCopyOfBoard()
+	{
+		// It may be prudent to add some methods to access board data without cloning the board for certain AIs.
+		return this.currentTurn.clone();
 	}
 	
 	/**
