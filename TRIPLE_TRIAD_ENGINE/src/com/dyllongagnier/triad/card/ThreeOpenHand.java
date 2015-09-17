@@ -48,6 +48,8 @@ public class ThreeOpenHand
 		}
 		assert i == 3;
 		JsonArray randomized = ob.getJsonArray("maybe");
+		if (randomized.size() < 3)
+			throw new IllegalArgumentException("Invalid file: randomized is less than three.");
 		HashSet<Card> possibleCards = new HashSet<Card>();
 		for(JsonValue cardName : randomized)
 		{
