@@ -1,5 +1,7 @@
 package com.dyllongagnier.triad.card;
 
+import java.util.Random;
+
 public enum Player
 {
 	SELF, OPPONENT, NONE;
@@ -20,5 +22,20 @@ public enum Player
 			default:
 				throw new IllegalArgumentException();
 		}
+	}
+	
+	private static final Random gen = new Random();
+	
+	/**
+	 * This method returns a random player (either SELF or OPPONENT).
+	 * @return A random player.
+	 */
+	public Player getRandomPlayer()
+	{
+		int roll = gen.nextInt(2);
+		if (roll == 0)
+			return Player.SELF;
+		else
+			return Player.OPPONENT;
 	}
 }
