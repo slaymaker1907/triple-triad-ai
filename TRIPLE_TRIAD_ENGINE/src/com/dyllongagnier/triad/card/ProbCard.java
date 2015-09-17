@@ -17,5 +17,5 @@ public class ProbCard
 	{
 		this.card = card;
 		this.probability = probability;
-	}
+	}	
 }
