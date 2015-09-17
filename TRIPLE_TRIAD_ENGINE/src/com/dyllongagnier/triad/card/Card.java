@@ -34,12 +34,14 @@ public class Card implements UndeployedCard
 	 */
 	public Card(int north, int east, int south, int west, String cardName, Card.Type cardType, int cardRarity)
 	{
-		if (cardName == null)
-			throw new NullPointerException();
-		if (cardType == null)
-			throw new NullPointerException();
-		if (cardRarity < 1 || cardRarity > 5)
-			throw new IllegalArgumentException("Card Rarity:" +  cardRarity);
+		assert cardName != null;
+		assert cardType != null;
+		assert cardRarity < 1 && cardRarity > 5;
+		assert north > 0 && north <= 11;
+		assert east > 0 && east <= 11;
+		assert south > 0 && south <= 11;
+		assert west > 0 && west <= 11;
+		assert cardType != null;
 
 		this.north = north;
 		this.east = east;
@@ -64,14 +66,14 @@ public class Card implements UndeployedCard
 	 */
 	public Card(int north, int east, int south, int west, String cardName, Card.Type cardType, int cardRarity, Player holdingPlayer)
 	{
-		if (cardName == null)
-			throw new NullPointerException();
-		if (cardType == null)
-			throw new NullPointerException();
-		if (holdingPlayer == null)
-			throw new NullPointerException();
-		if (cardRarity < 1 || cardRarity > 5)
-			throw new IllegalArgumentException("Card Rarity:" +  cardRarity);
+		assert cardName != null;
+		assert cardType != null;
+		assert cardRarity < 1 && cardRarity > 5;
+		assert north > 0 && north <= 11;
+		assert east > 0 && east <= 11;
+		assert south > 0 && south <= 11;
+		assert west > 0 && west <= 11;
+		assert cardType != null;
 
 		this.north = north;
 		this.east = east;

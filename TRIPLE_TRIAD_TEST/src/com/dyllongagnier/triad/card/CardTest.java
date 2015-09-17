@@ -7,6 +7,7 @@ import org.junit.Test;
 
 public class CardTest
 {
+	public static final Card testCard = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5);
 
 	@Before
 	public void setUp() throws Exception
@@ -53,5 +54,110 @@ public class CardTest
 		assertEquals(test.name, "");
 		assertEquals(test.cardType, Card.Type.BEASTMAN);
 		assertEquals(test.holdingPlayer, Player.OPPONENT);
+	}
+	
+	@Test
+	public void testIncreaseStats()
+	{
+		Card newCard = testCard.increaseAllStats(1);
+		assertEquals(newCard.cardRarity, 5);
+		assertEquals(newCard.north, 2);
+		assertEquals(newCard.east, 3);
+		assertEquals(newCard.south, 4);
+		assertEquals(newCard.west, 5);
+		assertEquals(newCard.name, "");
+		assertEquals(newCard.cardType, Card.Type.BEASTMAN);
+		assertEquals(newCard.holdingPlayer, Player.NONE);
+	}
+	
+	@Test
+	public void testIncreaseBeyondMax()
+	{
+		Card newCard = testCard.increaseAllStats(7);
+		assertEquals(newCard.cardRarity, 5);
+		assertEquals(newCard.north, 8);
+		assertEquals(newCard.east, 9);
+		assertEquals(newCard.south, 10);
+		assertEquals(newCard.west, 10);
+		assertEquals(newCard.name, "");
+		assertEquals(newCard.cardType, Card.Type.BEASTMAN);
+		assertEquals(newCard.holdingPlayer, Player.NONE);
+	}
+	
+	@Test
+	public void testIncreaseStatsNeg()
+	{
+		Card newCard = testCard.increaseAllStats(-1);
+		assertEquals(newCard.cardRarity, 5);
+		assertEquals(newCard.north, 1);
+		assertEquals(newCard.east, 1);
+		assertEquals(newCard.south, 2);
+		assertEquals(newCard.west, 3);
+		assertEquals(newCard.name, "");
+		assertEquals(newCard.cardType, Card.Type.BEASTMAN);
+		assertEquals(newCard.holdingPlayer, Player.NONE);
+	}
+	
+	@Test
+	public void testEquals()
+	{
+		Card testCopy = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5);
+		assertTrue(testCopy.equals(testCard));
+	}
+	
+	@Test
+	public void testNotEqualsName()
+	{
+		Card testCopy = new Card(1,2,3,4, "a", Card.Type.BEASTMAN, 5);
+		assertFalse(testCopy.equals(testCard));
+	}
+	
+	@Test
+	public void testNotEqualsNorth()
+	{
+		Card testCopy = new Card(2,2,3,4, "", Card.Type.BEASTMAN, 5);
+		assertFalse(testCopy.equals(testCard));
+	}
+	
+	@Test
+	public void testNotEqualsEast()
+	{
+		Card testCopy = new Card(1,1,3,4, "", Card.Type.BEASTMAN, 5);
+		assertFalse(testCopy.equals(testCard));
+	}
+	
+	@Test
+	public void testNotEqualsSouth()
+	{
+		Card testCopy = new Card(1,2,2,4, "", Card.Type.BEASTMAN, 5);
+		assertFalse(testCopy.equals(testCard));
+	}
+	
+	@Test
+	public void testNotEqualsWest()
+	{
+		Card testCopy = new Card(1,2,3,3, "", Card.Type.BEASTMAN, 5);
+		assertFalse(testCopy.equals(testCard));
+	}
+	
+	@Test
+	public void testNotEqualsType()
+	{
+		Card testCopy = new Card(1,2,3,4, "", Card.Type.GARLEAN, 5);
+		assertFalse(testCopy.equals(testCard));
+	}
+	
+	@Test
+	public void testNotEqualsRarity()
+	{
+		Card testCopy = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 1);
+		assertFalse(testCopy.equals(testCard));
+	}
+	
+	@Test
+	public void testNotEqualsPlayer()
+	{
+		Card testCopy = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5).setHoldingPlayer(Player.SELF);
+		assertFalse(testCopy.equals(testCard));
 	}
 }
