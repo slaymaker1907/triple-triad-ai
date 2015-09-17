@@ -36,7 +36,7 @@ public class Card implements UndeployedCard
 	{
 		assert cardName != null;
 		assert cardType != null;
-		assert cardRarity < 1 && cardRarity > 5;
+		assert cardRarity >= 1 && cardRarity <= 5;
 		assert north > 0 && north <= 11;
 		assert east > 0 && east <= 11;
 		assert south > 0 && south <= 11;
@@ -68,7 +68,7 @@ public class Card implements UndeployedCard
 	{
 		assert cardName != null;
 		assert cardType != null;
-		assert cardRarity < 1 && cardRarity > 5;
+		assert cardRarity >= 1 && cardRarity <= 5;
 		assert north > 0 && north <= 11;
 		assert east > 0 && east <= 11;
 		assert south > 0 && south <= 11;
@@ -117,6 +117,8 @@ public class Card implements UndeployedCard
 		builder.append(this.south);
 		builder.append(';');
 		builder.append(this.west);
+		builder.append(';');
+		builder.append(this.holdingPlayer.toString());
 		return builder.toString();
 	}
 	

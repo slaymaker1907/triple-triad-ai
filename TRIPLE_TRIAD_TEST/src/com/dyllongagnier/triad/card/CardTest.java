@@ -2,12 +2,14 @@ package com.dyllongagnier.triad.card;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class CardTest
 {
-	public static final Card testCard = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5);
+	public final Card testCard = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5);
 
 	@Before
 	public void setUp() throws Exception
@@ -159,5 +161,115 @@ public class CardTest
 	{
 		Card testCopy = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5).setHoldingPlayer(Player.SELF);
 		assertFalse(testCopy.equals(testCard));
+	}
+	
+	@Test
+	public void testDeploy()
+	{
+		// Should be object equality.
+		Card deployed = testCard.deploy();
+		assertTrue(deployed == testCard);
+	}
+	
+	@Test
+	public void testToString()
+	{
+		String expected = ";BEASTMAN;5;1;2;3;4;NONE";
+		assertEquals(expected, this.testCard.toString());
+	}
+	
+	@Test
+	public void testToString2()
+	{
+		String expected = "name;BEASTMAN;5;1;2;3;4;NONE";
+		Card card = new Card(1,2,3,4, "name", Card.Type.BEASTMAN, 5);
+		assertEquals(expected, card.toString());
+	}
+	
+	@Test
+	public void testClone()
+	{
+		// Should be object equality.
+		Card clone = this.testCard.clone();
+		assertTrue(clone == this.testCard);
+	}
+	
+	@Test
+	public void testIsVisible()
+	{
+		assertTrue(this.testCard.isVisible());
+	}
+	
+	@Test
+	public void testGetPossibleCards()
+	{
+		List<ProbCard> possibleCards = this.testCard.getPossibleCards();
+		assertEquals(possibleCards.size(), 1);
+		ProbCard card = possibleCards.get(0);
+		assertEquals(1, card.probability, 0.001);
+		assertTrue(card.card == this.testCard);
+	}
+	
+	@Test
+	public void testCompareToEqual()
+	{
+		Card other = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5);
+		assertEquals(0, this.testCard.compareTo(other));
+	}
+	
+	@Test
+	public void testCompareNotEqualName()
+	{
+		Card other = new Card(1,2,3,4, "test", Card.Type.BEASTMAN, 5);
+		assertNotEquals(0, this.testCard.compareTo(other));
+	}
+	
+	@Test
+	public void testCompareNotEqualNorth()
+	{
+		Card other = new Card(2,2,3,4, "", Card.Type.BEASTMAN, 5);
+		assertNotEquals(0, this.testCard.compareTo(other));
+	}
+	
+	@Test
+	public void testCompareNotEqualEast()
+	{
+		Card other = new Card(1,1,3,4, "", Card.Type.BEASTMAN, 5);
+		assertNotEquals(0, this.testCard.compareTo(other));
+	}
+	
+	@Test
+	public void testCompareNotEqualSouth()
+	{
+		Card other = new Card(1,2,2,4, "", Card.Type.BEASTMAN, 5);
+		assertNotEquals(0, this.testCard.compareTo(other));
+	}
+	
+	@Test
+	public void testCompareNotEqualWest()
+	{
+		Card other = new Card(1,2,3,3, "", Card.Type.BEASTMAN, 5);
+		assertNotEquals(0, this.testCard.compareTo(other));
+	}
+	
+	@Test
+	public void testCompareNotEqualType()
+	{
+		Card other = new Card(1,2,3,4, "", Card.Type.GARLEAN, 5);
+		assertNotEquals(0, this.testCard.compareTo(other));
+	}
+	
+	@Test
+	public void testCompareNotEqualRank()
+	{
+		Card other = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 2);
+		assertNotEquals(0, this.testCard.compareTo(other));
+	}
+	
+	@Test
+	public void testCompareNotEqualPlayer()
+	{
+		Card other = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5).setHoldingPlayer(Player.SELF);
+		assertNotEquals(0, this.testCard.compareTo(other));
 	}
 }
