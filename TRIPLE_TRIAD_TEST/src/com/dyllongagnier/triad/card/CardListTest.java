@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -89,5 +90,25 @@ public class CardListTest
 	{
 		Card expected = new Card(2, 4, 3, 5, "Pudding", Card.Type.NONE, 1);
 		assertCardEqual(CardList.getCard("Pudding"), expected);
+	}
+	
+	@Test
+	public void testGenerateHand()
+	{
+		String[] cardNames = new String[]{"Coblyn", "Morbol", "Coeurl", "Ahriman", "Garuda"};
+		Card[] actualHand = CardList.generateHand(Player.SELF, cardNames);
+		Card[] expectedHand = new Card[5];
+		for(int i = 0; i < 5; i++)
+		{
+			expectedHand[i] = CardList.getCard(cardNames[i]).setHoldingPlayer(Player.SELF);
+		}
+		Assert.assertArrayEquals(expectedHand, actualHand);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void invalidCardException()
+	{
+		String[] cardNames = new String[]{"Coblyn", "NotACard", "Coeurl", "Ahriman", "Garuda"};
+		CardList.generateHand(Player.SELF, cardNames);
 	}
 }
