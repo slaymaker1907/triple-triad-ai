@@ -17,5 +17,26 @@ public class ProbCard
 	{
 		this.card = card;
 		this.probability = probability;
-	}	
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		try
+		{
+			// It's probably ok to check probabilities according to == since they should be exactly equal.
+			ProbCard other = (ProbCard)o;
+			return other.card.equals(this.card) && this.probability == other.probability;
+		}
+		catch (ClassCastException e)
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return this.card.hashCode();
+	}
 }
