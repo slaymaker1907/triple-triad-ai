@@ -17,12 +17,14 @@ import javax.json.JsonValue;
  * This is a listing of all implemented cards. It can not be instantiated and is
  * a static class.
  */
-public class CardList {
+public class CardList
+{
 	private static final Map<String, Card> allCards = CardList
 			.getCardsFromJson("resources" + File.separator
 					+ "TripleTriadCardList.json");
 
-	protected CardList() {
+	protected CardList()
+	{
 	}
 
 	/**
@@ -33,7 +35,8 @@ public class CardList {
 	 *            The name of the card to return.
 	 * @return The Card object with a given name.
 	 */
-	public static Card getCard(String name) {
+	public static Card getCard(String name)
+	{
 		return CardList.allCards.get(name);
 	}
 
@@ -43,23 +46,28 @@ public class CardList {
 	 * 
 	 * @return All implemented cards.
 	 */
-	public static Collection<Card> getAllCards() {
+	public static Collection<Card> getAllCards()
+	{
 		return Collections.unmodifiableCollection(allCards.values());
 	}
 
-	private static Map<String, Card> getCardsFromJson(String fileName) {
+	private static Map<String, Card> getCardsFromJson(String fileName)
+	{
 		HashMap<String, Card> result = new HashMap<>();
-		try {
+		try
+		{
 			JsonReader reader = Json
 					.createReader(new FileInputStream(fileName));
 			JsonObject rankLists = reader.readObject();
 			reader.close();
-			for (int rank = 1; rank <= 5; rank++) {
+			for (int rank = 1; rank <= 5; rank++)
+			{
 				result.putAll(CardList.getCardsFromRankList(
 						rankLists.getJsonArray("rank_" + rank), rank));
 			}
 			return Collections.unmodifiableMap(result);
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			System.err.println("Could not initialize card database.");
 			e.printStackTrace();
 			return null;
@@ -67,9 +75,11 @@ public class CardList {
 	}
 
 	private static Map<String, Card> getCardsFromRankList(JsonArray cardList,
-			int rank) {
+			int rank)
+	{
 		HashMap<String, Card> result = new HashMap<>();
-		for (JsonValue val : cardList) {
+		for (JsonValue val : cardList)
+		{
 			JsonObject card = (JsonObject) val;
 			String name = card.getString("name");
 			Card.Type cardType = Card.Type.valueOf(card.getString("type"));
@@ -91,11 +101,13 @@ public class CardList {
 	 *            The names of cards.
 	 * @return A Card[] of the input cards.
 	 */
-	public static Card[] generateHand(Player player, String... cardNames) {
+	public static Card[] generateHand(Player player, String... cardNames)
+	{
 		assert cardNames.length == 5;
 		assert player != Player.NONE;
 		Card[] cards = new Card[5];
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++)
+		{
 			cards[i] = CardList.getCard(cardNames[i]).setHoldingPlayer(player);
 		}
 		return cards;

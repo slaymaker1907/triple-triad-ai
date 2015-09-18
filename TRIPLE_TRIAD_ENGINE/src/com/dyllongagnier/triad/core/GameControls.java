@@ -4,7 +4,8 @@ import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.functions.MoveValidator;
 
-public class GameControls {
+public class GameControls
+{
 	private final Player currentPlayer;
 
 	private final BoardState currentTurn;
@@ -21,7 +22,8 @@ public class GameControls {
 	 *            The player taking this turn.
 	 */
 	public GameControls(BoardState currentTurn, Player currentPlayer,
-			MoveValidator moveValidator) {
+			MoveValidator moveValidator)
+	{
 		this.currentTurn = currentTurn;
 		this.currentPlayer = currentPlayer;
 		this.nextTurn = null;
@@ -41,7 +43,8 @@ public class GameControls {
 	 * @param col
 	 *            The col to play the card at.
 	 */
-	public void playCard(UndeployedCard card, int row, int col) {
+	public void playCard(UndeployedCard card, int row, int col)
+	{
 		// These can may be replaced with assert statements to be compiled away.
 		if (this.nextTurn != null)
 			throw new IllegalArgumentException(
@@ -59,7 +62,8 @@ public class GameControls {
 	 * 
 	 * @return A clone of the current turn.
 	 */
-	public BoardState getCopyOfBoard() {
+	public BoardState getCopyOfBoard()
+	{
 		// It may be prudent to add some methods to access board data without
 		// cloning the board for certain AIs.
 		return this.currentTurn.clone();
@@ -71,7 +75,8 @@ public class GameControls {
 	 * 
 	 * @return The nextTurn BoardState.
 	 */
-	public BoardState getNextTurn() {
+	public BoardState getNextTurn()
+	{
 		assert this.nextTurn != null;
 		return this.nextTurn;
 	}

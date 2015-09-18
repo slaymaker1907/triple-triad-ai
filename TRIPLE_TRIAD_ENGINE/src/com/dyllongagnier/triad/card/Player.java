@@ -2,7 +2,8 @@ package com.dyllongagnier.triad.card;
 
 import java.util.Random;
 
-public enum Player {
+public enum Player
+{
 	SELF, OPPONENT, NONE;
 
 	/**
@@ -11,14 +12,16 @@ public enum Player {
 	 * 
 	 * @return The other player.
 	 */
-	public Player swapPlayer() {
-		switch (this) {
-		case SELF:
-			return OPPONENT;
-		case OPPONENT:
-			return SELF;
-		default:
-			throw new IllegalArgumentException();
+	public Player swapPlayer()
+	{
+		switch (this)
+		{
+			case SELF:
+				return OPPONENT;
+			case OPPONENT:
+				return SELF;
+			default:
+				throw new IllegalArgumentException();
 		}
 	}
 
@@ -29,7 +32,8 @@ public enum Player {
 	 * 
 	 * @return A random player.
 	 */
-	public static Player getRandomPlayer() {
+	public static Player getRandomPlayer()
+	{
 		int roll = gen.nextInt(2);
 		if (roll == 0)
 			return Player.SELF;

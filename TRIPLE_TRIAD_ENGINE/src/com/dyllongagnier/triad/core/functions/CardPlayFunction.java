@@ -14,19 +14,22 @@ import com.dyllongagnier.triad.core.Field;
  * captured when a card is played.
  */
 @FunctionalInterface
-public interface CardPlayFunction {
+public interface CardPlayFunction
+{
 	/**
 	 * This is an internal class that will sum together the relevant stats of
 	 * two cards and store the second card as as it relates to the first one.
 	 * cardsToCapture can then be called to see get cards that were captured.
 	 */
-	static class SumPairCollection {
+	static class SumPairCollection
+	{
 		private final Map<Integer, Set<DeployedCard>> mapOfSums;
 
 		/**
 		 * Initializes an empty sum pair collection.
 		 */
-		public SumPairCollection() {
+		public SumPairCollection()
+		{
 			this.mapOfSums = new HashMap<>();
 		}
 
@@ -40,7 +43,8 @@ public interface CardPlayFunction {
 		 *            An adjacent card.
 		 * @return True if the pair was actually added.
 		 */
-		public boolean addPair(DeployedCard playedCard, DeployedCard otherCard) {
+		public boolean addPair(DeployedCard playedCard, DeployedCard otherCard)
+		{
 			assert playedCard.cardAdjacent(otherCard);
 			if (otherCard == null)
 				return false;
@@ -56,10 +60,12 @@ public interface CardPlayFunction {
 		 * 
 		 * @return Captured cards.
 		 */
-		public Set<DeployedCard> cardsToCapture() {
+		public Set<DeployedCard> cardsToCapture()
+		{
 			Set<DeployedCard> result = new HashSet<DeployedCard>();
 			for (Entry<Integer, Set<DeployedCard>> pair : this.mapOfSums
-					.entrySet()) {
+					.entrySet())
+			{
 				if (pair.getValue().size() >= 2)
 					result.addAll(this.mapOfSums.get(pair.getKey()));
 			}
@@ -98,7 +104,8 @@ public interface CardPlayFunction {
 	 * @return The captured cards.
 	 */
 	public static Set<DeployedCard> basicCapture(Field field,
-			DeployedCard toPlay, DeployedCardComparator cardComparator) {
+			DeployedCard toPlay, DeployedCardComparator cardComparator)
+	{
 		Set<DeployedCard> result = new HashSet<>(4);
 		int row = toPlay.row;
 		int col = toPlay.col;
@@ -125,7 +132,8 @@ public interface CardPlayFunction {
 	 * @return The captured cards.
 	 */
 	public static Set<DeployedCard> sameCapture(Field field,
-			DeployedCard toPlay, DeployedCardComparator cardComparator) {
+			DeployedCard toPlay, DeployedCardComparator cardComparator)
+	{
 		Set<DeployedCard> result = CardPlayFunction.basicCapture(field, toPlay,
 				cardComparator);
 		Set<DeployedCard> sameCards = CardPlayFunction.basicCapture(field,
@@ -145,23 +153,25 @@ public interface CardPlayFunction {
 	 *            The other card. Must be non-null.
 	 * @return The sum of the two cards.
 	 */
-	static int computeSum(DeployedCard toPlay, DeployedCard otherCard) {
+	static int computeSum(DeployedCard toPlay, DeployedCard otherCard)
+	{
 		assert toPlay.cardAdjacent(otherCard);
 		assert toPlay != null;
 		assert otherCard != null;
 
 		DeployedCard.Direction dir = toPlay.getDirectionOfOther(otherCard);
-		switch (dir) {
-		case NORTH:
-			return toPlay.card.north + otherCard.card.south;
-		case EAST:
-			return toPlay.card.east + otherCard.card.west;
-		case SOUTH:
-			return toPlay.card.south + otherCard.card.north;
-		case WEST:
-			return toPlay.card.west + toPlay.card.east;
-		default:
-			throw new RuntimeException("Unsupported enum value.");
+		switch (dir)
+		{
+			case NORTH:
+				return toPlay.card.north + otherCard.card.south;
+			case EAST:
+				return toPlay.card.east + otherCard.card.west;
+			case SOUTH:
+				return toPlay.card.south + otherCard.card.north;
+			case WEST:
+				return toPlay.card.west + toPlay.card.east;
+			default:
+				throw new RuntimeException("Unsupported enum value.");
 		}
 	}
 
@@ -180,7 +190,8 @@ public interface CardPlayFunction {
 	 * @return The captured cards.
 	 */
 	public static Set<DeployedCard> plusCapture(Field field,
-			DeployedCard toPlay, DeployedCardComparator cardComparator) {
+			DeployedCard toPlay, DeployedCardComparator cardComparator)
+	{
 		Set<DeployedCard> result = CardPlayFunction.basicCapture(field, toPlay,
 				cardComparator);
 		int row = toPlay.row;
@@ -212,7 +223,8 @@ public interface CardPlayFunction {
 	 * @return The captured cards.
 	 */
 	public static Set<DeployedCard> plusCombo(Field field, DeployedCard toPlay,
-			DeployedCardComparator cardComparator) {
+			DeployedCardComparator cardComparator)
+	{
 		Set<DeployedCard> capturedThroughBattle = CardPlayFunction
 				.basicCapture(field, toPlay, cardComparator);
 		int row = toPlay.row;
@@ -225,7 +237,8 @@ public interface CardPlayFunction {
 		sums.addPair(toPlay, field.getCard(row, col + 1));
 		sums.addPair(toPlay, field.getCard(row, col - 1));
 		Set<DeployedCard> capturedThroughRule = sums.cardsToCapture();
-		for (DeployedCard card : capturedThroughRule) {
+		for (DeployedCard card : capturedThroughRule)
+		{
 			capturedThroughBattle.addAll(CardPlayFunction
 					.recursiveNormalCapture(field, card, cardComparator));
 		}
@@ -248,14 +261,17 @@ public interface CardPlayFunction {
 	 * @return The captured cards.
 	 */
 	public static Set<DeployedCard> sameCombo(Field field, DeployedCard toPlay,
-			DeployedCardComparator cardComparator) {
+			DeployedCardComparator cardComparator)
+	{
 		Set<DeployedCard> capturedThroughBattle = CardPlayFunction
 				.basicCapture(field, toPlay, cardComparator);
 
 		Set<DeployedCard> sameCards = CardPlayFunction.basicCapture(field,
 				toPlay, DeployedCardComparator::equalCompare);
-		if (sameCards.size() >= 2) {
-			for (DeployedCard card : sameCards) {
+		if (sameCards.size() >= 2)
+		{
+			for (DeployedCard card : sameCards)
+			{
 				capturedThroughBattle.addAll(CardPlayFunction
 						.recursiveNormalCapture(field, card, cardComparator));
 			}
@@ -280,7 +296,8 @@ public interface CardPlayFunction {
 	 * @return The captured cards.
 	 */
 	public static Set<DeployedCard> samePlusCombo(Field field,
-			DeployedCard toPlay, DeployedCardComparator cardComparator) {
+			DeployedCard toPlay, DeployedCardComparator cardComparator)
+	{
 		// Take the union of the two sets.
 		Set<DeployedCard> result = CardPlayFunction.sameCombo(field, toPlay,
 				cardComparator);
@@ -304,7 +321,8 @@ public interface CardPlayFunction {
 	 * @return The captured cards.
 	 */
 	public static Set<DeployedCard> samePlus(Field field, DeployedCard toPlay,
-			DeployedCardComparator cardComparator) {
+			DeployedCardComparator cardComparator)
+	{
 		Set<DeployedCard> result = CardPlayFunction.plusCapture(field, toPlay,
 				cardComparator);
 		result.addAll(CardPlayFunction.sameCapture(field, toPlay,
@@ -325,11 +343,13 @@ public interface CardPlayFunction {
 	 * @return A set of captured cards by toPlay.
 	 */
 	static Set<DeployedCard> recursiveNormalCapture(Field field,
-			DeployedCard toPlay, DeployedCardComparator cardComparator) {
+			DeployedCard toPlay, DeployedCardComparator cardComparator)
+	{
 		Set<DeployedCard> result = new HashSet<>();
 		Set<DeployedCard> captured = CardPlayFunction.basicCapture(field,
 				toPlay, cardComparator);
-		for (DeployedCard card : captured) {
+		for (DeployedCard card : captured)
+		{
 			result.addAll(CardPlayFunction.basicCapture(field, card,
 					cardComparator));
 		}
@@ -350,7 +370,8 @@ public interface CardPlayFunction {
 	 *            The set to add toCapture to if justPlayed captures toCapture.
 	 */
 	static void tryCapture(DeployedCard justPlayed, DeployedCard toCapture,
-			DeployedCardComparator cardComparator, Set<DeployedCard> result) {
+			DeployedCardComparator cardComparator, Set<DeployedCard> result)
+	{
 		if (toCapture == null)
 			return;
 		assert justPlayed != null;

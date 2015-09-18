@@ -11,8 +11,10 @@ import javax.json.JsonReader;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 
-public class ThreeOpenHand {
-	private ThreeOpenHand() {
+public class ThreeOpenHand
+{
+	private ThreeOpenHand()
+	{
 	}
 
 	/**
@@ -28,12 +30,15 @@ public class ThreeOpenHand {
 	 * @throws FileNotFoundException
 	 */
 	public UndeployedCard[] getDeck(Player player, String fileName)
-			throws FileNotFoundException {
+			throws FileNotFoundException
+	{
 		JsonReader reader = Json.createReader(new FileInputStream(fileName));
 		JsonObject ob;
-		try {
+		try
+		{
 			ob = reader.readObject();
-		} finally {
+		} finally
+		{
 			reader.close();
 		}
 		JsonArray guaranteed = ob.getJsonArray("guaranteed");
@@ -42,7 +47,8 @@ public class ThreeOpenHand {
 					"Invalid file: guaranteed is not equal to 3.");
 		UndeployedCard[] result = new UndeployedCard[5];
 		int i = 0;
-		for (JsonValue cardName : guaranteed) {
+		for (JsonValue cardName : guaranteed)
+		{
 			result[i++] = CardList.getCard(((JsonString) cardName).getString())
 					.setHoldingPlayer(player);
 		}
@@ -52,7 +58,8 @@ public class ThreeOpenHand {
 			throw new IllegalArgumentException(
 					"Invalid file: randomized is less than three.");
 		HashSet<Card> possibleCards = new HashSet<Card>();
-		for (JsonValue cardName : randomized) {
+		for (JsonValue cardName : randomized)
+		{
 			possibleCards.add(CardList.getCard(
 					((JsonString) cardName).getString()).setHoldingPlayer(
 					player));

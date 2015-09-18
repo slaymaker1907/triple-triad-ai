@@ -6,7 +6,8 @@ import com.dyllongagnier.triad.card.DeployedCard;
 
 @FunctionalInterface
 public interface AscensionTransform extends
-		BiFunction<DeployedCard, Integer, DeployedCard> {
+		BiFunction<DeployedCard, Integer, DeployedCard>
+{
 	/**
 	 * This function simply returns the input card since there is no ascension.
 	 * 
@@ -16,7 +17,8 @@ public interface AscensionTransform extends
 	 *            Unused.
 	 * @return The input card.
 	 */
-	public static DeployedCard noAscension(DeployedCard card, int amount) {
+	public static DeployedCard noAscension(DeployedCard card, int amount)
+	{
 		return card;
 	}
 
@@ -30,7 +32,8 @@ public interface AscensionTransform extends
 	 *            The amount to increase the card's stats by.
 	 * @return The input card with its new stats.
 	 */
-	public static DeployedCard ascension(DeployedCard card, int amount) {
+	public static DeployedCard ascension(DeployedCard card, int amount)
+	{
 		return new DeployedCard(card.card.increaseAllStats(amount), card.row,
 				card.col);
 	}
@@ -45,7 +48,8 @@ public interface AscensionTransform extends
 	 *            amount to decrease the card's stats by.
 	 * @return The input card with its new stats.
 	 */
-	public static DeployedCard descension(DeployedCard card, int amount) {
+	public static DeployedCard descension(DeployedCard card, int amount)
+	{
 		return AscensionTransform.ascension(card, -1 * amount);
 	}
 }

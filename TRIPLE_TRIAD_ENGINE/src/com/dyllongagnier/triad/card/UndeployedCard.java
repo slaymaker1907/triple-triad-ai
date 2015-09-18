@@ -10,7 +10,8 @@ import java.util.List;
  * played. Every UndeployedCard should also implement clone since this is an
  * inherently mutable object.
  */
-public interface UndeployedCard extends Comparable<UndeployedCard> {
+public interface UndeployedCard extends Comparable<UndeployedCard>
+{
 	/**
 	 * This method is only guaranteed to return a valid card once. Subsequent
 	 * calls have no guarantees about anything unless isVisible returns true.
@@ -33,7 +34,8 @@ public interface UndeployedCard extends Comparable<UndeployedCard> {
 	 * 
 	 * @return True if deploy may be called multiple times.
 	 */
-	public default boolean isVisible() {
+	public default boolean isVisible()
+	{
 		return false;
 	}
 }

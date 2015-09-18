@@ -19,7 +19,8 @@ import com.dyllongagnier.triad.card.UndeployedCard;
  * complex games may need to extend this class. Player hands may not be
  * completely immutable due to IO and thus need to be cloned if copying.
  */
-public class BoardState {
+public class BoardState
+{
 	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands = new EnumMap<>(
 			Player.class);
 	public final Field playedCards;
@@ -39,7 +40,8 @@ public class BoardState {
 	 */
 	protected BoardState(
 			EnumMap<Player, SortedSet<UndeployedCard>> playerHands,
-			Field playedCards) {
+			Field playedCards)
+	{
 		SortedSet<UndeployedCard> opponentCards = Collections
 				.unmodifiableSortedSet(playerHands.get(Player.OPPONENT));
 		SortedSet<UndeployedCard> selfCards = Collections
@@ -50,7 +52,8 @@ public class BoardState {
 	}
 
 	@Override
-	public BoardState clone() {
+	public BoardState clone()
+	{
 		// Do a deep clone on the player hands to ensure immutability.
 		EnumMap<Player, SortedSet<UndeployedCard>> newPlayerHands = new EnumMap<>(
 				Player.class);
@@ -74,7 +77,8 @@ public class BoardState {
 	 *            not Player.NONE.
 	 * @return An unmodifiable list view of the hand.
 	 */
-	public SortedSet<UndeployedCard> getHand(Player player) {
+	public SortedSet<UndeployedCard> getHand(Player player)
+	{
 		assert player != Player.NONE;
 		assert player == null;
 		return this.playerHands.get(player);
@@ -86,7 +90,8 @@ public class BoardState {
 	 * 
 	 * @return True if there are 9 played cards.
 	 */
-	public boolean gameComplete() {
+	public boolean gameComplete()
+	{
 		for (int row = 0; row < 3; row++)
 			for (int col = 0; col < 3; col++)
 				if (!this.playedCards.isCardInPos(row, col))
@@ -100,14 +105,16 @@ public class BoardState {
 	 * 
 	 * @return The winner of the game.
 	 */
-	public Player getWinner() {
+	public Player getWinner()
+	{
 		assert this.gameComplete();
 
 		EnumMap<Player, Integer> holdingCount = new EnumMap<>(Player.class);
 		holdingCount.put(Player.SELF, 0);
 		holdingCount.put(Player.OPPONENT, 0);
 		for (int row = 0; row < 3; row++)
-			for (int col = 0; col < 3; col++) {
+			for (int col = 0; col < 3; col++)
+			{
 				holdingCount.compute(
 						this.playedCards.getCard(row, col).card.holdingPlayer,
 						(player, currentVal) -> currentVal + 1);
@@ -134,7 +141,8 @@ public class BoardState {
 	 *            non-null and not Player.NONE.
 	 * @return The first card in the input player's hand.
 	 */
-	public UndeployedCard getFirstCardInHand(Player player) {
+	public UndeployedCard getFirstCardInHand(Player player)
+	{
 		assert player != null;
 		assert player != Player.NONE;
 		return this.playerHands.get(player).first();
@@ -154,7 +162,8 @@ public class BoardState {
 	 * @return The resulting board state.
 	 */
 	public BoardState playCard(Player player, UndeployedCard card, int row,
-			int col) {
+			int col)
+	{
 		assert player != Player.NONE;
 		assert player != null;
 		assert card != null;
@@ -173,7 +182,8 @@ public class BoardState {
 	 * 
 	 * @return A function that returns the cards for each player.
 	 */
-	public Function<Player, UndeployedCard[]> getCardsUnderPlayers() {
+	public Function<Player, UndeployedCard[]> getCardsUnderPlayers()
+	{
 		assert this.gameComplete();
 
 		Function<Player, ArrayList<UndeployedCard>> boardFunc = this.playedCards
@@ -187,16 +197,19 @@ public class BoardState {
 
 		assert selfCards.size() == opponentCards.size();
 
-		return (player) -> {
-			switch (player) {
-			case SELF:
-				return selfCards.toArray(new UndeployedCard[selfCards.size()]);
-			case OPPONENT:
-				return opponentCards.toArray(new UndeployedCard[opponentCards
-						.size()]);
-			default:
-				assert false;
-				return new UndeployedCard[0];
+		return (player) ->
+		{
+			switch (player)
+			{
+				case SELF:
+					return selfCards.toArray(new UndeployedCard[selfCards
+							.size()]);
+				case OPPONENT:
+					return opponentCards
+							.toArray(new UndeployedCard[opponentCards.size()]);
+				default:
+					assert false;
+					return new UndeployedCard[0];
 			}
 		};
 	}
@@ -204,7 +217,8 @@ public class BoardState {
 	/**
 	 * This class is used to construct BoardStates and is mutable.
 	 */
-	public static class Builder {
+	public static class Builder
+	{
 		protected final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
 		private final Field fieldToUse;
 
@@ -214,7 +228,8 @@ public class BoardState {
 		 * @param ruleSet
 		 *            The rules to use for this game.
 		 */
-		public Builder(Rules ruleSet) {
+		public Builder(Rules ruleSet)
+		{
 			this.playerHands = new EnumMap<>(Player.class);
 			this.playerHands.put(Player.SELF, new TreeSet<>());
 			this.playerHands.put(Player.OPPONENT, new TreeSet<>());
@@ -235,7 +250,8 @@ public class BoardState {
 		 *            The cards to set the hand as.
 		 * @return This object.
 		 */
-		public Builder setHand(Player player, UndeployedCard... cards) {
+		public Builder setHand(Player player, UndeployedCard... cards)
+		{
 			assert player != null;
 			assert cards != null;
 			assert player != Player.NONE;
@@ -251,7 +267,8 @@ public class BoardState {
 		 * 
 		 * @return A new BoardState using the input parameters to this object.
 		 */
-		public BoardState build() {
+		public BoardState build()
+		{
 			return new BoardState(this.playerHands, this.fieldToUse);
 		}
 	}

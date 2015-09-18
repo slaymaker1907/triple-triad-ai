@@ -9,13 +9,15 @@ import com.dyllongagnier.triad.core.functions.MoveValidator;
 /**
  * This is an immutable object for the purpose of conveying rules.
  */
-public class Rules {
+public class Rules
+{
 	public final boolean isSuddenDeath;
 	public final AscensionRule ascensionRule;
 	public final MoveValidator moveValidator;
 	public final CardPlayFunction playFunc;
 
-	public static enum AscensionRule {
+	public static enum AscensionRule
+	{
 		NONE, NORMAL, DESCENSION
 	}
 
@@ -43,7 +45,8 @@ public class Rules {
 	public Rules(boolean isSuddenDeath, boolean isOrder, boolean isReverse,
 			boolean isFallenAce, boolean isPlus, boolean isSame,
 			boolean isCombo, AscensionRule ascensionRule,
-			UndeployedCard[] selfCards, UndeployedCard[] opponentCards) {
+			UndeployedCard[] selfCards, UndeployedCard[] opponentCards)
+	{
 		this.isSuddenDeath = isSuddenDeath;
 		this.moveValidator = getValidator(isOrder);
 		this.ascensionFunc = getAscensionFunc(ascensionRule);
@@ -60,7 +63,8 @@ public class Rules {
 	 * @return A comparator associated with the input rules.
 	 */
 	private static DeployedCardComparator getComparator(boolean isReverse,
-			boolean isFallenAce) {
+			boolean isFallenAce)
+	{
 		if (isReverse && isFallenAce)
 			return DeployedCardComparator::fallenAceReverseCompare;
 		else if (isReverse)
@@ -77,16 +81,18 @@ public class Rules {
 	 * 
 	 * @return A method for ascension.
 	 */
-	private static AscensionTransform getAscensionFunc(AscensionRule rule) {
-		switch (rule) {
-		case NONE:
-			return AscensionTransform::noAscension;
-		case NORMAL:
-			return AscensionTransform::ascension;
-		case DESCENSION:
-			return AscensionTransform::descension;
-		default:
-			throw new IllegalArgumentException();
+	private static AscensionTransform getAscensionFunc(AscensionRule rule)
+	{
+		switch (rule)
+		{
+			case NONE:
+				return AscensionTransform::noAscension;
+			case NORMAL:
+				return AscensionTransform::ascension;
+			case DESCENSION:
+				return AscensionTransform::descension;
+			default:
+				throw new IllegalArgumentException();
 		}
 	}
 
@@ -103,7 +109,8 @@ public class Rules {
 	 * @return The appropriate play function.
 	 */
 	private static CardPlayFunction getPlayFunction(boolean isPlus,
-			boolean isSame, boolean isCombo) {
+			boolean isSame, boolean isCombo)
+	{
 		if (!isPlus && !isSame && !isCombo)
 			return CardPlayFunction::basicCapture;
 		else if (isPlus && !isSame && !isCombo)
@@ -130,7 +137,8 @@ public class Rules {
 	 *            Whether to use the Order rule.
 	 * @return A move validator for the relevant game.
 	 */
-	private static MoveValidator getValidator(boolean isOrder) {
+	private static MoveValidator getValidator(boolean isOrder)
+	{
 		if (isOrder)
 			return MoveValidator::normalValidator;
 		else

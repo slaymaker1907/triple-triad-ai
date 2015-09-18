@@ -15,7 +15,8 @@ import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 /**
  * This class represents a field of cards. This object is immutable.
  */
-public class Field {
+public class Field
+{
 	protected final DeployedCard[][] playedCards;
 	protected final DeployedCardComparator cardComparator;
 	protected final CardPlayFunction playFunc;
@@ -27,7 +28,8 @@ public class Field {
 	 *            The comparator to use for determining victories.
 	 */
 	public Field(DeployedCardComparator cardComparator,
-			CardPlayFunction playFunc) {
+			CardPlayFunction playFunc)
+	{
 		this.playedCards = new DeployedCard[3][3];
 		this.cardComparator = cardComparator;
 		this.playFunc = playFunc;
@@ -43,7 +45,8 @@ public class Field {
 	 *            The comparator to use in comparing cards.
 	 */
 	protected Field(DeployedCard[][] playedCards,
-			DeployedCardComparator cardComparator, CardPlayFunction playFunc) {
+			DeployedCardComparator cardComparator, CardPlayFunction playFunc)
+	{
 		this.playedCards = playedCards;
 		this.cardComparator = cardComparator;
 		this.playFunc = playFunc;
@@ -59,7 +62,8 @@ public class Field {
 	 *            The column of the card to retrieve.
 	 * @return The card at row/col.
 	 */
-	public DeployedCard getCard(int row, int col) {
+	public DeployedCard getCard(int row, int col)
+	{
 		return playedCards[row][col];
 	}
 
@@ -71,7 +75,8 @@ public class Field {
 	 *            The card that will be played.
 	 * @return A new field with the reflected mutation.
 	 */
-	public Field playCard(DeployedCard cardToPlay) {
+	public Field playCard(DeployedCard cardToPlay)
+	{
 		assert cardToPlay != null;
 		int row = cardToPlay.row;
 		int col = cardToPlay.col;
@@ -82,7 +87,8 @@ public class Field {
 		DeployedCard[][] newPlayedCards = Arrays.copyOf(playedCards,
 				playedCards.length);
 		newPlayedCards[row][col] = cardToPlay;
-		for (DeployedCard card : takeOver) {
+		for (DeployedCard card : takeOver)
+		{
 			DeployedCard newCard = card
 					.setPlayer(cardToPlay.card.holdingPlayer);
 			newPlayedCards[newCard.row][newCard.col] = newCard;
@@ -101,7 +107,8 @@ public class Field {
 	 *            The col to check.
 	 * @return Whethere there is a card at row/col.
 	 */
-	public boolean isCardInPos(int row, int col) {
+	public boolean isCardInPos(int row, int col)
+	{
 		return this.isInBounds(row, col) && this.playedCards[row][col] != null;
 	}
 
@@ -115,7 +122,8 @@ public class Field {
 	 *            The column to check.
 	 * @return Whether the row/column pair is in bounds.
 	 */
-	public boolean isInBounds(int row, int col) {
+	public boolean isInBounds(int row, int col)
+	{
 		return row >= 0 && row < 3 && col >= 0 && col < 3;
 	}
 
@@ -125,34 +133,39 @@ public class Field {
 	 * 
 	 * @return
 	 */
-	public Function<Player, ArrayList<UndeployedCard>> getCardsUnderPlayers() {
+	public Function<Player, ArrayList<UndeployedCard>> getCardsUnderPlayers()
+	{
 		ArrayList<UndeployedCard> selfCards = new ArrayList<>();
 		ArrayList<UndeployedCard> opponentCards = new ArrayList<>();
 		for (int row = 0; row < 3; row++)
-			for (int col = 0; col < 3; col++) {
+			for (int col = 0; col < 3; col++)
+			{
 				Card card = this.getCard(row, col).card;
-				switch (card.holdingPlayer) {
-				case SELF:
-					selfCards.add(card);
-					break;
-				case OPPONENT:
-					opponentCards.add(card);
-					break;
-				default:
-					throw new RuntimeException(
-							"NONE player was owner of a card.");
+				switch (card.holdingPlayer)
+				{
+					case SELF:
+						selfCards.add(card);
+						break;
+					case OPPONENT:
+						opponentCards.add(card);
+						break;
+					default:
+						throw new RuntimeException(
+								"NONE player was owner of a card.");
 				}
 			}
 
-		return (player) -> {
-			switch (player) {
-			case SELF:
-				return selfCards;
-			case OPPONENT:
-				return opponentCards;
-			default:
-				assert false;
-				return new ArrayList<>(0);
+		return (player) ->
+		{
+			switch (player)
+			{
+				case SELF:
+					return selfCards;
+				case OPPONENT:
+					return opponentCards;
+				default:
+					assert false;
+					return new ArrayList<>(0);
 			}
 		};
 	}

@@ -9,7 +9,8 @@ import com.dyllongagnier.triad.core.BoardState;
  * not.
  */
 @FunctionalInterface
-public interface MoveValidator {
+public interface MoveValidator
+{
 	/**
 	 * This function returns true if it legal to play toPlay at (row,col).
 	 * 
@@ -45,7 +46,8 @@ public interface MoveValidator {
 	 * @return True if toPlay can be played at (row,col).
 	 */
 	public static boolean normalValidator(BoardState currentState,
-			UndeployedCard toPlay, Player player, int row, int col) {
+			UndeployedCard toPlay, Player player, int row, int col)
+	{
 		if (!currentState.getHand(player).contains(toPlay))
 			return false;
 		if (currentState.playedCards.isCardInPos(row, col))
@@ -70,7 +72,8 @@ public interface MoveValidator {
 	 * @return True if toPlay can be played at (row,col).
 	 */
 	public static boolean orderValidator(BoardState currentState,
-			UndeployedCard toPlay, Player player, int row, int col) {
+			UndeployedCard toPlay, Player player, int row, int col)
+	{
 		if (!currentState.getFirstCardInHand(player).equals(toPlay))
 			return false;
 		if (currentState.playedCards.isCardInPos(row, col))

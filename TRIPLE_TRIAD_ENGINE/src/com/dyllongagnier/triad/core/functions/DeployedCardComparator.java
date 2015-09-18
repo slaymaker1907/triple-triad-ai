@@ -11,7 +11,8 @@ import com.dyllongagnier.triad.card.DeployedCard;
  */
 @FunctionalInterface
 public interface DeployedCardComparator extends
-		BiFunction<DeployedCard, DeployedCard, Boolean> {
+		BiFunction<DeployedCard, DeployedCard, Boolean>
+{
 	/**
 	 * This function compares playedCard with otherCard normally except that
 	 * lower numbers beat bigger numbers.
@@ -23,7 +24,8 @@ public interface DeployedCardComparator extends
 	 * @return Whether the played card captures the other card.
 	 */
 	public static boolean reverseCompare(DeployedCard playedCard,
-			DeployedCard otherCard) {
+			DeployedCard otherCard)
+	{
 		Comparator<Integer> comp = (i1, i2) -> -1 * Integer.compare(i1, i2);
 		return DeployedCardComparator.compareCards(playedCard, otherCard, comp);
 	}
@@ -39,8 +41,10 @@ public interface DeployedCardComparator extends
 	 * @return Whether the played card captures the other card.
 	 */
 	public static boolean fallenAceCompare(DeployedCard playedCard,
-			DeployedCard otherCard) {
-		Comparator<Integer> comp = (i1, i2) -> {
+			DeployedCard otherCard)
+	{
+		Comparator<Integer> comp = (i1, i2) ->
+		{
 			// If played card is 1 and other card is 10 (A) then return 1 since
 			// 1 beats ten.
 			if (i1 == 1 && i2 == 10)
@@ -62,8 +66,10 @@ public interface DeployedCardComparator extends
 	 * @return Whether the played card captures the other card.
 	 */
 	public static boolean fallenAceReverseCompare(DeployedCard playedCard,
-			DeployedCard otherCard) {
-		Comparator<Integer> comp = (i1, i2) -> {
+			DeployedCard otherCard)
+	{
+		Comparator<Integer> comp = (i1, i2) ->
+		{
 			// If played card is 10 and other card is 1 (A) then return 1 since
 			// 10 beats 1.
 			if (i1 == 10 && i2 == 1)
@@ -85,7 +91,8 @@ public interface DeployedCardComparator extends
 	 * @return Whether the played card captures the other card.
 	 */
 	public static boolean regularCompare(DeployedCard playedCard,
-			DeployedCard otherCard) {
+			DeployedCard otherCard)
+	{
 		return DeployedCardComparator.compareCards(playedCard, otherCard,
 				Integer::compare);
 	}
@@ -101,10 +108,12 @@ public interface DeployedCardComparator extends
 	 * @return True if playedCard captures otherCard.
 	 */
 	public static boolean equalCompare(DeployedCard playedCard,
-			DeployedCard otherCard) {
+			DeployedCard otherCard)
+	{
 		assert playedCard.cardAdjacent(otherCard);
 		return DeployedCardComparator.compareCards(playedCard, otherCard, (i1,
-				i2) -> {
+				i2) ->
+		{
 			// Hacky way to get the compareCards function to work since it
 			// captures when i1 > i2.
 				if (i1 == i2)
@@ -125,19 +134,23 @@ public interface DeployedCardComparator extends
 	 * @return Whether the played card captures the other card.
 	 */
 	public static boolean compareCards(DeployedCard playedCard,
-			DeployedCard otherCard, Comparator<Integer> comp) {
+			DeployedCard otherCard, Comparator<Integer> comp)
+	{
 		DeployedCard.Direction dir = playedCard.getDirectionOfOther(otherCard);
-		switch (dir) {
-		case NORTH:
-			return comp.compare(playedCard.card.north, otherCard.card.south) > 0;
-		case EAST:
-			return comp.compare(playedCard.card.east, otherCard.card.west) > 0;
-		case SOUTH:
-			return comp.compare(playedCard.card.south, otherCard.card.north) > 0;
-		case WEST:
-			return comp.compare(playedCard.card.west, otherCard.card.east) > 0;
-		default:
-			throw new RuntimeException("Unsupported enum value.");
+		switch (dir)
+		{
+			case NORTH:
+				return comp
+						.compare(playedCard.card.north, otherCard.card.south) > 0;
+			case EAST:
+				return comp.compare(playedCard.card.east, otherCard.card.west) > 0;
+			case SOUTH:
+				return comp
+						.compare(playedCard.card.south, otherCard.card.north) > 0;
+			case WEST:
+				return comp.compare(playedCard.card.west, otherCard.card.east) > 0;
+			default:
+				throw new RuntimeException("Unsupported enum value.");
 		}
 	}
 
