@@ -200,4 +200,11 @@ public class RandomCardTest
 		assertNotEquals(0, randCard2.compareTo(randCard1));
 		assertNotEquals(0, randCard1.compareTo(randCard2));
 	}
+	
+	@Test
+	public void testNotVisible()
+	{
+		RandomCard card = new RandomCard(CardList.getAllCards());
+		assertFalse(card.isVisible());
+	}
 }
