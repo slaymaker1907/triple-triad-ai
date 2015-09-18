@@ -294,4 +294,11 @@ public class CardTest
 		Card other = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5).setHoldingPlayer(Player.SELF);
 		assertNotEquals(0, this.testCard.compareTo(other));
 	}
+	
+	@Test
+	public void testHashCodeIdentical()
+	{
+		Card other = new Card(1,2,3,4, "", Card.Type.BEASTMAN, 5);
+		assertEquals(this.testCard.hashCode(), other.hashCode());
+	}
 }
