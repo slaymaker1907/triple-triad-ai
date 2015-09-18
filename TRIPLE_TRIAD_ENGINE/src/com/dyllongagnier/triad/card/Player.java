@@ -30,7 +30,7 @@ public enum Player
 	 * This method returns a random player (either SELF or OPPONENT).
 	 * @return A random player.
 	 */
-	public Player getRandomPlayer()
+	public static Player getRandomPlayer()
 	{
 		int roll = gen.nextInt(2);
 		if (roll == 0)

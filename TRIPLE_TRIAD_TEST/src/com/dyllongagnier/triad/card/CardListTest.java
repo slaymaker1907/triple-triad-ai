@@ -111,4 +111,10 @@ public class CardListTest
 		String[] cardNames = new String[]{"Coblyn", "NotACard", "Coeurl", "Ahriman", "Garuda"};
 		CardList.generateHand(Player.SELF, cardNames);
 	}
+	
+	@Test
+	public void testNoCardLookup()
+	{
+		assertNull(CardList.getCard("fakecard"));
+	}
 }
