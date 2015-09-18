@@ -18,6 +18,7 @@ public class ProbCard
 	 */
 	public ProbCard(Card card, double probability)
 	{
+		assert card != null;
 		assert probability >= 0 && probability <= 1;
 		this.card = card;
 		this.probability = probability;

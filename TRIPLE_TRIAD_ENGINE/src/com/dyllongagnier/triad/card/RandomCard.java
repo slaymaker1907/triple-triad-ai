@@ -2,6 +2,7 @@ package com.dyllongagnier.triad.card;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -24,9 +25,16 @@ public class RandomCard extends HiddenCard
 	 */
 	public RandomCard(Collection<Card> cards)
 	{
+		assert cards != null;
+		assert cards.size() > 0;
+		
+		double probability = 1.0 / cards.size();
 		ArrayList<ProbCard> possibleCards = new ArrayList<ProbCard>();
 		for (Card card : cards)
-			possibleCards.add(new ProbCard(card, 1.0 / cards.size()));
+		{
+			assert card != null;
+			possibleCards.add(new ProbCard(card, probability));
+		}
 		this.possibleCards = possibleCards;
 	}
 
@@ -44,16 +52,17 @@ public class RandomCard extends HiddenCard
 	@Override
 	public Card deploy()
 	{
-		Card result = this.possibleCards.get(gen.nextInt(this.possibleCards
-				.size())).card;
-		this.possibleCards.remove(result);
-		return result;
+		ProbCard result = this.possibleCards.get(gen.nextInt(this.possibleCards
+				.size()));
+		boolean removed = this.possibleCards.remove(result);
+		assert removed;
+		return result.card;
 	}
 
 	@Override
 	public List<ProbCard> getPossibleCards()
 	{
-		return this.possibleCards;
+		return Collections.unmodifiableList(this.possibleCards);
 	}
 
 	@Override
