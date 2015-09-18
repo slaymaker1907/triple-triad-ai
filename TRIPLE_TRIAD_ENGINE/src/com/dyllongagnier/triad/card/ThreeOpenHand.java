@@ -29,9 +29,12 @@ public class ThreeOpenHand
 	 * @return A new UndeployedCard[] to use as a hand.
 	 * @throws FileNotFoundException
 	 */
-	public UndeployedCard[] getDeck(Player player, String fileName)
+	public static UndeployedCard[] getDeck(Player player, String fileName)
 			throws FileNotFoundException
 	{
+		if (player == Player.NONE)
+			throw new IllegalArgumentException("Player must not be none.");
+		
 		JsonReader reader = Json.createReader(new FileInputStream(fileName));
 		JsonObject ob;
 		try
@@ -45,12 +48,14 @@ public class ThreeOpenHand
 		if (guaranteed.size() != 3)
 			throw new IllegalArgumentException(
 					"Invalid file: guaranteed is not equal to 3.");
+		
 		UndeployedCard[] result = new UndeployedCard[5];
 		int i = 0;
+		HashSet<Card> inHand = new HashSet<>();
+		
 		for (JsonValue cardName : guaranteed)
 		{
-			result[i++] = CardList.getCard(((JsonString) cardName).getString())
-					.setHoldingPlayer(player);
+			result[i++] = getCardSafely(cardName, player, inHand);
 		}
 		assert i == 3;
 		JsonArray randomized = ob.getJsonArray("maybe");
@@ -60,9 +65,7 @@ public class ThreeOpenHand
 		HashSet<Card> possibleCards = new HashSet<Card>();
 		for (JsonValue cardName : randomized)
 		{
-			possibleCards.add(CardList.getCard(
-					((JsonString) cardName).getString()).setHoldingPlayer(
-					player));
+			possibleCards.add(getCardSafely(cardName, player, inHand));
 		}
 
 		// Ensure that the random cards are a singleton.
@@ -71,5 +74,29 @@ public class ThreeOpenHand
 		result[i++] = rand;
 		assert i == 5;
 		return result;
+	}
+	
+	/**
+	 * This method gets a card safely from the cardName and sets it to be held by the input player.
+	 * This will throw an exception if the name of the card is invalid. It will also throw an exception if the card is already in the hand
+	 * and will add this card to alreadyInHand.
+	 * @param cardName The name of the card.
+	 * @param player The holder of the card.
+	 * @param alreadyInHand This set is used to determine if the input card is already in one's hand.
+	 * @return A valid card.
+	 */
+	private static Card getCardSafely(JsonValue cardName, Player player, HashSet<Card> alreadyInHand)
+	{
+		assert player != Player.NONE;
+		Card toAdd = CardList.getCard(((JsonString) cardName).getString());
+		if (toAdd == null)
+			throw new IllegalArgumentException(((JsonString)cardName).getString() + " is not a card.");
+		else if (alreadyInHand.contains(toAdd))
+			throw new IllegalArgumentException("Duplicate card:" + toAdd.name);
+		else
+		{
+			alreadyInHand.add(toAdd);
+			return toAdd.setHoldingPlayer(player);
+		}
 	}
 }
