@@ -16,6 +16,7 @@ public class ProbCard {
 	 *            The probability of a deployed card being this card.
 	 */
 	public ProbCard(Card card, double probability) {
+		assert probability >= 0 && probability <= 1;
 		this.card = card;
 		this.probability = probability;
 	}
