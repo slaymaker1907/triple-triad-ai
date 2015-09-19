@@ -142,6 +142,17 @@ public class DeployedCardComparatorTest
 	}
 	
 	@Test
+	public void testFallenAceNoCapture()
+	{
+		DeployedCard inPlace = new DeployedCard(gaelicat, 0, 0); // Ace is north stat.
+		DeployedCard played = new DeployedCard(nidhogg, 1, 0);
+		assertEquals(DeployedCard.Direction.NORTH,played.getDirectionOfOther(inPlace));
+		assertEquals(10, played.card.north);
+		assertEquals(1, inPlace.card.south);
+		assertFalse(DeployedCardComparator.fallenAceCompare(played, inPlace));
+	}
+	
+	@Test
 	public void testFallenAceReverseCompare()
 	{
 		DeployedCard inPlace = new DeployedCard(gaelicat, 0, 0);
@@ -161,5 +172,32 @@ public class DeployedCardComparatorTest
 		assertEquals(10, inPlace.card.north);
 		assertEquals(1, played.card.south);
 		assertFalse(DeployedCardComparator.fallenAceReverseCompare(played, inPlace));
+	}
+	
+	@Test
+	public void testCompareEquality()
+	{
+		DeployedCard inPlace = new DeployedCard(gaelicat, 1, 0);
+		DeployedCard played = new DeployedCard(spriggan, 0, 0);
+		assertEquals(DeployedCard.Direction.SOUTH,played.getDirectionOfOther(inPlace));
+		assertTrue(DeployedCardComparator.equalCompare(played, inPlace));
+	}
+	
+	@Test
+	public void testCompareEqualityGt()
+	{
+		DeployedCard inPlace = new DeployedCard(nidhogg, 1, 0);
+		DeployedCard played = new DeployedCard(gaelicat, 0, 0);
+		assertEquals(DeployedCard.Direction.SOUTH,played.getDirectionOfOther(inPlace));
+		assertFalse(DeployedCardComparator.equalCompare(played, inPlace));
+	}
+	
+	@Test
+	public void testCompareEqualityLt()
+	{
+		DeployedCard inPlace = new DeployedCard(gaelicat, 0, 0);
+		DeployedCard played = new DeployedCard(nidhogg, 1, 0);
+		assertEquals(DeployedCard.Direction.NORTH,played.getDirectionOfOther(inPlace));
+		assertFalse(DeployedCardComparator.equalCompare(played, inPlace));
 	}
 }

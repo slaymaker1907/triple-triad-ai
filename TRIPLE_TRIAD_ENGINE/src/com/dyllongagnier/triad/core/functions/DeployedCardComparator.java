@@ -49,6 +49,8 @@ public interface DeployedCardComparator extends
 			// 1 beats ten.
 			if (i1 == 1 && i2 == 10)
 				return 1;
+			else if (i1 == 10 && i2 == 1)
+				return -1;
 			else
 				return Integer.compare(i1, i2);
 		};
