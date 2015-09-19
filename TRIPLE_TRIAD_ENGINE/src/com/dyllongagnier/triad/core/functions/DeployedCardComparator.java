@@ -74,6 +74,8 @@ public interface DeployedCardComparator extends
 			// 10 beats 1.
 			if (i1 == 10 && i2 == 1)
 				return 1;
+			else if (i1 == 1 && i2 == 10)
+				return -1;
 			else
 				return -1 * Integer.compare(i1, i2);
 		};
