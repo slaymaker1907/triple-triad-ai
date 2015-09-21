@@ -1,6 +1,5 @@
 package com.dyllongagnier.triad.core;
 
-import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.functions.AscensionTransform;
 import com.dyllongagnier.triad.core.functions.CardPlayFunction;
 import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
@@ -44,8 +43,7 @@ public class Rules
 	 */
 	public Rules(boolean isSuddenDeath, boolean isOrder, boolean isReverse,
 			boolean isFallenAce, boolean isPlus, boolean isSame,
-			boolean isCombo, AscensionRule ascensionRule,
-			UndeployedCard[] selfCards, UndeployedCard[] opponentCards)
+			boolean isCombo, AscensionRule ascensionRule)
 	{
 		this.isSuddenDeath = isSuddenDeath;
 		this.moveValidator = getValidator(isOrder);

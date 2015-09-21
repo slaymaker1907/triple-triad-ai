@@ -43,9 +43,30 @@ public class FunctionAsserts
 		Assert.assertEquals(expected.apply(upMidGael, middleNid), actual.apply(upMidGael, middleNid));
 	}
 	
+	/**
+	 * This method runs a number of tests over the input functions to determine if they are equal,
+	 * throwing an AssertionError otherwise.
+	 * @param expected The expected function.
+	 * @param actual The actual function.
+	 */
 	public static void assertEquals(AscensionTransform expected, AscensionTransform actual)
 	{
 		DeployedCard card = new DeployedCard(kobold, 0, 0);
 		Assert.assertEquals(expected.apply(card, 100), actual.apply(card, 100));
+	}
+	
+	/**
+	 * This method runs a number of tests over the input functions to determine if they are equal,
+	 * throwing an AssertionError otherwise.
+	 * @param expected The expected function.
+	 * @param actual The actual function.
+	 */
+	public static void assertEquals(CardPlayFunction expected, CardPlayFunction actual)
+	{
+		throw new UnsupportedOperationException("This method is not yet implemented.");
+		
+		// Determine if the same rule is in effect.
+		// Determine if the plus rule is in effect.
+		// Determine if the Combo rule is in effect with either same or plus.
 	}
 }
