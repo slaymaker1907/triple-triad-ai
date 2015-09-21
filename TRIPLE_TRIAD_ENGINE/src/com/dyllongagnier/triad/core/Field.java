@@ -64,6 +64,8 @@ public class Field
 	 */
 	public DeployedCard getCard(int row, int col)
 	{
+		if (!isInBounds(row, col))
+			return null;
 		return playedCards[row][col];
 	}
 

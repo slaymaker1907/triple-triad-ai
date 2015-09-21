@@ -45,9 +45,10 @@ public interface CardPlayFunction
 		 */
 		public boolean addPair(DeployedCard playedCard, DeployedCard otherCard)
 		{
-			assert playedCard.cardAdjacent(otherCard);
 			if (otherCard == null)
 				return false;
+			assert playedCard.cardAdjacent(otherCard);
+			
 			int sum = CardPlayFunction.computeSum(playedCard, otherCard);
 			if (!this.mapOfSums.containsKey(sum))
 				this.mapOfSums.put(sum, new HashSet<DeployedCard>());
