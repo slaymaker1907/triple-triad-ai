@@ -5,6 +5,8 @@ import org.junit.Assert;
 import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.DeployedCard;
+import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.core.Field;
 
 public class FunctionAsserts
 {
@@ -63,10 +65,31 @@ public class FunctionAsserts
 	 */
 	public static void assertEquals(CardPlayFunction expected, CardPlayFunction actual)
 	{
-		throw new UnsupportedOperationException("This method is not yet implemented.");
-		
+		// throw new UnsupportedOperationException("This method is not yet implemented.");
 		// Determine if the same rule is in effect.
 		// Determine if the plus rule is in effect.
 		// Determine if the Combo rule is in effect with either same or plus.
+		
+		// This field should trigger plus, same, and combo if they are in effect.
+		Field actualField = new Field(DeployedCardComparator::regularCompare, actual);
+		Field expectedField = new Field(DeployedCardComparator::regularCompare, expected);
+		DeployedCard center = new DeployedCard(new Card(3, 5, 2, 3, "center", Card.Type.NONE, 1, Player.SELF), 1, 1);
+		actualField = FunctionAsserts.getSamePlusComboTriggerField(actualField);
+		expectedField = FunctionAsserts.getSamePlusComboTriggerField(expectedField);
+		
+		Assert.assertEquals(expected.updateField(actualField, center, DeployedCardComparator::regularCompare), 
+				expected.updateField(expectedField, center, DeployedCardComparator::regularCompare));
+	}
+	
+	private static Field getSamePlusComboTriggerField(Field start)
+	{
+		Card opponentOne = new Card(1,1,1,1,"one",Card.Type.NONE, 1, Player.OPPONENT);
+		DeployedCard west = new DeployedCard(new Card(2, 6, 1, 1, "west", Card.Type.NONE, 1, Player.OPPONENT), 1, 0);
+		DeployedCard north = new DeployedCard(new Card(1, 2, 6, 1, "north", Card.Type.NONE, 1, Player.OPPONENT), 0, 1);
+		DeployedCard east = new DeployedCard(new Card(1, 1, 2, 5, "east", Card.Type.NONE, 1, Player.OPPONENT), 1, 2);
+		DeployedCard south = new DeployedCard(new Card(2, 1, 1, 2, "south", Card.Type.NONE, 1, Player.OPPONENT), 1, 2);
+		return start.playCard(new DeployedCard(opponentOne, 0, 0)).playCard(new DeployedCard(opponentOne, 0, 2))
+				.playCard(new DeployedCard(opponentOne, 2, 0)).playCard(new DeployedCard(opponentOne, 2, 2))
+				.playCard(north).playCard(east).playCard(south).playCard(west);
 	}
 }
