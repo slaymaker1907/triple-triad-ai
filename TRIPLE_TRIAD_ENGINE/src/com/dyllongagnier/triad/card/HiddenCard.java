@@ -1,19 +1,17 @@
 package com.dyllongagnier.triad.card;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * This class represents
  */
 public abstract class HiddenCard implements UndeployedCard
 {
-	private static int idGen = 0;
-	private static final Object idLock = new Object();
+	private static final AtomicInteger idGen = new AtomicInteger(0);
 
 	private static int idFactory()
 	{
-		synchronized (idLock)
-		{
-			return idGen++;
-		}
+		return idGen.getAndIncrement();
 	}
 
 	public final int id;
@@ -21,7 +19,6 @@ public abstract class HiddenCard implements UndeployedCard
 	public HiddenCard()
 	{
 		this.id = HiddenCard.idFactory();
-
 	}
 
 	@Override
