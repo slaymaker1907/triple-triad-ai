@@ -12,7 +12,6 @@ import java.util.function.Function;
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
-import com.dyllongagnier.triad.core.Rules.AscensionRule;
 import com.dyllongagnier.triad.core.functions.AscensionTransform;
 import com.dyllongagnier.triad.core.functions.CardPlayFunction;
 import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
