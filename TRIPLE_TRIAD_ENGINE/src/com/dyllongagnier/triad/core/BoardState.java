@@ -84,7 +84,7 @@ public class BoardState
 	public SortedSet<UndeployedCard> getHand(Player player)
 	{
 		assert player != Player.NONE;
-		assert player == null;
+		assert player != null;
 		return this.playerHands.get(player);
 	}
 

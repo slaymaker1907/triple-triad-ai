@@ -31,7 +31,7 @@ public class BasicGamePerformance
 		{
 			BasicGame.runGame(BasicGamePerformance::getRandomPlayer, builder, ai, ai);
 		}
-		System.out.println(System.currentTimeMillis() - start);
+		System.out.println(900_000.0 / (System.currentTimeMillis() - start) * 1000.0);
 	}
 	
 	
