@@ -12,6 +12,11 @@ import java.util.function.Function;
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
+import com.dyllongagnier.triad.core.Rules.AscensionRule;
+import com.dyllongagnier.triad.core.functions.AscensionTransform;
+import com.dyllongagnier.triad.core.functions.CardPlayFunction;
+import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
+import com.dyllongagnier.triad.core.functions.MoveValidator;
 
 /**
  * This class represents a (mostly) immutable BoardState for triple triad. This
@@ -219,28 +224,105 @@ public class BoardState
 	 */
 	public static class Builder
 	{
-		protected final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
-		private final Field fieldToUse;
+		private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
+		private MoveValidator validator;
+		private AscensionTransform ascensionTransform;
+		private boolean isOrder;
+		private AscensionRule ascensionRule;
+		
+		public boolean isSuddenDeath, isReverse, isFallenAce, isPlus, isSame, isCombo;
 
 		/**
 		 * Constructs a new state with no cards in hands and no played cards.
-		 * 
-		 * @param ruleSet
-		 *            The rules to use for this game.
+		 * Rules default to no special rules.
 		 */
-		public Builder(Rules ruleSet)
+		public Builder()
 		{
 			this.playerHands = new EnumMap<>(Player.class);
 			this.playerHands.put(Player.SELF, new TreeSet<>());
 			this.playerHands.put(Player.OPPONENT, new TreeSet<>());
-			if (ruleSet.ascensionRule != Rules.AscensionRule.NONE)
-				this.fieldToUse = new AscensionField(ruleSet.cardComparator,
-						ruleSet.ascensionFunc, ruleSet.playFunc);
-			else
-				this.fieldToUse = new Field(ruleSet.cardComparator,
-						ruleSet.playFunc);
+			this.validator = MoveValidator::normalValidator;
+			this.ascensionTransform = AscensionTransform::noAscension;
+			this.isOrder = false;
+			this.ascensionRule = AscensionRule.NONE;
+			this.isSuddenDeath = this.isReverse = this.isPlus = this.isSame = this.isCombo = false;
 		}
-
+		
+		/**
+		 * This method sets isOrder. If isOrder is true, then an extra check is performed during the game
+		 * to make sure that the only valid move is the first card in a player's hand.
+		 * @param isOrder
+		 * @return This object.
+		 */
+		public Builder setIsOrder(boolean isOrder)
+		{
+			if (isOrder)
+			{
+				this.validator = MoveValidator::orderValidator;
+			}
+			else
+			{
+				this.validator = MoveValidator::normalValidator;
+			}
+			
+			this.isOrder = isOrder;
+			
+			return this;
+		}
+		
+		/**
+		 * This method returns whether this object is using the isOrder rule.
+		 * @return
+		 */
+		public boolean getIsOrder()
+		{
+			return this.isOrder;
+		}
+		
+		/**
+		 * This method retrieves the move validator that should be used to verify moves in this game.
+		 * @return
+		 */
+		public MoveValidator getMoveValidator()
+		{
+			return this.validator;
+		}
+		
+		/**
+		 * This method sets the ascension rule to use at runtime.
+		 * @param rule The ascension rule to use (can be nothing).
+		 * @return This object.
+		 */
+		public Builder setAscensionTransform(AscensionRule rule)
+		{
+			switch (rule)
+			{
+				case NONE:
+					this.ascensionTransform = AscensionTransform::noAscension;
+					break;
+				case NORMAL:
+					this.ascensionTransform = AscensionTransform::ascension;
+					break;
+				case DESCENSION:
+					this.ascensionTransform = AscensionTransform::descension;
+					break;
+				default:
+					throw new IllegalArgumentException();
+			}
+			
+			this.ascensionRule = rule;
+			return this;
+		}
+		
+		/**
+		 * This method retrieves the ascension rule to be used with this builder.
+		 * @return An ascension rule (none, ascension, descension).
+		 */
+		public AscensionRule getAscensionRule()
+		{
+			return this.ascensionRule;
+		}
+		
 		/**
 		 * This method sets a given player's hand.
 		 * 
@@ -269,7 +351,74 @@ public class BoardState
 		 */
 		public BoardState build()
 		{
-			return new BoardState(this.playerHands, this.fieldToUse);
+			DeployedCardComparator cardComparator = Builder.getComparator(isReverse, isFallenAce);
+			CardPlayFunction playFunc = Builder.getPlayFunction(isPlus, isSame, isCombo);
+			Field fieldToUse;
+			switch(this.ascensionRule)
+			{
+				case NORMAL:
+				case DESCENSION:
+					fieldToUse = new AscensionField(cardComparator, this.ascensionTransform, playFunc);
+					break;
+				default:
+					fieldToUse = new Field(cardComparator, playFunc);
+			}
+			
+			return new BoardState(this.playerHands, fieldToUse);
+		}
+		
+		/**
+		 * This method returns the comparator associated with this rule set.
+		 * 
+		 * @boolean isReverse Indicates that the Reverse rule is in place.
+		 * @boolean isFallenAce Indicates that the Fallen Ace rule is in place.
+		 * @return A comparator associated with the input rules.
+		 */
+		private static DeployedCardComparator getComparator(boolean isReverse,
+				boolean isFallenAce)
+		{
+			if (isReverse && isFallenAce)
+				return DeployedCardComparator::fallenAceReverseCompare;
+			else if (isReverse)
+				return DeployedCardComparator::reverseCompare;
+			else if (isFallenAce)
+				return DeployedCardComparator::fallenAceCompare;
+			else
+				return DeployedCardComparator::regularCompare;
+		}
+
+		/**
+		 * This method gets the relevant play function for the input options.
+		 * 
+		 * @param isPlus
+		 *            Indicates the Plus rule.
+		 * @param isSame
+		 *            Indicates the Same rule.
+		 * @param isCombo
+		 *            Indicates the Combo rule. This can only be selected with
+		 *            isPlus or isSame.
+		 * @return The appropriate play function.
+		 */
+		private static CardPlayFunction getPlayFunction(boolean isPlus,
+				boolean isSame, boolean isCombo)
+		{
+			if (!isPlus && !isSame && !isCombo)
+				return CardPlayFunction::basicCapture;
+			else if (isPlus && !isSame && !isCombo)
+				return CardPlayFunction::plusCapture;
+			else if (!isPlus && isSame && !isCombo)
+				return CardPlayFunction::sameCapture;
+			else if (isPlus && isSame && !isCombo)
+				return CardPlayFunction::samePlus;
+			else if (isPlus && !isSame && isCombo)
+				return CardPlayFunction::plusCombo;
+			else if (!isPlus && isSame && isCombo)
+				return CardPlayFunction::sameCombo;
+			else if (isPlus && isSame && isCombo)
+				return CardPlayFunction::samePlusCombo;
+			else
+				throw new IllegalArgumentException(
+						"Must select isPlus and/or isSame with isCombo.");
 		}
 	}
 }
