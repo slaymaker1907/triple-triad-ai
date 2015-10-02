@@ -32,7 +32,7 @@ public class BasicGame
 		for (int turn = 1; turn <= 9; turn++)
 		{
 			GameControls currentControls = new GameControls(currentState,
-					currentPlayer, gameBuilder.getMoveValidator());
+					currentPlayer, gameBuilder.getMoveValidator(), gameBuilder.getIsOrder());
 			switch (currentPlayer)
 			{
 				case SELF:
