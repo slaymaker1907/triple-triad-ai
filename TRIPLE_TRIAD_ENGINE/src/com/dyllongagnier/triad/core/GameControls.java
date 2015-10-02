@@ -9,7 +9,7 @@ import com.dyllongagnier.triad.core.functions.MoveValidator;
 
 public class GameControls
 {
-	private final Player currentPlayer;
+	public final Player currentPlayer;
 
 	/**
 	 * This is the mostly immutable board state. However, agents are trusted to NOT deploy

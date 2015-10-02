@@ -3,6 +3,7 @@ package com.dyllongagnier.triad.core;
 import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.core.functions.MoveValidator;
 
 public class BasicGame
 {
@@ -60,6 +61,53 @@ public class BasicGame
 			}
 		}
 
+		return currentState;
+	}
+	
+	/**
+	 * This method runs a game with the given inputs.
+	 * 
+	 * @param firstPlayer
+	 *            The first player.
+	 * @param gameBuilder
+	 * 			  The game builder to use for this game.
+	 * @param selfAgent
+	 *            The agent for self. The agent to use for playing Player.SELF.
+	 * @param opponentAgent
+	 *            The agent for OPPONENT. The agent to use for playing
+	 *            Player.OPPONENT.
+	 * @return The final BoardState of the game.
+	 */
+	public static BoardState runGame(Player firstPlayer,
+			BoardState currentState, MoveValidator validator, boolean isOrder,
+			GameAgent selfAgent, GameAgent opponentAgent)
+	{
+		assert firstPlayer != Player.NONE;
+
+		Player currentPlayer = firstPlayer;
+		int turnCount = 11 - (currentState.getHand(Player.SELF).size() + currentState.getHand(Player.OPPONENT).size());
+		for (int turn = turnCount; turn <= 9; turn++)
+		{
+			GameControls currentControls = new GameControls(currentState,
+					currentPlayer, validator, isOrder);
+			switch (currentPlayer)
+			{
+				case SELF:
+					selfAgent.takeTurn(currentControls);
+					break;
+				case OPPONENT:
+					opponentAgent.takeTurn(currentControls);
+					break;
+				default:
+					throw new RuntimeException(
+							"Somehow, NONE became the current player.");
+			}
+			currentState = currentControls.getNextTurn();
+			currentPlayer = currentPlayer.swapPlayer();
+		}
+
+		assert currentState.gameComplete();
+		
 		return currentState;
 	}
 }

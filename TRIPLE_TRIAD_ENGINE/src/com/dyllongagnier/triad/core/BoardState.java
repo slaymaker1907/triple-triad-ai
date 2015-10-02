@@ -176,7 +176,11 @@ public class BoardState
 		DeployedCard cardToPlay = new DeployedCard(card.deploy(), row, col);
 		assert cardToPlay.card.holdingPlayer == player;
 		Field newField = this.playedCards.playCard(cardToPlay);
-		return new BoardState(this.playerHands, newField);
+		EnumMap<Player, SortedSet<UndeployedCard>> newHands = new EnumMap<>(Player.class);
+		newHands.put(player, new TreeSet<>(this.getHand(player)));
+		newHands.put(player.swapPlayer(), this.getHand(player.swapPlayer()));
+		newHands.get(player).remove(card);
+		return new BoardState(newHands, newField);
 	}
 
 	/**
