@@ -1,5 +1,8 @@
 package com.dyllongagnier.triad.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.functions.MoveValidator;
@@ -8,9 +11,16 @@ public class GameControls
 {
 	private final Player currentPlayer;
 
-	private final BoardState currentTurn;
+	/**
+	 * This is the mostly immutable board state. However, agents are trusted to NOT deploy
+	 * any cards from hand unless it is explicitly allowed by the UndeployedCard in question otherwise
+	 * undefined behavior will occur.
+	 */
+	public final BoardState currentTurn;
+	
 	private BoardState nextTurn;
 	public final MoveValidator moveValidator;
+	public final boolean isOrder;
 
 	/**
 	 * Constructs a new GameControls from the currentTurn as well as the
@@ -22,12 +32,13 @@ public class GameControls
 	 *            The player taking this turn.
 	 */
 	public GameControls(BoardState currentTurn, Player currentPlayer,
-			MoveValidator moveValidator)
+			MoveValidator moveValidator, boolean isOrder)
 	{
 		this.currentTurn = currentTurn;
 		this.currentPlayer = currentPlayer;
 		this.nextTurn = null;
 		this.moveValidator = moveValidator;
+		this.isOrder = isOrder;
 	}
 
 	/**
@@ -79,5 +90,47 @@ public class GameControls
 	{
 		assert this.nextTurn != null;
 		return this.nextTurn;
+	}
+	
+	/**
+	 * This method retrieves all possible valid moves.
+	 * @return A list with all possible valid moves.
+	 */
+	public List<PossibleMove> getValidMoves()
+	{
+		ArrayList<PossibleMove> result = new ArrayList<>();
+		if (isOrder)
+		{
+			for(int row = 0; row < 3; row++)
+				for(int col = 0; col < 3; col++)
+				{
+					UndeployedCard toPlay = this.currentTurn.getFirstCardInHand(this.currentPlayer);
+					if (this.moveValidator.apply(this.currentTurn, toPlay, this.currentPlayer, row, col))
+						result.add(new PossibleMove(toPlay, row, col));
+				}
+		}
+		else
+		{
+			for(UndeployedCard card : this.currentTurn.getHand(this.currentPlayer))
+				for(int row = 0; row < 3; row++)
+					for(int col = 0; col < 3; col++)
+						if (this.moveValidator.apply(this.currentTurn, card, this.currentPlayer, row, col))
+							result.add(new PossibleMove(card, row, col));
+		}
+		
+		return result;
+	}
+	
+	public static class PossibleMove
+	{
+		public final UndeployedCard toPlay;
+		public final int row, col;
+		
+		public PossibleMove(UndeployedCard toPlay, int row, int col)
+		{
+			this.toPlay = toPlay;
+			this.row = row;
+			this.col = col;
+		}
 	}
 }
