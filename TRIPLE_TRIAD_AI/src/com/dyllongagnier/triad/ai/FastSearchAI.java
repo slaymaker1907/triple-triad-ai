@@ -26,7 +26,8 @@ public class FastSearchAI implements GameAgent
 	
 	public FastSearchAI(Consumer<BoardState> observer)
 	{
-		this.testAgent = new FastSearchAI(this, observer);
+		Consumer<BoardState> doNothing = (state) -> {};
+		this.testAgent = new FastSearchAI(this, doNothing);
 		this.observer = observer;
 	}
 	
@@ -88,7 +89,6 @@ public class FastSearchAI implements GameAgent
 	}
 	
 	private static Random gen = new Random();
-	
 	public static Player getRandomPlayer()
 	{
 		if (gen.nextBoolean())
