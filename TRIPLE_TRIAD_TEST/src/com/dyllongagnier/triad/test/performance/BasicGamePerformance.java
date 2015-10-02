@@ -22,10 +22,15 @@ public class BasicGamePerformance
 	
 	public static void main(String[] args)
 	{
+		System.out.println(BasicGamePerformance.class.desiredAssertionStatus());
 		BoardState.Builder builder = new BoardState.Builder();
 		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		GameAgent ai = new RandomAI();
+		for(int i = 0; i < 100_000; i++)
+		{
+			BasicGame.runGame(BasicGamePerformance::getRandomPlayer, builder, ai, ai);
+		}
 		long start = System.currentTimeMillis();
 		for(int i = 0; i < 100_000; i++)
 		{
