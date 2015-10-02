@@ -54,7 +54,18 @@ public class FastSearchAI implements GameAgent
 	private int possibleMoveMap(PossibleMove move, BoardState currentState, boolean isOrder, MoveValidator validator, Player player)
 	{
 		currentState = currentState.playCard(player, move.toPlay, move.row, move.col);
-		BoardState endState = BasicGame.runGame(player.swapPlayer(), currentState, validator, isOrder, this, this.testAgent);
+		BoardState endState;
+		switch(player)
+		{
+			case SELF:
+				endState = BasicGame.runGame(player.swapPlayer(), currentState, validator, isOrder, this, this.testAgent);
+				break;
+			case OPPONENT:
+				endState = BasicGame.runGame(player.swapPlayer(), currentState, validator, isOrder, this.testAgent, this);
+				break;
+			default:
+				throw new RuntimeException("Can not be NONE.");
+		}
 		return this.evaluateBoardState(endState, player);
 	}
 	
