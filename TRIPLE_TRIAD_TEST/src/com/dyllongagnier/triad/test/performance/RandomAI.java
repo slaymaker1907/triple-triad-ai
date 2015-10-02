@@ -18,7 +18,7 @@ public class RandomAI implements GameAgent
 	public void takeTurn(GameControls controls)
 	{
 		List<PossibleMove> moves = controls.getValidMoves();
-		PossibleMove move = moves.get(gen.nextInt());
+		PossibleMove move = moves.get(gen.nextInt(moves.size()));
 		controls.playCard(move.toPlay, move.row, move.col);
 	}
 

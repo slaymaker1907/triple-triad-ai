@@ -60,7 +60,7 @@ public class GameControls
 		if (this.nextTurn != null)
 			throw new IllegalArgumentException(
 					"This turn is already complete and can not be changed.");
-		if (this.moveValidator.apply(this.currentTurn, card,
+		if (!this.moveValidator.apply(this.currentTurn, card,
 				this.currentPlayer, row, col))
 			throw new IllegalArgumentException();
 
