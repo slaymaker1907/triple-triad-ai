@@ -86,8 +86,7 @@ public class Field
 
 		Set<DeployedCard> takeOver = this.playFunc.updateField(this,
 				cardToPlay, this.cardComparator);
-		DeployedCard[][] newPlayedCards = Arrays.copyOf(playedCards,
-				playedCards.length);
+		DeployedCard[][] newPlayedCards = this.copyPlayedCards();
 		newPlayedCards[row][col] = cardToPlay;
 		for (DeployedCard card : takeOver)
 		{
@@ -97,6 +96,18 @@ public class Field
 		}
 
 		return new Field(newPlayedCards, this.cardComparator, this.playFunc);
+	}
+	
+	private DeployedCard[][] copyPlayedCards()
+	{
+		DeployedCard[][] result = new DeployedCard[3][3];
+		for(int row = 0; row < 3; row++)
+			for(int col = 0; col < 3; col++)
+			{
+				result[row][col] = this.playedCards[row][col];
+			}
+		
+		return result;
 	}
 
 	/**
