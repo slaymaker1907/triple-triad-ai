@@ -2,7 +2,6 @@ package com.dyllongagnier.triad.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Set;
 import java.util.SortedSet;
@@ -25,8 +24,7 @@ import com.dyllongagnier.triad.core.functions.MoveValidator;
  */
 public class BoardState
 {
-	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands = new EnumMap<>(
-			Player.class);
+	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
 	public final Field playedCards;
 
 	/**
@@ -46,12 +44,7 @@ public class BoardState
 			EnumMap<Player, SortedSet<UndeployedCard>> playerHands,
 			Field playedCards)
 	{
-		SortedSet<UndeployedCard> opponentCards = Collections
-				.unmodifiableSortedSet(playerHands.get(Player.OPPONENT));
-		SortedSet<UndeployedCard> selfCards = Collections
-				.unmodifiableSortedSet(playerHands.get(Player.SELF));
-		this.playerHands.put(Player.OPPONENT, opponentCards);
-		this.playerHands.put(Player.SELF, selfCards);
+		this.playerHands = playerHands;
 		this.playedCards = playedCards;
 	}
 

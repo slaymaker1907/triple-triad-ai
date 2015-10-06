@@ -18,12 +18,12 @@ public class TriadGameCloneSpeed
 		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		GameAgent ai = new RandomAI();
 		TriadGame mainGame = new TriadGame(BasicGamePerformance.getRandomPlayer(), builder, ai, ai, new DefaultListener()).clone();
-		for(int i = 0; i < 1_000_000_000; i++)
+		for(int i = 0; i < 100_000; i++)
 		{
 			mainGame.clone();
 		}
 		long start = System.currentTimeMillis();
-		for(int i = 0; i < 1_000_000_000; i++)
+		for(int i = 0; i < 100_000; i++)
 		{
 			mainGame.clone();
 		}
