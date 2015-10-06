@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.dyllongagnier.triad.core.GameAgent;
-import com.dyllongagnier.triad.core.GameControls;
-import com.dyllongagnier.triad.core.GameControls.PossibleMove;
+import com.dyllongagnier.triad.core.TriadGame;
+import com.dyllongagnier.triad.core.TriadGame.PossibleMove;
 
 /**
  * This is a random AI for the purpose of testing.
@@ -15,11 +15,11 @@ public class RandomAI implements GameAgent
 	private Random gen = new Random();
 	
 	@Override
-	public void takeTurn(GameControls controls)
+	public void takeTurn(TriadGame controls)
 	{
 		List<PossibleMove> moves = controls.getValidMoves();
 		PossibleMove move = moves.get(gen.nextInt(moves.size()));
-		controls.playCard(move.toPlay, move.row, move.col);
+		controls.takeTurn(move.toPlay, move.row, move.col);
 	}
 
 }

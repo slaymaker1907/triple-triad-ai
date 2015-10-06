@@ -2,72 +2,43 @@ package com.dyllongagnier.triad.ai;
 
 import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
 
 import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.Player;
-import com.dyllongagnier.triad.core.BasicGame;
+import com.dyllongagnier.triad.core.DefaultListener;
+import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.core.BoardState;
 import com.dyllongagnier.triad.core.GameAgent;
-import com.dyllongagnier.triad.core.GameControls;
-import com.dyllongagnier.triad.core.GameControls.PossibleMove;
-import com.dyllongagnier.triad.core.functions.MoveValidator;
+import com.dyllongagnier.triad.core.TriadGame.PossibleMove;
 
 public class FastSearchAI implements GameAgent
-{
-	private final GameAgent testAgent;
-	private final Consumer<BoardState> observer;
-	
-	public FastSearchAI(GameAgent testAgent, Consumer<BoardState> observer)
+{	
+	public FastSearchAI(GameAgent otherAgent)
 	{
-		this.testAgent = testAgent;
-		this.observer = observer;
 	}
 	
-	public FastSearchAI(Consumer<BoardState> observer)
+	public FastSearchAI()
 	{
-		Consumer<BoardState> doNothing = (state) -> {};
-		this.testAgent = new FastSearchAI(this, doNothing);
-		this.observer = observer;
 	}
 	
 	@Override
-	public void takeTurn(GameControls controls)
+	public void takeTurn(TriadGame controls)
 	{
-		this.observer.accept(controls.currentTurn);
-		
-		BoardState clone = controls.getCopyOfBoard();
 		List<PossibleMove> moves = controls.getValidMoves();
 		PossibleMove bestMove = null;
 		int currentBest = Integer.MIN_VALUE;
 		for(PossibleMove move : moves)
 		{
-			int current = possibleMoveMap(move, clone, controls.isOrder, controls.moveValidator, controls.currentPlayer);
+			TriadGame clone = controls.clone();
+			clone.takeTurn(move.toPlay, move.row, move.col);
+			int current = evaluateBoardState(clone.getCurrentState(), controls.getCurrentPlayer());
 			if (current > currentBest)
 			{
 				currentBest = current;
 				bestMove = move;
 			}
 		}
-		controls.playCard(bestMove.toPlay, bestMove.row, bestMove.col);
-	}
-	
-	private int possibleMoveMap(PossibleMove move, BoardState currentState, boolean isOrder, MoveValidator validator, Player player)
-	{
-		currentState = currentState.playCard(player, move.toPlay, move.row, move.col);
-		BoardState endState;
-		switch(player)
-		{
-			case SELF:
-				endState = BasicGame.runGame(player.swapPlayer(), currentState, validator, isOrder, this, this.testAgent);
-				break;
-			case OPPONENT:
-				endState = BasicGame.runGame(player.swapPlayer(), currentState, validator, isOrder, this.testAgent, this);
-				break;
-			default:
-				throw new RuntimeException("Can not be NONE.");
-		}
-		return this.evaluateBoardState(endState, player);
+		controls.takeTurn(bestMove.toPlay, bestMove.row, bestMove.col);
 	}
 	
 	private int evaluateBoardState(BoardState endState, Player player)
@@ -81,11 +52,10 @@ public class FastSearchAI implements GameAgent
 		BoardState.Builder builder = new BoardState.Builder();
 		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
-		Consumer<BoardState> doNothing = (state) -> {};
 		
-		FastSearchAI ai1 = new FastSearchAI(doNothing);
-		FastSearchAI ai2 = new FastSearchAI(doNothing);
-		BasicGame.runGame(FastSearchAI::getRandomPlayer, builder, ai1, ai2);
+		FastSearchAI ai1 = new FastSearchAI();
+		FastSearchAI ai2 = new FastSearchAI();
+		new TriadGame(getRandomPlayer(), builder, ai1, ai2, new DefaultListener()).startGame();
 	}
 	
 	private static Random gen = new Random();
