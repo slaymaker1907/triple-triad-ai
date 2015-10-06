@@ -112,7 +112,7 @@ public class TriadGame
 	protected TriadGame(TriadGame oldGame)
 	{
 		this.currentPlayer = oldGame.currentPlayer;
-		this.currentState = oldGame.currentState;
+		this.currentState = oldGame.currentState.clone();
 		this.turnCount = oldGame.turnCount;
 		this.gameAgentMap = oldGame.gameAgentMap;
 		this.listener = TriadGame.defaultListener;

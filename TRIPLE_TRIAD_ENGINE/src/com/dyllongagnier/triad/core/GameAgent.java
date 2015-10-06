@@ -2,7 +2,7 @@ package com.dyllongagnier.triad.core;
 
 /**
  * Implementing classes act as agents to play TripleTriad. When takeTurn is called, the BoardState will wait for the
- * called upon agent to make a valid move.
+ * called upon agent to make a valid move. Agents should implement clone.
  */
 public interface GameAgent
 {
