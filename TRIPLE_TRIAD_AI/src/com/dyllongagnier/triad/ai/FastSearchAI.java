@@ -2,6 +2,7 @@ package com.dyllongagnier.triad.ai;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.Player;
@@ -17,27 +18,38 @@ public class FastSearchAI implements GameAgent
 	public void takeTurn(TriadGame controls)
 	{
 		List<PossibleMove> moves = controls.getValidMoves();
-		PossibleMove bestMove = null;
-		int currentBest = Integer.MIN_VALUE;
+		NodeFutures futures = new NodeFutures((turn)->controls.takeTurn(turn.toPlay, turn.row, turn.col), moves.size());
 		for(PossibleMove move : moves)
 		{
-			TriadGame clone = controls.clone();
-			clone.takeTurn(move.toPlay, move.row, move.col);
-			NodeComm comm = new NodeComm()
-			BoardNode newNode = new BoardNode()
-			int current = evaluateBoardState(clone.getCurrentState(), controls.getCurrentPlayer());
-			if (current > currentBest)
-			{
-				currentBest = current;
-				bestMove = move;
-			}
+			futures.addNode(move, fullEvaluateBoard(controls, move), evaluateBoardState(controls, move));
 		}
-		controls.takeTurn(bestMove.toPlay, bestMove.row, bestMove.col);
 	}
 	
-	private int evaluateBoardState(BoardState endState, Player player)
+	private static Supplier<Integer> evaluateBoardState(TriadGame toClone, PossibleMove move)
 	{
-		return endState.getCardsUnderPlayers().apply(player).length;
+		return () ->
+		{
+			TriadGame clone = toClone.clone();
+			Player currentPlayer = clone.getCurrentPlayer();
+			BoardState playedState = clone.getCurrentState().playCard(clone.getCurrentPlayer(), move.toPlay, move.row, move.col);
+			return getCardsUnderPlayer(playedState, currentPlayer);
+		};
+	}
+	
+	private static int getCardsUnderPlayer(BoardState state, Player player)
+	{
+		return state.getCardsUnderPlayers().apply(player).length;
+	}
+	
+	private static Supplier<Integer> fullEvaluateBoard(TriadGame toClone, PossibleMove move)
+	{
+		return () ->
+		{
+			TriadGame clone = toClone.clone();
+			Player currentPlayer = clone.getCurrentPlayer();
+			clone.takeTurn(move.toPlay, move.row, move.col);
+			return getCardsUnderPlayer(clone.getCurrentState(), currentPlayer);
+		};
 	}
 	
 	public static void main(String[] args)
