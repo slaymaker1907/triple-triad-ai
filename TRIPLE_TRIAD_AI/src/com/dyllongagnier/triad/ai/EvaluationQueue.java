@@ -21,7 +21,10 @@ public class EvaluationQueue
 	{
 		EvaluationWorker[] result = new EvaluationWorker[threads];
 		for(int i = 0; i < threads; i++)
+		{
 			result[i] = new EvaluationWorker(EvaluationQueue::doNothingSupplier, EvaluationQueue::doNothingSupplier);
+			result[i].start();
+		}
 		return result;
 	}
 	
@@ -73,7 +76,8 @@ public class EvaluationQueue
 	private static void processNode()
 	{
 		BoardNode toProcess = priorityQueue.poll();
-		toProcess.regularEvaluation();
+		if (toProcess != null)
+			toProcess.regularEvaluation();
 	}
 	
 	private static void processNodeQuickly()
