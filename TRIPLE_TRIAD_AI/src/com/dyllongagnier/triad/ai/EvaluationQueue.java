@@ -95,4 +95,21 @@ public class EvaluationQueue
 		if (toProcess != null)
 			toProcess.regularEvaluation();
 	}
+	
+	public static void setMaxThinkTime(long milliseconds)
+	{
+		Thread thinker = new Thread(() -> 
+		{
+			try
+			{
+				Thread.sleep(milliseconds);
+			} catch (Exception e)
+			{
+				System.out.println("Sleeping was interruped for max think time.");
+			}
+			EvaluationQueue.finishProcessingQuickly();
+		});
+		thinker.setDaemon(true);
+		thinker.start();
+	}
 }

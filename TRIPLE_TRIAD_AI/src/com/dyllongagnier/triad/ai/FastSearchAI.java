@@ -61,8 +61,9 @@ public class FastSearchAI implements GameAgent
 	
 	public static void main(String[] args)
 	{
-		EvaluationQueue.setThreadCount(8);
+		EvaluationQueue.setThreadCount(6);
 		EvaluationQueue.beginProcessing();
+		EvaluationQueue.setMaxThinkTime(5000);
 		BoardState.Builder builder = new BoardState.Builder();
 		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
@@ -78,6 +79,7 @@ public class FastSearchAI implements GameAgent
 		@Override
 		public void gameChanged(TriadGame changedGame)
 		{
+			System.out.println("Here");
 		}
 
 		@Override
