@@ -46,7 +46,7 @@ public class EvaluationQueue
 	{
 		for(EvaluationWorker worker : workers)
 		{
-			worker.finishQuickly = false;
+			worker.finishQuickly = true;
 		}
 	}
 	
