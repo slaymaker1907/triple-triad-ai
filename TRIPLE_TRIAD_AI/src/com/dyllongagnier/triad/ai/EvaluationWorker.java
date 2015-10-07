@@ -6,18 +6,20 @@ public class EvaluationWorker extends Thread
 {
 	public Supplier<Runnable> getMainWork, getQuickWork;
 	public volatile boolean finishQuickly;
+	private volatile boolean isDestroyed;
 	
 	public EvaluationWorker(Supplier<Runnable> getMainWork, Supplier<Runnable> getQuickWork)
 	{
 		this.getMainWork = getMainWork;
 		this.getQuickWork = getQuickWork;
 		this.finishQuickly = false;
+		this.isDestroyed = false;
 	}
 	
 	@Override
 	public void run()
 	{
-		while(true)
+		while(!isDestroyed)
 		{
 			Runnable toRun;
 			if (this.finishQuickly)
@@ -36,6 +38,7 @@ public class EvaluationWorker extends Thread
 	public void destroy()
 	{
 		this.finishQuickly = true;
+		this.isDestroyed = true;
 		try
 		{
 			this.join();

@@ -185,8 +185,6 @@ public class BoardState
 	 */
 	public Function<Player, UndeployedCard[]> getCardsUnderPlayers()
 	{
-		assert this.gameComplete();
-
 		Function<Player, ArrayList<UndeployedCard>> boardFunc = this.playedCards
 				.getCardsUnderPlayers();
 		ArrayList<UndeployedCard> selfCards = boardFunc.apply(Player.SELF);

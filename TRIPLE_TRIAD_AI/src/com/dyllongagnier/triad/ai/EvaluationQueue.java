@@ -17,6 +17,15 @@ public class EvaluationQueue
 		}
 	}
 	
+	/**
+	 * This method destroys the queue such that setThreadCount must be called to do work again.
+	 */
+	public static void stopAllThreads()
+	{
+		for(int i = 0; i < workers.length; i++)
+			workers[i].destroy();
+	}
+	
 	private static EvaluationWorker[] getNewPool(int threads)
 	{
 		EvaluationWorker[] result = new EvaluationWorker[threads];
@@ -83,6 +92,7 @@ public class EvaluationQueue
 	private static void processNodeQuickly()
 	{
 		BoardNode toProcess = priorityQueue.poll();
-		toProcess.immediateEvaluation();
+		if (toProcess != null)
+			toProcess.regularEvaluation();
 	}
 }

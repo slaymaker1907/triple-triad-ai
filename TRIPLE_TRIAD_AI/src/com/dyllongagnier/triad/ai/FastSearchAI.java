@@ -2,18 +2,20 @@ package com.dyllongagnier.triad.ai;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.core.DefaultListener;
+import com.dyllongagnier.triad.core.GameListener;
 import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.core.BoardState;
 import com.dyllongagnier.triad.core.GameAgent;
 
 public class FastSearchAI implements GameAgent
-{
+{	
 	@Override
 	public void takeTurn(TriadGame controls)
 	{
@@ -54,7 +56,6 @@ public class FastSearchAI implements GameAgent
 	
 	public static void main(String[] args)
 	{
-		EvaluationQueue.setThreadCount(8);
 		EvaluationQueue.beginProcessing();
 		BoardState.Builder builder = new BoardState.Builder();
 		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
@@ -62,8 +63,22 @@ public class FastSearchAI implements GameAgent
 		
 		FastSearchAI ai1 = new FastSearchAI();
 		FastSearchAI ai2 = new FastSearchAI();
-		new TriadGame(getRandomPlayer(), builder, ai1, ai2, new DefaultListener()).startGame();
+		new TriadGame(getRandomPlayer(), builder, ai1, ai2, new EndListener()).startGame();
 		EvaluationQueue.stopProcessing();
+	}
+	
+	private static class EndListener implements GameListener
+	{
+		@Override
+		public void gameChanged(TriadGame changedGame)
+		{
+		}
+
+		@Override
+		public void gameComplete(TriadGame finalState)
+		{
+			System.out.println("Game complete, winnner: " + finalState.getCurrentState().getWinner());
+		}
 	}
 	
 	private static Random gen = new Random();
