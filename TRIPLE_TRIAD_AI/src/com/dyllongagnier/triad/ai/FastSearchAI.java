@@ -7,7 +7,6 @@ import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.Player;
-import com.dyllongagnier.triad.core.DefaultListener;
 import com.dyllongagnier.triad.core.GameListener;
 import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
@@ -16,6 +15,9 @@ import com.dyllongagnier.triad.core.GameAgent;
 
 public class FastSearchAI implements GameAgent
 {	
+	static AtomicInteger counter = new AtomicInteger(0);
+	static long start = System.currentTimeMillis();
+	
 	@Override
 	public void takeTurn(TriadGame controls)
 	{
@@ -23,6 +25,9 @@ public class FastSearchAI implements GameAgent
 		NodeFutures futures = new NodeFutures((turn)->controls.takeTurn(turn.toPlay, turn.row, turn.col), moves.size());
 		for(PossibleMove move : moves)
 		{
+			int count = counter.incrementAndGet();
+			if (count % 1_000_000 == 0)
+				System.out.println((System.currentTimeMillis() - start) / 1000.0);
 			futures.addNode(move, fullEvaluateBoard(controls, move), evaluateBoardState(controls, move));
 		}
 	}
@@ -56,6 +61,7 @@ public class FastSearchAI implements GameAgent
 	
 	public static void main(String[] args)
 	{
+		EvaluationQueue.setThreadCount(8);
 		EvaluationQueue.beginProcessing();
 		BoardState.Builder builder = new BoardState.Builder();
 		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
@@ -63,8 +69,8 @@ public class FastSearchAI implements GameAgent
 		
 		FastSearchAI ai1 = new FastSearchAI();
 		FastSearchAI ai2 = new FastSearchAI();
+		start = System.currentTimeMillis();
 		new TriadGame(getRandomPlayer(), builder, ai1, ai2, new EndListener()).startGame();
-		EvaluationQueue.stopProcessing();
 	}
 	
 	private static class EndListener implements GameListener
@@ -78,6 +84,7 @@ public class FastSearchAI implements GameAgent
 		public void gameComplete(TriadGame finalState)
 		{
 			System.out.println("Game complete, winnner: " + finalState.getCurrentState().getWinner());
+			EvaluationQueue.stopAllThreads();
 		}
 	}
 	
