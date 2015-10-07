@@ -54,6 +54,7 @@ public class FastSearchAI implements GameAgent
 	
 	public static void main(String[] args)
 	{
+		EvaluationQueue.beginProcessing();
 		BoardState.Builder builder = new BoardState.Builder();
 		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
@@ -61,6 +62,7 @@ public class FastSearchAI implements GameAgent
 		FastSearchAI ai1 = new FastSearchAI();
 		FastSearchAI ai2 = new FastSearchAI();
 		new TriadGame(getRandomPlayer(), builder, ai1, ai2, new DefaultListener()).startGame();
+		EvaluationQueue.stopProcessing();
 	}
 	
 	private static Random gen = new Random();

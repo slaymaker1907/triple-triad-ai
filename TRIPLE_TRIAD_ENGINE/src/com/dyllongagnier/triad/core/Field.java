@@ -150,22 +150,28 @@ public class Field
 		ArrayList<UndeployedCard> selfCards = new ArrayList<>();
 		ArrayList<UndeployedCard> opponentCards = new ArrayList<>();
 		for (int row = 0; row < 3; row++)
+		{
 			for (int col = 0; col < 3; col++)
 			{
-				Card card = this.getCard(row, col).card;
-				switch (card.holdingPlayer)
+				DeployedCard card = this.getCard(row, col);
+				if (card != null)
 				{
-					case SELF:
-						selfCards.add(card);
-						break;
-					case OPPONENT:
-						opponentCards.add(card);
-						break;
-					default:
-						throw new RuntimeException(
-								"NONE player was owner of a card.");
+					Card realCard = card.card;
+					switch (realCard.holdingPlayer)
+					{
+						case SELF:
+							selfCards.add(realCard);
+							break;
+						case OPPONENT:
+							opponentCards.add(realCard);
+							break;
+						default:
+							throw new RuntimeException(
+									"NONE player was owner of a card.");
+					}
 				}
 			}
+		}
 
 		return (player) ->
 		{
