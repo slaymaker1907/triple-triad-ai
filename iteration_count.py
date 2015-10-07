@@ -26,7 +26,8 @@ def ai(queue, hand1, hand2):
 	queue.add_node(iters)
 	for i in range(iters):
 		ai(queue, hand1, hand2)
-		
+
+# (4, 5) = 116,121,599
 def calc_queue_size(hand1, hand2):
 	queue = EvaluationQueue()
 	ai(queue, hand1, hand2)
