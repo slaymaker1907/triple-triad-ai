@@ -193,8 +193,6 @@ public class BoardState
 		selfCards.addAll(this.getHand(Player.SELF));
 		opponentCards.addAll(this.getHand(Player.OPPONENT));
 
-		assert selfCards.size() == opponentCards.size();
-
 		return (player) ->
 		{
 			switch (player)
