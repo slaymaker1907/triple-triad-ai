@@ -114,7 +114,7 @@ public class TriadGame
 		return result;
 	}
 	
-	protected TriadGame(TriadGame oldGame)
+	protected TriadGame(TriadGame oldGame, GameListener newListener)
 	{
 		this.currentPlayer = oldGame.currentPlayer;
 		this.currentState = oldGame.currentState.clone();
@@ -122,7 +122,7 @@ public class TriadGame
 		this.gameAgentMap = new EnumMap<>(Player.class);
 		this.gameAgentMap.put(Player.SELF, oldGame.getGameAgent(Player.SELF).clone());
 		this.gameAgentMap.put(Player.OPPONENT, oldGame.getGameAgent(Player.OPPONENT).clone());
-		this.listener = TriadGame.defaultListener;
+		this.listener = newListener;
 		this.moveValidator = oldGame.moveValidator;
 	}
 	
@@ -130,6 +130,11 @@ public class TriadGame
 	@Override
 	public TriadGame clone()
 	{
-		return new TriadGame(this);
+		return new TriadGame(this, TriadGame.defaultListener);
+	}
+	
+	public TriadGame clone(GameListener listener)
+	{
+		return new TriadGame(this, listener);
 	}
 }
