@@ -1,33 +1,29 @@
 package com.dyllongagnier.triad.ai;
 
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 public class BoardNode implements Comparable<BoardNode>
 {
-	private final Supplier<Integer> expensiveEval, cheapEval;
+	private final Consumer<NodeComm> expensiveEval, cheapEval;
 	private final NodeComm comm;
 	private final int heuristic;
 	
-	public BoardNode(NodeComm comm, Supplier<Integer> expensiveEval, Supplier<Integer> cheapEval)
+	public BoardNode(NodeComm comm, Consumer<NodeComm> expensiveEval, Consumer<NodeComm> cheapEval, int heuristic)
 	{
 		this.comm = comm;
 		this.cheapEval = cheapEval;
 		this.expensiveEval = expensiveEval;
-		this.heuristic = this.cheapEval.get();
+		this.heuristic = heuristic;
 	}
 	
-	public int immediateEvaluation()
+	public void immediateEvaluation()
 	{
-		int result = this.cheapEval.get();
-		this.comm.addResult(result);
-		return result;
+		this.cheapEval.accept(comm);
 	}
 	
-	public int regularEvaluation()
+	public void regularEvaluation()
 	{
-		int result = this.expensiveEval.get();
-		this.comm.addResult(result);
-		return result;
+		this.expensiveEval.accept(comm);
 	}
 
 	@Override

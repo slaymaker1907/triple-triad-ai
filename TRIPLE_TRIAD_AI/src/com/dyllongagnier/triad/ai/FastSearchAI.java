@@ -3,6 +3,7 @@ package com.dyllongagnier.triad.ai;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.card.CardList;
@@ -24,7 +25,7 @@ public class FastSearchAI implements GameAgent
 	public void takeTurn(TriadGame controls)
 	{
 		List<PossibleMove> moves = controls.getValidMoves();
-		NodeFutures futures = new NodeFutures((turn)->controls.takeTurn(turn.toPlay, turn.row, turn.col), moves.size());
+		NodeFutures futures = new NodeFutures(controls.getCurrentPlayer(), (turn)->controls.takeTurn(turn.toPlay, turn.row, turn.col), moves.size());
 		synchronized(lock)
 		{
 			if (firstFuture == null)
@@ -35,34 +36,31 @@ public class FastSearchAI implements GameAgent
 //			int count = counter.incrementAndGet();
 //			if (count % 1_000_000 == 0)
 //				System.out.println((System.currentTimeMillis() - start) / 1000.0);
-			futures.addNode(move, fullEvaluateBoard(controls, move), evaluateBoardState(controls, move));
+			int heuristic = FastSearchAI.getCardsUnderPlayer(controls.getCurrentState(), controls.getCurrentPlayer());
+			futures.addNode(move, fullEvaluateBoard(controls, move), evaluateBoardState(controls, move), heuristic);
 		}
 	}
 	
-	private static Supplier<Integer> evaluateBoardState(TriadGame toClone, PossibleMove move)
+	private static Consumer<NodeComm> evaluateBoardState(TriadGame toClone, PossibleMove move)
 	{
-		return () ->
+		return (listener) ->
 		{
 			TriadGame clone = toClone.clone();
-			Player currentPlayer = clone.getCurrentPlayer();
-			BoardState playedState = clone.getCurrentState().playCard(clone.getCurrentPlayer(), move.toPlay, move.row, move.col);
-			return getCardsUnderPlayer(playedState, currentPlayer);
+			listener.addQuickResult(clone.getCurrentState(), move);
 		};
 	}
 	
-	private static int getCardsUnderPlayer(BoardState state, Player player)
+	public static int getCardsUnderPlayer(BoardState state, Player player)
 	{
 		return state.getCardsUnderPlayers().apply(player).length;
 	}
 	
-	private static Supplier<Integer> fullEvaluateBoard(TriadGame toClone, PossibleMove move)
+	private static Consumer<NodeComm> fullEvaluateBoard(TriadGame toClone, PossibleMove move)
 	{
-		return () ->
+		return (listener) ->
 		{
-			TriadGame clone = toClone.clone();
-			Player currentPlayer = clone.getCurrentPlayer();
+			TriadGame clone = toClone.clone(listener);
 			clone.takeTurn(move.toPlay, move.row, move.col);
-			return getCardsUnderPlayer(clone.getCurrentState(), currentPlayer);
 		};
 	}
 	
