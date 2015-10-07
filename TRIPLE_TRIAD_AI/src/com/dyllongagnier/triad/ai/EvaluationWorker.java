@@ -27,11 +27,8 @@ public class EvaluationWorker extends Thread
 			else
 				toRun = this.getMainWork.get();
 			
-			// If it is null, stop execution of thread.
-			if (toRun == null)
-				return;
-			else
-				toRun.run();
+			assert toRun != null;
+			toRun.run();
 		}
 	}
 	
