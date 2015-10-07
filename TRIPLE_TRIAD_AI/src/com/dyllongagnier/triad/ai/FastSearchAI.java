@@ -17,12 +17,19 @@ public class FastSearchAI implements GameAgent
 {	
 	//static AtomicInteger counter = new AtomicInteger(0);
 	static long start = System.currentTimeMillis();
+	static Object lock = new Object();
+	static volatile NodeFutures firstFuture;
 	
 	@Override
 	public void takeTurn(TriadGame controls)
 	{
 		List<PossibleMove> moves = controls.getValidMoves();
 		NodeFutures futures = new NodeFutures((turn)->controls.takeTurn(turn.toPlay, turn.row, turn.col), moves.size());
+		synchronized(lock)
+		{
+			if (firstFuture == null)
+				firstFuture = futures;
+		}
 		for(PossibleMove move : moves)
 		{
 //			int count = counter.incrementAndGet();
@@ -61,9 +68,9 @@ public class FastSearchAI implements GameAgent
 	
 	public static void main(String[] args)
 	{
-		EvaluationQueue.setThreadCount(6);
+		EvaluationQueue.setThreadCount(8);
 		EvaluationQueue.beginProcessing();
-		EvaluationQueue.setMaxQueueSize(10_000);
+		EvaluationQueue.setMaxQueueSize(100_000);
 		BoardState.Builder builder = new BoardState.Builder();
 		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));

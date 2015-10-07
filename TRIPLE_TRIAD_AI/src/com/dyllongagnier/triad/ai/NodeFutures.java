@@ -36,6 +36,11 @@ public class NodeFutures
 		}
 	}
 	
+	public int size()
+	{
+		return this.moveValue.size();
+	}
+	
 	private PossibleMove getBestMove()
 	{
 		PossibleMove bestMove = null;
