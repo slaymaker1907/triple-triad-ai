@@ -6,20 +6,22 @@ import java.util.function.Consumer;
 public class NodeComm
 {
 	private final AtomicInteger resultCounter, result;
-	private final Consumer<Integer> resultAcceptor;
+	private final Consumer<Double> resultAcceptor;
+	private final int totalResults;
 	
-	public NodeComm(int totalResults, Consumer<Integer> resultAcceptor)
+	public NodeComm(int totalResults, Consumer<Double> resultAcceptor)
 	{
 		this.resultCounter = new AtomicInteger(totalResults);
 		this.result = new AtomicInteger(0);
 		this.resultAcceptor = resultAcceptor;
+		this.totalResults = totalResults;
 	}
 	
-	public int addResult(int result)
+	public double addResult(int result)
 	{
-		int toReturn = this.result.addAndGet(result);
+		double toReturn = this.result.addAndGet(result);
 		if (this.resultCounter.decrementAndGet() <= 0)
-			this.resultAcceptor.accept(toReturn);
+			this.resultAcceptor.accept(toReturn / this.totalResults);
 		return toReturn;
 	}
 }

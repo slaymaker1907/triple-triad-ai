@@ -35,7 +35,6 @@ public class FastSearchAI implements GameAgent
 	
 	private int evaluateBoardState(BoardState endState, Player player)
 	{
-		assert endState.gameComplete();
 		return endState.getCardsUnderPlayers().apply(player).length;
 	}
 	
