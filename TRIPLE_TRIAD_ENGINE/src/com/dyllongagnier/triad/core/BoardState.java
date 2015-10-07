@@ -190,7 +190,6 @@ public class BoardState
 		ArrayList<UndeployedCard> selfCards = boardFunc.apply(Player.SELF);
 		ArrayList<UndeployedCard> opponentCards = boardFunc
 				.apply(Player.OPPONENT);
-		assert boardFunc.apply(Player.NONE).size() == 0;
 		selfCards.addAll(this.getHand(Player.SELF));
 		opponentCards.addAll(this.getHand(Player.OPPONENT));
 
