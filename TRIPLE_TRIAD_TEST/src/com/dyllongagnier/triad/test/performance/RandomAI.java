@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.dyllongagnier.triad.core.GameAgent;
+import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
-import com.dyllongagnier.triad.core.TriadGame.PossibleMove;
 
 /**
  * This is a random AI for the purpose of testing.

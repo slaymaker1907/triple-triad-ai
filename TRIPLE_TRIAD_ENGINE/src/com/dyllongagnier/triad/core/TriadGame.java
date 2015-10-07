@@ -127,17 +127,4 @@ public class TriadGame
 	{
 		return new TriadGame(this);
 	}
-	
-	public static class PossibleMove
-	{
-		public final UndeployedCard toPlay;
-		public final int row, col;
-		
-		public PossibleMove(UndeployedCard toPlay, int row, int col)
-		{
-			this.toPlay = toPlay;
-			this.row = row;
-			this.col = col;
-		}
-	}
 }

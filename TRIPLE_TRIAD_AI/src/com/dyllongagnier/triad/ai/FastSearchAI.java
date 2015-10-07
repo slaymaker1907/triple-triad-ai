@@ -6,10 +6,10 @@ import java.util.Random;
 import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.core.DefaultListener;
+import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.core.BoardState;
 import com.dyllongagnier.triad.core.GameAgent;
-import com.dyllongagnier.triad.core.TriadGame.PossibleMove;
 
 public class FastSearchAI implements GameAgent
 {
@@ -23,6 +23,8 @@ public class FastSearchAI implements GameAgent
 		{
 			TriadGame clone = controls.clone();
 			clone.takeTurn(move.toPlay, move.row, move.col);
+			NodeComm comm = new NodeComm()
+			BoardNode newNode = new BoardNode()
 			int current = evaluateBoardState(clone.getCurrentState(), controls.getCurrentPlayer());
 			if (current > currentBest)
 			{
