@@ -11,4 +11,10 @@ public interface GameAgent
 	 * @param game The current state of the game.
 	 */
 	public void takeTurn(TriadGame game);
+	
+	/**
+	 * This method makes a suitable copy of this agent that should be automated.
+	 * @return A new automated agent roughly equivalent to this one.
+	 */
+	public GameAgent clone();
 }

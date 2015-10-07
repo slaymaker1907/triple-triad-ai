@@ -215,7 +215,7 @@ public class CardTest
 	public void testClone()
 	{
 		// Should be object equality.
-		Card clone = this.testCard.clone();
+		UndeployedCard clone = this.testCard.clone();
 		assertTrue(clone == this.testCard);
 	}
 

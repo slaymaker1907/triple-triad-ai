@@ -132,7 +132,7 @@ public class RandomCardTest
 	public void testCloneNotSameOb()
 	{
 		RandomCard randCard = new RandomCard(CardList.getAllCards());
-		RandomCard clone = randCard.clone();
+		UndeployedCard clone = randCard.clone();
 		assertFalse(randCard == clone);
 		assertFalse(randCard.getPossibleCards() == clone.getPossibleCards());
 	}
@@ -141,8 +141,8 @@ public class RandomCardTest
 	public void testCloneMultipleCalls()
 	{
 		RandomCard randCard = new RandomCard(CardList.getAllCards());
-		RandomCard clone1 = randCard.clone();
-		RandomCard clone2 = randCard.clone();
+		UndeployedCard clone1 = randCard.clone();
+		UndeployedCard clone2 = randCard.clone();
 		assertTrue(clone1 == clone2);
 	}
 	
@@ -150,7 +150,7 @@ public class RandomCardTest
 	public void testCloneSamePossibleCards()
 	{
 		RandomCard randCard = new RandomCard(CardList.getAllCards());
-		RandomCard clone = randCard.clone();
+		UndeployedCard clone = randCard.clone();
 		assertEquals(randCard.getPossibleCards(), clone.getPossibleCards());
 	}
 	

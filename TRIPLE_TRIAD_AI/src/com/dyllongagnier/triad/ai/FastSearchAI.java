@@ -12,15 +12,7 @@ import com.dyllongagnier.triad.core.GameAgent;
 import com.dyllongagnier.triad.core.TriadGame.PossibleMove;
 
 public class FastSearchAI implements GameAgent
-{	
-	public FastSearchAI(GameAgent otherAgent)
-	{
-	}
-	
-	public FastSearchAI()
-	{
-	}
-	
+{
 	@Override
 	public void takeTurn(TriadGame controls)
 	{
@@ -65,5 +57,11 @@ public class FastSearchAI implements GameAgent
 			return Player.SELF;
 		else
 			return Player.OPPONENT;
+	}
+	
+	@Override
+	public GameAgent clone()
+	{
+		return this;
 	}
 }

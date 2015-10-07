@@ -27,7 +27,7 @@ public class TriadGameCloneSpeed
 		{
 			mainGame.clone();
 		}
-		System.out.println(900_000.0 / (System.currentTimeMillis() - start) * 1000.0);
+		System.out.println(100_000.0 / (System.currentTimeMillis() - start) * 1000.0);
 	}
 
 }

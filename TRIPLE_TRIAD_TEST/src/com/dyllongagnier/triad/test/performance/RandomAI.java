@@ -22,4 +22,9 @@ public class RandomAI implements GameAgent
 		controls.takeTurn(move.toPlay, move.row, move.col);
 	}
 
+	@Override
+	public GameAgent clone()
+	{
+		return this;
+	}
 }
