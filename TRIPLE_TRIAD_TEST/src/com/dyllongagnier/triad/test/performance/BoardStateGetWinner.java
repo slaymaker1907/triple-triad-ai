@@ -1,26 +1,15 @@
 package com.dyllongagnier.triad.test.performance;
 
-import java.util.Random;
-
 import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.Player;
-import com.dyllongagnier.triad.core.DefaultListener;
-import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.core.BoardState;
+import com.dyllongagnier.triad.core.DefaultListener;
 import com.dyllongagnier.triad.core.GameAgent;
+import com.dyllongagnier.triad.core.TriadGame;
 
-public class BasicGamePerformance
+public class BoardStateGetWinner
 {
-	private static Random gen = new Random();
-	
-	public static Player getRandomPlayer()
-	{
-		if (gen.nextBoolean())
-			return Player.SELF;
-		else
-			return Player.OPPONENT;
-	}
-	
+
 	public static void main(String[] args)
 	{
 		System.out.println(BasicGamePerformance.class.desiredAssertionStatus());
@@ -28,14 +17,17 @@ public class BasicGamePerformance
 		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		GameAgent ai = new RandomAI();
+		TriadGame game = new TriadGame(BasicGamePerformance.getRandomPlayer(), builder, ai, ai, new DefaultListener());
+		game.startGame();
+		BoardState state = game.getCurrentState();
 		for(int i = 0; i < 100_000; i++)
 		{
-			new TriadGame(BasicGamePerformance.getRandomPlayer(), builder, ai, ai, new DefaultListener()).startGame();
+			state.getWinner();
 		}
 		long start = System.currentTimeMillis();
 		for(int i = 0; i < 100_000; i++)
 		{
-			new TriadGame(BasicGamePerformance.getRandomPlayer(), builder, ai, ai, new DefaultListener()).startGame();
+			state.getWinner();
 		}
 		System.out.println(900_000.0 / (System.currentTimeMillis() - start) * 1000.0);
 	}
