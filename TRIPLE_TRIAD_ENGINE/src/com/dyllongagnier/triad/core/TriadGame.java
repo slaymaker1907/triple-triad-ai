@@ -44,6 +44,11 @@ public class TriadGame
 		return this.currentState;
 	}
 	
+	public int getTurnCount()
+	{
+		return this.turnCount;
+	}
+	
 	public Player getCurrentPlayer()
 	{
 		return this.currentPlayer;
