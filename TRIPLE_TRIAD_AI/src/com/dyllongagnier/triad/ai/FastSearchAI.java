@@ -63,7 +63,7 @@ public class FastSearchAI implements GameAgent
 	{
 		EvaluationQueue.setThreadCount(6);
 		EvaluationQueue.beginProcessing();
-		EvaluationQueue.setMaxThinkTime(5000);
+		EvaluationQueue.setMaxQueueSize(10_000);
 		BoardState.Builder builder = new BoardState.Builder();
 		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT, "Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));

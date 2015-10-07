@@ -6,6 +6,7 @@ public class EvaluationQueue
 {
 	private static EvaluationWorker[] workers = getNewPool(Runtime.getRuntime().availableProcessors());
 	private final static PriorityBlockingQueue<BoardNode> priorityQueue = new PriorityBlockingQueue<BoardNode>();
+	private static int maxQueueSize = Integer.MAX_VALUE;
 	
 	public static void setThreadCount(int threads)
 	{
@@ -80,6 +81,8 @@ public class EvaluationQueue
 	public static void addNodeToQueue(BoardNode node)
 	{
 		priorityQueue.add(node);
+		if (priorityQueue.size() > EvaluationQueue.maxQueueSize)
+			EvaluationQueue.finishProcessingQuickly();
 	}
 	
 	private static void processNode()
@@ -93,23 +96,11 @@ public class EvaluationQueue
 	{
 		BoardNode toProcess = priorityQueue.poll();
 		if (toProcess != null)
-			toProcess.regularEvaluation();
+			toProcess.immediateEvaluation();
 	}
 	
-	public static void setMaxThinkTime(long milliseconds)
+	public static void setMaxQueueSize(int size)
 	{
-		Thread thinker = new Thread(() -> 
-		{
-			try
-			{
-				Thread.sleep(milliseconds);
-			} catch (Exception e)
-			{
-				System.out.println("Sleeping was interruped for max think time.");
-			}
-			EvaluationQueue.finishProcessingQuickly();
-		});
-		thinker.setDaemon(true);
-		thinker.start();
+		EvaluationQueue.maxQueueSize = size;
 	}
 }
