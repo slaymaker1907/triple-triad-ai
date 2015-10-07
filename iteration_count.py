@@ -26,9 +26,30 @@ def ai(queue, hand1, hand2):
 	queue.add_node(iters)
 	for i in range(iters):
 		ai(queue, hand1, hand2)
-
+		
+def max_iterations(hand1, hand2):
+	free_spaces = hand1 + hand2 - 1
+	if free_spaces <= 0:
+		return 1
+	elif hand1 == hand2:
+		return hand1 * free_spaces * max_iterations(hand1 - 1, hand2)
+	else:
+		return hand2 * free_spaces * max_iterations(hand1, hand2 - 1)
+		
 # (4, 5) = 116,121,599
 def calc_queue_size(hand1, hand2):
 	queue = EvaluationQueue()
 	ai(queue, hand1, hand2)
 	return queue.max_size
+	
+def calc_queue_size(hand1, hand2, max_size = 0, size = 0):
+	free_spaces = hand1 + hand2 - 1
+	size -= 1
+	if free_spaces <= 0:
+		return max_size
+	elif hand1 == hand2:
+		size += hand1 * free_spaces
+		hand1 -= 1
+	else:
+		size += hand2 * free_spaces
+		hand2 -= 1
