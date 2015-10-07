@@ -66,7 +66,7 @@ public class RandomCard extends HiddenCard
 	}
 
 	@Override
-	public RandomCard clone()
+	public UndeployedCard clone()
 	{
 		// This is hacky way to ensure that every copy of this RandomCard
 		// generates the same clone.

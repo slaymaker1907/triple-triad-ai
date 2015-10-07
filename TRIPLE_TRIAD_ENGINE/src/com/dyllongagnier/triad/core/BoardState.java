@@ -56,10 +56,10 @@ public class BoardState
 				Player.class);
 		SortedSet<UndeployedCard> selfHand = new TreeSet<>();
 		for (UndeployedCard card : this.playerHands.get(Player.SELF))
-			selfHand.add(card);
+			selfHand.add(card.clone());
 		SortedSet<UndeployedCard> opponentHand = new TreeSet<>();
 		for (UndeployedCard card : this.playerHands.get(Player.OPPONENT))
-			opponentHand.add(card);
+			opponentHand.add(card.clone());
 		newPlayerHands.put(Player.SELF, selfHand);
 		newPlayerHands.put(Player.OPPONENT, opponentHand);
 

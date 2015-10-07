@@ -32,4 +32,7 @@ public abstract class HiddenCard implements UndeployedCard
 	{
 		return String.valueOf(this.id);
 	}
+	
+	@Override
+	public abstract UndeployedCard clone();
 }

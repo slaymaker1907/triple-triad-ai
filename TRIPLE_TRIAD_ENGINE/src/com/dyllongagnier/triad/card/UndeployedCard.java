@@ -38,4 +38,10 @@ public interface UndeployedCard extends Comparable<UndeployedCard>
 	{
 		return false;
 	}
+	
+	/**
+	 * This method returns a clone of this card.
+	 * @return A clone of this card.
+	 */
+	public UndeployedCard clone();
 }

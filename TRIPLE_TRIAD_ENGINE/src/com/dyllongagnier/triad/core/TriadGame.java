@@ -114,7 +114,9 @@ public class TriadGame
 		this.currentPlayer = oldGame.currentPlayer;
 		this.currentState = oldGame.currentState.clone();
 		this.turnCount = oldGame.turnCount;
-		this.gameAgentMap = oldGame.gameAgentMap;
+		this.gameAgentMap = new EnumMap<>(Player.class);
+		this.gameAgentMap.put(Player.SELF, oldGame.getGameAgent(Player.SELF));
+		this.gameAgentMap.put(Player.OPPONENT, oldGame.getGameAgent(Player.OPPONENT));
 		this.listener = TriadGame.defaultListener;
 		this.moveValidator = oldGame.moveValidator;
 	}

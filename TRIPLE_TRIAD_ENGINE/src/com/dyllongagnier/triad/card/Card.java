@@ -236,7 +236,7 @@ public class Card implements UndeployedCard
 	}
 
 	@Override
-	public Card clone()
+	public UndeployedCard clone()
 	{
 		// Since this is immutable, just return this object.
 		return this;
