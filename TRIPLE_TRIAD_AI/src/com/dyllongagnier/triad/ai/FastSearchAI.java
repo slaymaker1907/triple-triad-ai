@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.Player;
