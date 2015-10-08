@@ -5,7 +5,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 public class EvaluationQueue
 {
 	private static EvaluationWorker[] workers = getNewPool(Runtime.getRuntime().availableProcessors());
-	private final static PriorityBlockingQueue<BoardNode> priorityQueue = new PriorityBlockingQueue<BoardNode>();
+	private final static PriorityBlockingQueue<DualRunner> priorityQueue = new PriorityBlockingQueue<>();
 	private static int maxQueueSize = Integer.MAX_VALUE;
 	
 	public static void setThreadCount(int threads)
@@ -78,25 +78,25 @@ public class EvaluationQueue
 		return priorityQueue.isEmpty();
 	}
 	
-	public static void addNodeToQueue(BoardNode node)
+	public static void addNodeToQueue(DualRunner runner)
 	{
-		priorityQueue.add(node);
+		priorityQueue.add(runner);
 		if (priorityQueue.size() > EvaluationQueue.maxQueueSize)
 			EvaluationQueue.finishProcessingQuickly();
 	}
 	
 	private static void processNode()
 	{
-		BoardNode toProcess = priorityQueue.poll();
+		DualRunner toProcess = priorityQueue.poll();
 		if (toProcess != null)
-			toProcess.regularEvaluation();
+			toProcess.slowRun.run();
 	}
 	
 	private static void processNodeQuickly()
 	{
-		BoardNode toProcess = priorityQueue.poll();
+		DualRunner toProcess = priorityQueue.poll();
 		if (toProcess != null)
-			toProcess.immediateEvaluation();
+			toProcess.fastRun.run();
 	}
 	
 	public static void setMaxQueueSize(int size)
