@@ -16,7 +16,7 @@ import com.dyllongagnier.triad.core.GameAgent;
 
 public class FastSearchAI implements GameAgent
 {	
-	//static AtomicInteger counter = new AtomicInteger(0);
+	static AtomicInteger counter = new AtomicInteger(0);
 	static long start = System.currentTimeMillis();
 	static Object lock = new Object();
 	static volatile NodeFutures firstFuture;
@@ -33,9 +33,9 @@ public class FastSearchAI implements GameAgent
 		}
 		for(PossibleMove move : moves)
 		{
-//			int count = counter.incrementAndGet();
-//			if (count % 1_000_000 == 0)
-//				System.out.println((System.currentTimeMillis() - start) / 1000.0);
+			int count = counter.incrementAndGet();
+			if (count % 1_000_000 == 0)
+				System.out.println((System.currentTimeMillis() - start) / 1000.0);
 			int heuristic = FastSearchAI.getCardsUnderPlayer(controls.getCurrentState(), controls.getCurrentPlayer());
 			futures.addNode(move, fullEvaluateBoard(controls, move), evaluateBoardState(controls, move), heuristic);
 		}
