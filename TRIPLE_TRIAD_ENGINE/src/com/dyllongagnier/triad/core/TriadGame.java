@@ -23,10 +23,9 @@ public class TriadGame
 
 	public static TriadGame gameFactory(PlayerSupplier firstPlayerGen,
 			BoardState.Builder gameBuilder, GameAgent selfAgent,
-			GameAgent opponentAgent, GameListener listener,
-			boolean isSuddenDeath)
+			GameAgent opponentAgent, GameListener listener)
 	{
-		if (isSuddenDeath)
+		if (gameBuilder.isSuddenDeath)
 			return new SuddenDeathGame(firstPlayerGen, gameBuilder, selfAgent,
 					opponentAgent, listener);
 		else

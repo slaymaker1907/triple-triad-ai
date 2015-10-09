@@ -2,7 +2,9 @@ package com.dyllongagnier.triad.card;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Function;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -26,10 +28,13 @@ public class HandFactory
 	 *            The player of these cards.
 	 * @param fileName
 	 *            The file to read from.
+	 * @param maybeCardGenerator
+	 * 			   A function that converts a collection of cards into a singleton representing one card.
 	 * @return A new UndeployedCard[] to use as a hand.
 	 * @throws FileNotFoundException
 	 */
-	public static UndeployedCard[] getDeck(Player player, String fileName)
+	public static UndeployedCard[] getDeck(Player player, String fileName, Function<Collection<Card>, UndeployedCard>
+		maybeCardGenerator)
 			throws FileNotFoundException
 	{
 		if (player == Player.NONE)
@@ -73,14 +78,19 @@ public class HandFactory
 		}
 
 		// Ensure that the random cards are a singleton.
-		RandomCard rand = new RandomCard(possibleCards);
+		UndeployedCard card = maybeCardGenerator.apply(possibleCards);
 		for (; i < 5; i++)
 		{
-			result[i] = rand;
+			result[i] = card;
 		}
 
 		assert i == 5;
 		return result;
+	}
+	
+	public static UndeployedCard[] getDeck(Player player, String fileName) throws FileNotFoundException
+	{
+		return HandFactory.getDeck(player, fileName, RandomCard::new);
 	}
 
 	/**

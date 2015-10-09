@@ -1,19 +1,29 @@
 package com.dyllongagnier.triad.gui.controller;
 
 import java.io.FileNotFoundException;
+import java.util.Collection;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.ai.FastSearchAI;
+import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.HandFactory;
 import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.card.RandomCard;
+import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.AscensionRule;
 import com.dyllongagnier.triad.core.BoardState;
 import com.dyllongagnier.triad.core.GameAgent;
+import com.dyllongagnier.triad.core.TriadGame;
+import com.dyllongagnier.triad.card.ActionCard;
 
 public class Players
 {
 	private static GameAgent selfAgent, opponentAgent;
+	private static GameAgent defaultAI;
 	private static BoardState.Builder gameBuilder;
 	private static int maxThreads;
+	private static long timeout = Long.MAX_VALUE;
 	
 	protected Players()
 	{
@@ -25,7 +35,7 @@ public class Players
 		if (isAI)
 			agent = Players.getDefaultAI();
 		else
-			agent = new GUIAgent();
+			agent = new GUIAgent(player);
 		switch(player)
 		{
 			case SELF:
@@ -47,10 +57,42 @@ public class Players
 		{
 			case SELF:
 			case OPPONENT:
-				Players.gameBuilder.setHand(player, HandFactory.getDeck(player, filename));
+				Players.gameBuilder.setHand(player, HandFactory.getDeck(player, filename, Players.getGUIFunction(player)));
 				break;
 			default:
 				throw new IllegalArgumentException("Player.NONE can not have a deck.");
+		}
+	}
+	
+	private static GameAgent getAgent(Player player)
+	{
+		GameAgent agent;
+		switch(player)
+		{
+			case SELF:
+				agent = Players.selfAgent;
+				break;
+			case OPPONENT:
+				agent = Players.opponentAgent;
+				break;
+			default:
+				throw new IllegalArgumentException("Player can not be NONE.");
+		}
+		
+		return agent;
+	}
+	
+	private static Function<Collection<Card>, UndeployedCard> getGUIFunction(Player player)
+	{
+		GameAgent agent = Players.getAgent(player);
+		if (agent instanceof GUIAgent)
+		{
+			Supplier<Card> guiAction = ((GUIAgent)agent)::popLastMove;
+			return (cards) -> new ActionCard(cards, guiAction);
+		}
+		else
+		{
+			return RandomCard::new;
 		}
 	}
 	
@@ -99,7 +141,7 @@ public class Players
 	
 	static GameAgent getDefaultAI()
 	{
-		return new FastSearchAI(Players.getMaxThreads() / 2);
+		return defaultAI;
 	}
 	
 	public static void setMaxThreads(int maxThreads)
@@ -107,6 +149,7 @@ public class Players
 		if (maxThreads < 1)
 			throw new IllegalArgumentException("Maximum number of threads must be greater than or equal to one.");
 		Players.maxThreads = maxThreads;
+		defaultAI = new FastSearchAI(maxThreads);
 	}
 	
 	public static int getMaxThreads()
@@ -117,5 +160,36 @@ public class Players
 	public static void verifyOptionValidity()
 	{
 		Players.gameBuilder.build();
+	}
+	
+	public static void setIsSuddenDeath()
+	{
+		Players.gameBuilder.isSuddenDeath = true;
+	}
+	
+	/**
+	 * This method sets the maximum think time for the AI.
+	 * @param timeout
+	 * 					Max think time in seconds.
+	 */
+	public static void setTimeout(double timeout)
+	{
+		Players.timeout = (long) (1000 * timeout);
+	}
+	
+	/**
+	 * This needs to be called every time the AI makes a move to reset the move timer.
+	 */
+	static void resetTimeout()
+	{
+		((FastSearchAI)getDefaultAI()).setMoveTimeout(timeout);
+	}
+	
+	/**
+	 * This method starts a new game.
+	 */
+	public static void startNewGame(double timeout)
+	{
+		TriadGame.gameFactory(new PlayerGenerator(), gameBuilder, selfAgent, opponentAgent, new GUIListener()).startGame();
 	}
 }
