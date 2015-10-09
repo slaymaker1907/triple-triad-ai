@@ -9,9 +9,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.dyllongagnier.triad.card.ThreeOpenHand;
+import com.dyllongagnier.triad.card.HandFactory;
 
-public class ThreeOpenHandTest
+public class HandFactoryTest
 {
 	private static final String threeOpenExampleName = "resources" + File.separator + "ThreeOpenExample.json";
 	private UndeployedCard[] threeOpenExample;
@@ -19,7 +19,7 @@ public class ThreeOpenHandTest
 	@Before
 	public void setUp() throws Exception
 	{
-		threeOpenExample = ThreeOpenHand.getDeck(Player.SELF, threeOpenExampleName);
+		threeOpenExample = HandFactory.getDeck(Player.SELF, threeOpenExampleName);
 	}
 	
 	@Test
@@ -107,55 +107,55 @@ public class ThreeOpenHandTest
 	public void testMinimumHidden() throws Exception
 	{
 		// This should execute without an exception.
-		ThreeOpenHand.getDeck(Player.SELF, "resources" + File.separator + "MinimumHidden.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "MinimumHidden.json");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testBelowMinimumHidden() throws Exception
 	{
-		ThreeOpenHand.getDeck(Player.SELF, "resources" + File.separator + "BelowMinimumHidden.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "BelowMinimumHidden.json");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testBelowMinimumVisible() throws Exception
 	{
-		ThreeOpenHand.getDeck(Player.SELF, "resources" + File.separator + "BelowMinimumVisible.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "BelowMinimumVisible.json");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testAboveMaximumVisible() throws Exception
 	{
-		ThreeOpenHand.getDeck(Player.SELF, "resources" + File.separator + "AboveMaximumVisible.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "AboveMaximumVisible.json");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testInvalidCardName() throws Exception
 	{
-		ThreeOpenHand.getDeck(Player.SELF, "resources" + File.separator + "NoCardHand.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "NoCardHand.json");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testDuplicateCardVisVis() throws Exception
 	{
-		ThreeOpenHand.getDeck(Player.SELF, "resources" + File.separator + "DuplicateCardVisVis.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "DuplicateCardVisVis.json");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testDuplicateCardVisInv() throws Exception
 	{
-		ThreeOpenHand.getDeck(Player.SELF, "resources" + File.separator + "DuplicateCardVisInv.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "DuplicateCardVisInv.json");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testDuplicateCardInvInv() throws Exception
 	{
-		ThreeOpenHand.getDeck(Player.SELF, "resources" + File.separator + "DuplicateCardInvInv.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "DuplicateCardInvInv.json");
 	}
 	
 	@Test
 	public void testCorrectPlayer() throws Exception
 	{
-		UndeployedCard[] cards = ThreeOpenHand.getDeck(Player.OPPONENT, "resources" + File.separator + "ThreeOpenExample.json");
+		UndeployedCard[] cards = HandFactory.getDeck(Player.OPPONENT, "resources" + File.separator + "ThreeOpenExample.json");
 		verifyCorrectPlayer(cards, Player.OPPONENT);
 		verifyCorrectPlayer(threeOpenExample, Player.SELF);
 	}
@@ -163,7 +163,7 @@ public class ThreeOpenHandTest
 	@Test(expected=IllegalArgumentException.class)
 	public void testNonePlayer() throws Exception
 	{
-		ThreeOpenHand.getDeck(Player.NONE, "resources" + File.separator + "ThreeOpenExample.json");
+		HandFactory.getDeck(Player.NONE, "resources" + File.separator + "ThreeOpenExample.json");
 	}
 	
 	/**

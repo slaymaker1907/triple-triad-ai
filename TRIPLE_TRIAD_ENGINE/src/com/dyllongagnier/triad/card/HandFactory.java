@@ -11,15 +11,14 @@ import javax.json.JsonReader;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 
-public class ThreeOpenHand
+public class HandFactory
 {
-	private ThreeOpenHand()
+	private HandFactory()
 	{
 	}
 
 	/**
-	 * This method creates an UndeployedCard array for the input deck and player
-	 * assuming three open. See resources/TripleTriadCardList.json for an
+	 * This method creates an UndeployedCard array for the input deck and player. See resources/TripleTriadCardList.json for an
 	 * example of how to format the file.
 	 * 
 	 * @param player
@@ -45,9 +44,9 @@ public class ThreeOpenHand
 			reader.close();
 		}
 		JsonArray guaranteed = ob.getJsonArray("guaranteed");
-		if (guaranteed.size() != 3)
+		if (guaranteed.size() > 5 )
 			throw new IllegalArgumentException(
-					"Invalid file: guaranteed is not equal to 3.");
+					"Invalid file: can not have more than 5 guaranteed cards");
 		
 		UndeployedCard[] result = new UndeployedCard[5];
 		int i = 0;
@@ -57,11 +56,14 @@ public class ThreeOpenHand
 		{
 			result[i++] = getCardSafely(cardName, player, inHand);
 		}
-		assert i == 3;
+		
 		JsonArray randomized = ob.getJsonArray("maybe");
-		if (randomized.size() < 3)
+		if (randomized.size() < 5 - i)
 			throw new IllegalArgumentException(
-					"Invalid file: randomized is less than three.");
+					"Invalid file: randomized and guaranteed cards must sum to at least 5.");
+		else if (i == 5 && randomized.size() != 0)
+			throw new IllegalArgumentException("There are 5 guaranteed cards so there can be no maybe cards.");
+		
 		HashSet<Card> possibleCards = new HashSet<Card>();
 		for (JsonValue cardName : randomized)
 		{
@@ -70,8 +72,11 @@ public class ThreeOpenHand
 
 		// Ensure that the random cards are a singleton.
 		RandomCard rand = new RandomCard(possibleCards);
-		result[i++] = rand;
-		result[i++] = rand;
+		for(; i < 5; i++)
+		{
+			result[i] = rand;
+		}
+		
 		assert i == 5;
 		return result;
 	}
