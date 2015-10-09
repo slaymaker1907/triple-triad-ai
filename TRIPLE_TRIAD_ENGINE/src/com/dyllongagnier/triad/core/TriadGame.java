@@ -3,6 +3,7 @@ package com.dyllongagnier.triad.core;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
@@ -21,22 +22,37 @@ public class TriadGame
 	private final EnumMap<Player, GameAgent> gameAgentMap;
 	protected final GameListener listener;
 	
+	public static TriadGame gameFactory(PlayerSupplier firstPlayerGen, BoardState.Builder gameBuilder, GameAgent selfAgent,
+			GameAgent opponentAgent, GameListener listener, boolean isSuddenDeath)
+	{
+		if (isSuddenDeath)
+			return new SuddenDeathGame(firstPlayerGen, gameBuilder, selfAgent, opponentAgent, listener);
+		else
+			return new TriadGame(firstPlayerGen.get(), gameBuilder, selfAgent, opponentAgent, listener);
+	}
+	
 	public TriadGame(Player firstPlayer,
 			BoardState.Builder gameBuilder,
 			GameAgent selfAgent, GameAgent opponentAgent, GameListener listener)
-	{
-		assert firstPlayer != Player.NONE;
-		
-		this.turnCount = 1;
-		this.currentPlayer = firstPlayer;
+	{		
+		this.init(firstPlayer, gameBuilder);
 		
 		this.gameAgentMap = new EnumMap<>(Player.class);
 		this.gameAgentMap.put(Player.SELF, selfAgent);
 		this.gameAgentMap.put(Player.OPPONENT, opponentAgent);
 		
-		this.currentState = gameBuilder.build();
 		this.moveValidator = gameBuilder.getMoveValidator();
 		this.listener = listener;
+	}
+	
+	// This can be used to reset the game to turn 1.
+	protected void init(Player firstPlayer, BoardState.Builder builder)
+	{
+		assert firstPlayer != Player.NONE;
+
+		this.currentPlayer = firstPlayer;
+		this.turnCount = 1;
+		this.currentState = builder.build();
 	}
 	
 	public BoardState getCurrentState()
@@ -88,14 +104,19 @@ public class TriadGame
 		this.turnCount++;
 		if (this.turnCount > 9)
 		{
-			assert this.currentState.gameComplete();
-			this.listener.gameComplete(this);
+			this.completeGame();
 		}
 		else
 		{
 			this.listener.gameChanged(this);
 			this.startTurn();
 		}
+	}
+	
+	protected void completeGame()
+	{
+		assert this.currentState.gameComplete();
+		this.listener.gameComplete(this);
 	}
 	
 	/**
