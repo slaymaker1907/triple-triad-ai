@@ -13,7 +13,7 @@ import com.dyllongagnier.triad.core.TriadGame;
 public class RandomAI implements GameAgent
 {
 	private Random gen = new Random();
-	
+
 	@Override
 	public void takeTurn(TriadGame controls)
 	{

@@ -13,33 +13,35 @@ import com.dyllongagnier.triad.card.HandFactory;
 
 public class HandFactoryTest
 {
-	private static final String threeOpenExampleName = "resources" + File.separator + "ThreeOpenExample.json";
+	private static final String threeOpenExampleName = "resources"
+			+ File.separator + "ThreeOpenExample.json";
 	private UndeployedCard[] threeOpenExample;
-	
+
 	@Before
 	public void setUp() throws Exception
 	{
-		threeOpenExample = HandFactory.getDeck(Player.SELF, threeOpenExampleName);
+		threeOpenExample = HandFactory.getDeck(Player.SELF,
+				threeOpenExampleName);
 	}
-	
+
 	@Test
 	public void testHandSize()
 	{
 		assertEquals(5, threeOpenExample.length);
 	}
-	
+
 	@Test
 	public void threeVisibleCards()
 	{
 		int count = 0;
-		for(UndeployedCard card : threeOpenExample)
+		for (UndeployedCard card : threeOpenExample)
 		{
 			if (card.isVisible())
 				count++;
 		}
 		assertEquals(3, count);
 	}
-	
+
 	@Test
 	public void containsRightVisibleCards()
 	{
@@ -47,9 +49,10 @@ public class HandFactoryTest
 		seenGael = seenDodo = seenTonberry = false;
 		Card gael = CardList.getCard("Gaelicat").setHoldingPlayer(Player.SELF);
 		Card dodo = CardList.getCard("Dodo").setHoldingPlayer(Player.SELF);
-		Card tonberry = CardList.getCard("Tonberry").setHoldingPlayer(Player.SELF);
-		
-		for(UndeployedCard undepCard : threeOpenExample)
+		Card tonberry = CardList.getCard("Tonberry").setHoldingPlayer(
+				Player.SELF);
+
+		for (UndeployedCard undepCard : threeOpenExample)
 		{
 			if (undepCard.isVisible())
 			{
@@ -62,17 +65,17 @@ public class HandFactoryTest
 					seenTonberry = true;
 			}
 		}
-		
+
 		assertTrue(seenGael);
 		assertTrue(seenTonberry);
 		assertTrue(seenDodo);
 	}
-	
+
 	@Test
 	public void hiddenCardsEqual()
 	{
 		UndeployedCard hiddenCard = null;
-		for(UndeployedCard undepCard : threeOpenExample)
+		for (UndeployedCard undepCard : threeOpenExample)
 		{
 			if (!undepCard.isVisible())
 			{
@@ -83,7 +86,7 @@ public class HandFactoryTest
 			}
 		}
 	}
-	
+
 	@Test
 	public void testHiddenCardsCorrect()
 	{
@@ -94,7 +97,7 @@ public class HandFactoryTest
 		expectedCards.add(CardList.getCard("Bomb"));
 		expectedCards.add(CardList.getCard("Mandragora"));
 
-		for(UndeployedCard undepCard : threeOpenExample)
+		for (UndeployedCard undepCard : threeOpenExample)
 		{
 			if (!undepCard.isVisible())
 			{
@@ -102,87 +105,101 @@ public class HandFactoryTest
 			}
 		}
 	}
-	
+
 	@Test
 	public void testMinimumHidden() throws Exception
 	{
 		// This should execute without an exception.
-		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "MinimumHidden.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator
+				+ "MinimumHidden.json");
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testBelowMinimumHidden() throws Exception
 	{
-		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "BelowMinimumHidden.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator
+				+ "BelowMinimumHidden.json");
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testBelowMinimumVisible() throws Exception
 	{
-		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "BelowMinimumVisible.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator
+				+ "BelowMinimumVisible.json");
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testAboveMaximumVisible() throws Exception
 	{
-		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "AboveMaximumVisible.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator
+				+ "AboveMaximumVisible.json");
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testInvalidCardName() throws Exception
 	{
-		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "NoCardHand.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator
+				+ "NoCardHand.json");
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testDuplicateCardVisVis() throws Exception
 	{
-		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "DuplicateCardVisVis.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator
+				+ "DuplicateCardVisVis.json");
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testDuplicateCardVisInv() throws Exception
 	{
-		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "DuplicateCardVisInv.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator
+				+ "DuplicateCardVisInv.json");
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testDuplicateCardInvInv() throws Exception
 	{
-		HandFactory.getDeck(Player.SELF, "resources" + File.separator + "DuplicateCardInvInv.json");
+		HandFactory.getDeck(Player.SELF, "resources" + File.separator
+				+ "DuplicateCardInvInv.json");
 	}
-	
+
 	@Test
 	public void testCorrectPlayer() throws Exception
 	{
-		UndeployedCard[] cards = HandFactory.getDeck(Player.OPPONENT, "resources" + File.separator + "ThreeOpenExample.json");
+		UndeployedCard[] cards = HandFactory.getDeck(Player.OPPONENT,
+				"resources" + File.separator + "ThreeOpenExample.json");
 		verifyCorrectPlayer(cards, Player.OPPONENT);
 		verifyCorrectPlayer(threeOpenExample, Player.SELF);
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testNonePlayer() throws Exception
 	{
-		HandFactory.getDeck(Player.NONE, "resources" + File.separator + "ThreeOpenExample.json");
+		HandFactory.getDeck(Player.NONE, "resources" + File.separator
+				+ "ThreeOpenExample.json");
 	}
-	
+
 	/**
-	 * This method verifies that all of the cards in cards are held by the expected player.
-	 * @param cards The cards to verify.
-	 * @param expectedPlayer The expected player of these cards.
+	 * This method verifies that all of the cards in cards are held by the
+	 * expected player.
+	 * 
+	 * @param cards
+	 *            The cards to verify.
+	 * @param expectedPlayer
+	 *            The expected player of these cards.
 	 */
-	private static void verifyCorrectPlayer(UndeployedCard[] cards, Player expectedPlayer)
+	private static void verifyCorrectPlayer(UndeployedCard[] cards,
+			Player expectedPlayer)
 	{
-		for(UndeployedCard card : cards)
+		for (UndeployedCard card : cards)
 		{
 			if (card.isVisible())
 			{
 				assertEquals(expectedPlayer, card.deploy().holdingPlayer);
-			}
-			else
+			} else
 			{
 				List<ProbCard> possibleCards = card.getPossibleCards();
-				for(ProbCard pCard : possibleCards)
+				for (ProbCard pCard : possibleCards)
 				{
 					assertEquals(expectedPlayer, pCard.card.holdingPlayer);
 				}

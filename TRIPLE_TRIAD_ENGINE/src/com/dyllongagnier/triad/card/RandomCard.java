@@ -27,7 +27,7 @@ public class RandomCard extends HiddenCard
 	{
 		assert cards != null;
 		assert cards.size() > 0;
-		
+
 		double probability = 1.0 / cards.size();
 		ArrayList<ProbCard> possibleCards = new ArrayList<ProbCard>();
 		for (Card card : cards)

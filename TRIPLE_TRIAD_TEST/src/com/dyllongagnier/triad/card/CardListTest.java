@@ -123,8 +123,8 @@ public class CardListTest
 	{
 		assertNull(CardList.getCard("fakecard"));
 	}
-	
-	@Test(expected=UnsupportedOperationException.class)
+
+	@Test(expected = UnsupportedOperationException.class)
 	public void cantMutateAllCardsCollection()
 	{
 		CardList.getAllCards().clear();
