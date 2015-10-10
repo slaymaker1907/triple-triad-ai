@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.core.GameListener;
 import com.dyllongagnier.triad.core.PossibleMove;
@@ -92,19 +93,29 @@ public class FastSearchAI implements GameAgent
 	{
 		private final HashMap<PossibleMove, Integer> moveValue = new HashMap<>();
 		private final TriadGame game;
-		private int size; // Only one thread will ever be adding possible moves.
+		private int expectedSize, size; // Only one thread will ever be adding possible moves.
 
 		public MoveExecutor(TriadGame game)
 		{
 			this.game = game;
+			this.expectedSize = 0;
+			this.size = 0;
 		}
 
-		public GameRunner addPossibleMove(PossibleMove move)
+		public void addPossibleMove(PossibleMove move, Iterable<TriadGame> possibleConcreteGames)
 		{
-			this.size++;
+			// The possible move should be a concrete card and is therefore completely immutable.
+			assert move.toPlay.isVisible();
+			assert move.toPlay instanceof Card;
+			
+			this.moveValue.put(move, 0);
 			EndGameReporter listener = new EndGameReporter(
 					this.getConsumer(move), this.game.getCurrentPlayer());
-			return new GameRunner(move, this.game, listener);
+			for(TriadGame game : possibleConcreteGames)
+			{
+				GameRunner toRun = new GameRunner(move, game, listener);
+				executor.execute(toRun);
+			}
 		}
 
 		private Consumer<Integer> getConsumer(PossibleMove move)
@@ -113,8 +124,9 @@ public class FastSearchAI implements GameAgent
 			{
 				synchronized (moveValue)
 				{
-					moveValue.put(move, val);
-					if (moveValue.size() >= size)
+					this.size++;
+					moveValue.compute(move, (mov, num) -> num + val);
+					if (this.size >= expectedSize)
 					{
 						this.makeMove();
 					}
@@ -130,8 +142,8 @@ public class FastSearchAI implements GameAgent
 
 		private PossibleMove getBestMove()
 		{
-			// This should be guaranteed to be thread safe since it is invoked
-			// upon the last runners completion.
+			// There should always be the same number of
+			// cartesians for every move in here so averages are not necessary.
 			int bestVal = Integer.MIN_VALUE;
 			PossibleMove bestMove = null;
 			for (PossibleMove move : this.moveValue.keySet())
@@ -186,7 +198,7 @@ public class FastSearchAI implements GameAgent
 		MoveExecutor exec = new MoveExecutor(controls);
 		for (PossibleMove move : moves)
 		{
-			this.executor.execute(exec.addPossibleMove(move));
+			exec.addPossibleMove(move, controls.getConcreteCartesians());
 		}
 	}
 
