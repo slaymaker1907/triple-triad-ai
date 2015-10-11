@@ -210,6 +210,12 @@ public class BoardState
 			}
 		};
 	}
+	
+	public Function<Player, Integer> getPlayerScore()
+	{
+		Function<Player, Integer> subFunc = this.playedCards.getVictoryPoints();
+		return (player) -> subFunc.apply(player) + this.playerHands.get(player).size();
+	}
 
 	/**
 	 * This class is used to construct BoardStates and is mutable.
