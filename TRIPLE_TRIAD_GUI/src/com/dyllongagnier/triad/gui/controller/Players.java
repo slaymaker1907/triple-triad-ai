@@ -159,7 +159,7 @@ public class Players
 	
 	public static void verifyOptionValidity()
 	{
-		Players.gameBuilder.build();
+		Players.gameBuilder.build(Player.SELF);
 	}
 	
 	public static void setIsSuddenDeath()

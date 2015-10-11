@@ -26,6 +26,7 @@ public class BoardState
 {
 	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
 	public final Field playedCards;
+	private Player firstPlayer;
 
 	/**
 	 * Constructs a new BoardState. Unless doing something particular, the
@@ -42,7 +43,7 @@ public class BoardState
 	 */
 	protected BoardState(
 			EnumMap<Player, SortedSet<UndeployedCard>> playerHands,
-			Field playedCards)
+			Field playedCards, Player firstPlayer)
 	{
 		this.playerHands = playerHands;
 		this.playedCards = playedCards;
@@ -63,7 +64,7 @@ public class BoardState
 		newPlayerHands.put(Player.SELF, selfHand);
 		newPlayerHands.put(Player.OPPONENT, opponentHand);
 
-		return new BoardState(newPlayerHands, this.playedCards);
+		return new BoardState(newPlayerHands, this.playedCards, this.firstPlayer);
 	}
 
 	/**
@@ -174,7 +175,7 @@ public class BoardState
 		newHands.put(player, new TreeSet<>(this.getHand(player)));
 		newHands.put(player.swapPlayer(), this.getHand(player.swapPlayer()));
 		newHands.get(player).remove(card);
-		return new BoardState(newHands, newField);
+		return new BoardState(newHands, newField, this.firstPlayer);
 	}
 
 	/**
@@ -191,8 +192,17 @@ public class BoardState
 		ArrayList<UndeployedCard> selfCards = boardFunc.apply(Player.SELF);
 		ArrayList<UndeployedCard> opponentCards = boardFunc
 				.apply(Player.OPPONENT);
-		selfCards.addAll(this.getHand(Player.SELF));
-		opponentCards.addAll(this.getHand(Player.OPPONENT));
+		switch(this.firstPlayer)
+		{
+			case SELF:
+				opponentCards.addAll(this.getHand(Player.OPPONENT));
+				break;
+			case OPPONENT:
+				selfCards.addAll(this.getHand(Player.SELF));
+				break;
+			default:
+				throw new RuntimeException("Player must be SELF or OPPONENT.");
+		}
 
 		return (player) ->
 		{
@@ -350,7 +360,7 @@ public class BoardState
 		 * 
 		 * @return A new BoardState using the input parameters to this object.
 		 */
-		public BoardState build()
+		public BoardState build(Player firstPlayer)
 		{
 			DeployedCardComparator cardComparator = Builder.getComparator(
 					isReverse, isFallenAce);
@@ -368,7 +378,7 @@ public class BoardState
 					fieldToUse = new Field(cardComparator, playFunc);
 			}
 
-			return new BoardState(this.playerHands, fieldToUse);
+			return new BoardState(this.playerHands, fieldToUse, firstPlayer);
 		}
 
 		/**

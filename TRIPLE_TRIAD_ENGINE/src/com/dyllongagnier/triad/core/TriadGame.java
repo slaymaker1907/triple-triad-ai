@@ -53,7 +53,7 @@ public class TriadGame
 
 		this.currentPlayer = firstPlayer;
 		this.turnCount = 1;
-		this.currentState = builder.build();
+		this.currentState = builder.build(firstPlayer);
 	}
 
 	public BoardState getCurrentState()
