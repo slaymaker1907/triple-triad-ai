@@ -213,7 +213,13 @@ public class BoardState
 	public Function<Player, Integer> getPlayerScore()
 	{
 		Function<Player, Integer> subFunc = this.playedCards.getVictoryPoints();
-		return (player) -> subFunc.apply(player) + this.playerHands.get(player).size();
+		return (player) ->
+		{
+			if (player != this.firstPlayer)
+				return subFunc.apply(player) + 1;
+			else
+				return subFunc.apply(player);
+		};
 	}
 
 	/**
