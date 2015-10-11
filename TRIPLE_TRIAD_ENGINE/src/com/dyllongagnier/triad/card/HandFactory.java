@@ -71,20 +71,11 @@ public class HandFactory
 			throw new IllegalArgumentException(
 					"There are 5 guaranteed cards so there can be no maybe cards.");
 
-		HashSet<Card> possibleCards = new HashSet<Card>();
 		for (JsonValue cardName : randomized)
 		{
-			possibleCards.add(getCardSafely(cardName, player, inHand));
+			result[i++] = getCardSafely(cardName, player, inHand);
 		}
-
-		// Ensure that the random cards are a singleton.
-		UndeployedCard card = maybeCardGenerator.apply(possibleCards);
-		for (; i < 5; i++)
-		{
-			result[i] = card;
-		}
-
-		assert i == 5;
+		
 		return result;
 	}
 	
