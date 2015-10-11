@@ -20,7 +20,13 @@ public class CardWindow extends JPanel
 	public CardWindow(Card card)
 	{
 		this.card = card;
-		this.init();
+		if (card != null)
+			this.init();
+	}
+	
+	public CardWindow()
+	{
+		this.card = null;
 	}
 	
 	private void init()
@@ -74,5 +80,10 @@ public class CardWindow extends JPanel
 		JLabel result = new JLabel(label);
 		result.setHorizontalAlignment(SwingConstants.CENTER);
 		return result;
+	}
+	
+	public static int getDefaultSize()
+	{
+		return CardWindow.defaultSize;
 	}
 }
