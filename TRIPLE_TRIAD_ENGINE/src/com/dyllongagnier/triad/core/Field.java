@@ -1,10 +1,10 @@
 package com.dyllongagnier.triad.core;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Set;
 import java.util.function.Function;
 
-import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
@@ -147,8 +147,9 @@ public class Field
 	 */
 	public Function<Player, ArrayList<UndeployedCard>> getCardsUnderPlayers()
 	{
-		ArrayList<UndeployedCard> selfCards = new ArrayList<>();
-		ArrayList<UndeployedCard> opponentCards = new ArrayList<>();
+		EnumMap<Player, ArrayList<UndeployedCard>> result = new EnumMap<>(Player.class);
+		result.put(Player.SELF, new ArrayList<>());
+		result.put(Player.OPPONENT, new ArrayList<>());
 		for (int row = 0; row < 3; row++)
 		{
 			for (int col = 0; col < 3; col++)
@@ -156,35 +157,31 @@ public class Field
 				DeployedCard card = this.getCard(row, col);
 				if (card != null)
 				{
-					Card realCard = card.card;
-					switch (realCard.holdingPlayer)
-					{
-						case SELF:
-							selfCards.add(realCard);
-							break;
-						case OPPONENT:
-							opponentCards.add(realCard);
-							break;
-						default:
-							throw new RuntimeException(
-									"NONE player was owner of a card.");
-					}
+					result.get(card.card.holdingPlayer).add(card.card);
 				}
 			}
 		}
-
-		return (player) ->
+		
+		return result::get;
+	}
+		
+		public Function<Player, Integer> getVictoryPoints()
 		{
-			switch (player)
+			EnumMap<Player, Integer> playerPoints = new EnumMap<>(Player.class);
+			playerPoints.put(Player.SELF, 0);
+			playerPoints.put(Player.OPPONENT, 0);
+			for (int row = 0; row < 3; row++)
 			{
-				case SELF:
-					return selfCards;
-				case OPPONENT:
-					return opponentCards;
-				default:
-					assert false;
-					return new ArrayList<>(0);
+				for (int col = 0; col < 3; col++)
+				{
+					DeployedCard card = this.getCard(row, col);
+					if (card != null)
+					{
+						playerPoints.compute(card.card.holdingPlayer, (play, num) -> num + 1);
+					}
+				}
 			}
-		};
+
+		return playerPoints::get;
 	}
 }

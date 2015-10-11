@@ -106,26 +106,15 @@ public class BoardState
 	public Player getWinner()
 	{
 		assert this.gameComplete();
-
-		EnumMap<Player, Integer> holdingCount = new EnumMap<>(Player.class);
-		holdingCount.put(Player.SELF, 0);
-		holdingCount.put(Player.OPPONENT, 0);
-		for (int row = 0; row < 3; row++)
-			for (int col = 0; col < 3; col++)
-			{
-				holdingCount.compute(
-						this.playedCards.getCard(row, col).card.holdingPlayer,
-						(player, currentVal) -> currentVal + 1);
-			}
-
-		int playerCards = holdingCount.get(Player.SELF)
-				+ this.getHand(Player.SELF).size();
-		int opponentCards = holdingCount.get(Player.OPPONENT)
-				+ this.getHand(Player.OPPONENT).size();
-		assert playerCards + opponentCards == 10;
-		if (playerCards > opponentCards)
+		
+		Function<Player, Integer> playerPoints = this.getPlayerScore();
+		int selfPoints, opponentPoints;
+		selfPoints = playerPoints.apply(Player.SELF);
+		opponentPoints = playerPoints.apply(Player.OPPONENT);
+		
+		if (selfPoints > opponentPoints)
 			return Player.SELF;
-		else if (opponentCards > playerCards)
+		else if (opponentPoints > selfPoints)
 			return Player.OPPONENT;
 		else
 			return Player.NONE;
@@ -219,6 +208,12 @@ public class BoardState
 					return new UndeployedCard[0];
 			}
 		};
+	}
+	
+	public Function<Player, Integer> getPlayerScore()
+	{
+		Function<Player, Integer> subFunc = this.playedCards.getVictoryPoints();
+		return (player) -> subFunc.apply(player) + this.playerHands.get(player).size();
 	}
 
 	/**

@@ -40,8 +40,7 @@ public class FastSearchAI implements GameAgent
 			return newClone
 					.getCurrentState()
 					.playCard(newClone.getCurrentPlayer(), this.move.toPlay,
-							this.move.row, this.move.col)
-					.getCardsUnderPlayers().apply(newClone.getCurrentPlayer()).length;
+							this.move.row, this.move.col).getPlayerScore().apply(newClone.getCurrentPlayer());
 		}
 
 		@Override
@@ -84,8 +83,7 @@ public class FastSearchAI implements GameAgent
 		@Override
 		public void gameComplete(TriadGame finalState)
 		{
-			this.executeAfter.accept(finalState.getCurrentState()
-					.getCardsUnderPlayers().apply(currentPlayer).length);
+			this.executeAfter.accept(finalState.getCurrentState().getPlayerScore().apply(currentPlayer));
 		}
 	}
 
