@@ -1,40 +1,52 @@
 package com.dyllongagnier.triad.gui.view;
 
+import java.io.File;
+
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+
+import com.dyllongagnier.triad.card.CardList;
+import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.gui.controller.Players;
 
 public class MainWindow extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	private final ButtonGroup playerAIButtons = new ButtonGroup();
 	private final ButtonGroup opponentAIButtons = new ButtonGroup();
+	private CardCollection selfHand, opponentHand, currentField;
+	private static final JFileChooser explorerWindow = new JFileChooser(System.getProperty("user.dir"));
+	private static JFrame mainWindow;
 
 	public static void main(String[] args)
 	{
-		JFrame window = new MainWindow();
-		window.setVisible(true);
+		mainWindow = new MainWindow();
+		mainWindow.setVisible(true);
 	}
 	
 	public MainWindow()
 	{
 		setTitle("Triple Triad Simulator");
 		this.init();
+		this.selfHand.setCard(new CardWindow(CardList.getCard("Dodo").setHoldingPlayer(Player.OPPONENT)), 1, 1);
 	}
 	
 	private void init()
 	{
 		this.setSize(1000, 402);
 		
-		CardCollection selfHand = new CardCollection();
+		selfHand = new CardCollection();
 		
-		CardCollection opponentHand = new CardCollection();
+		opponentHand = new CardCollection();
 		
-		CardCollection currentField = new CardCollection();
+		currentField = new CardCollection();
 		
 		JButton selfLoadDeck = new JButton("Load Deck");
 		
@@ -109,5 +121,27 @@ public class MainWindow extends JFrame
 					.addContainerGap())
 		);
 		getContentPane().setLayout(groupLayout);
+		
+		selfLoadDeck.addActionListener((arg) -> MainWindow.loadDeck(Player.SELF));
+		opponentLoadDeck.addActionListener((arg) -> MainWindow.loadDeck(Player.OPPONENT));
+	}
+	
+	private static void loadDeck(Player player)
+	{
+		int opened = MainWindow.explorerWindow.showOpenDialog(MainWindow.mainWindow);
+		if (opened == JFileChooser.APPROVE_OPTION)
+		{
+			File file = MainWindow.explorerWindow.getSelectedFile();
+			try
+			{
+				Players.setPlayerDeck(player, file.getAbsolutePath());
+			}
+			catch (Exception e)
+			{
+				JOptionPane.showMessageDialog(MainWindow.explorerWindow, "Error, could not load deck from: " + file.getName());
+				System.err.println(e.getMessage());
+				System.err.println(e.getStackTrace());
+			}
+		}
 	}
 }

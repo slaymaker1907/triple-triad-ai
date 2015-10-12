@@ -19,6 +19,7 @@ public class CardWindow extends JPanel
 
 	public CardWindow(Card card)
 	{
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.card = card;
 		if (card != null)
 			this.init();
@@ -26,6 +27,7 @@ public class CardWindow extends JPanel
 	
 	public CardWindow()
 	{
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.card = null;
 	}
 	
