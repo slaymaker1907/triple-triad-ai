@@ -140,7 +140,7 @@ public class MainWindow extends JFrame
 			{
 				JOptionPane.showMessageDialog(MainWindow.explorerWindow, "Error, could not load deck from: " + file.getName());
 				System.err.println(e.getMessage());
-				System.err.println(e.getStackTrace());
+				e.printStackTrace();
 			}
 		}
 	}

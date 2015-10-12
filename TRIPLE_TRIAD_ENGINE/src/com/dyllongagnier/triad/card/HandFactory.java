@@ -2,6 +2,7 @@ package com.dyllongagnier.triad.card;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.function.Function;
@@ -54,13 +55,13 @@ public class HandFactory
 			throw new IllegalArgumentException(
 					"Invalid file: can not have more than 5 guaranteed cards");
 
-		UndeployedCard[] result = new UndeployedCard[5];
+		ArrayList<UndeployedCard> result = new ArrayList<>();
 		int i = 0;
 		HashSet<Card> inHand = new HashSet<>();
 
 		for (JsonValue cardName : guaranteed)
 		{
-			result[i++] = getCardSafely(cardName, player, inHand);
+			result.add(getCardSafely(cardName, player, inHand));
 		}
 
 		JsonArray randomized = ob.getJsonArray("maybe");
@@ -73,10 +74,10 @@ public class HandFactory
 
 		for (JsonValue cardName : randomized)
 		{
-			result[i++] = getCardSafely(cardName, player, inHand);
+			result.add(getCardSafely(cardName, player, inHand));
 		}
 		
-		return result;
+		return result.toArray(new UndeployedCard[result.size()]);
 	}
 	
 	public static UndeployedCard[] getDeck(Player player, String fileName) throws FileNotFoundException

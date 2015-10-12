@@ -21,7 +21,7 @@ public class Players
 {
 	private static GameAgent selfAgent, opponentAgent;
 	private static GameAgent defaultAI;
-	private static BoardState.Builder gameBuilder;
+	private static BoardState.Builder gameBuilder = new BoardState.Builder();
 	private static int maxThreads;
 	private static long timeout = Long.MAX_VALUE;
 	
