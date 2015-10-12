@@ -1,6 +1,7 @@
 package com.dyllongagnier.triad.gui.controller;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -49,7 +50,7 @@ public class Players
 		}
 	}
 	
-	public static void setPlayerDeck(Player player, String filename) throws FileNotFoundException
+	public static Iterable<UndeployedCard> setPlayerDeck(Player player, String filename) throws FileNotFoundException
 	{
 		if (player == null)
 			throw new NullPointerException();
@@ -57,8 +58,9 @@ public class Players
 		{
 			case SELF:
 			case OPPONENT:
-				Players.gameBuilder.setHand(player, HandFactory.getDeck(player, filename, Players.getGUIFunction(player)));
-				break;
+				UndeployedCard[] result = HandFactory.getDeck(player, filename, Players.getGUIFunction(player));
+				Players.gameBuilder.setHand(player, result);
+				return Arrays.asList(result);
 			default:
 				throw new IllegalArgumentException("Player.NONE can not have a deck.");
 		}

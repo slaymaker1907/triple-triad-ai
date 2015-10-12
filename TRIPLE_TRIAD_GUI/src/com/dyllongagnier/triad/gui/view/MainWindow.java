@@ -12,8 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 
-import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.card.UndeployedCard;
+import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.gui.controller.Players;
 
 public class MainWindow extends JFrame
@@ -23,7 +24,12 @@ public class MainWindow extends JFrame
 	private final ButtonGroup opponentAIButtons = new ButtonGroup();
 	private CardCollection selfHand, opponentHand, currentField;
 	private static final JFileChooser explorerWindow = new JFileChooser(System.getProperty("user.dir"));
-	private static JFrame mainWindow;
+	private static MainWindow mainWindow;
+	
+	public static MainWindow getMainWindow()
+	{
+		return MainWindow.mainWindow;
+	}
 
 	public static void main(String[] args)
 	{
@@ -35,7 +41,6 @@ public class MainWindow extends JFrame
 	{
 		setTitle("Triple Triad Simulator");
 		this.init();
-		this.selfHand.setCard(new CardWindow(CardList.getCard("Dodo").setHoldingPlayer(Player.OPPONENT)), 1, 1);
 	}
 	
 	private void init()
@@ -122,11 +127,11 @@ public class MainWindow extends JFrame
 		);
 		getContentPane().setLayout(groupLayout);
 		
-		selfLoadDeck.addActionListener((arg) -> MainWindow.loadDeck(Player.SELF));
-		opponentLoadDeck.addActionListener((arg) -> MainWindow.loadDeck(Player.OPPONENT));
+		selfLoadDeck.addActionListener((arg) -> this.loadDeck(Player.SELF));
+		opponentLoadDeck.addActionListener((arg) -> this.loadDeck(Player.OPPONENT));
 	}
 	
-	private static void loadDeck(Player player)
+	private void loadDeck(Player player)
 	{
 		int opened = MainWindow.explorerWindow.showOpenDialog(MainWindow.mainWindow);
 		if (opened == JFileChooser.APPROVE_OPTION)
@@ -134,7 +139,8 @@ public class MainWindow extends JFrame
 			File file = MainWindow.explorerWindow.getSelectedFile();
 			try
 			{
-				Players.setPlayerDeck(player, file.getAbsolutePath());
+				Iterable<UndeployedCard> newHand = Players.setPlayerDeck(player, file.getAbsolutePath());
+				this.setHand(player, newHand);
 			}
 			catch (Exception e)
 			{
@@ -143,5 +149,33 @@ public class MainWindow extends JFrame
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void displayBoardState(TriadGame game)
+	{
+	}
+	
+	public void setHand(Player player, Iterable<UndeployedCard> hand)
+	{
+		int i = 0;
+		for(UndeployedCard card : hand)
+		{
+			assert card.isVisible();
+			CardCollection col;
+			switch(player)
+			{
+				case SELF:
+					col = this.selfHand;
+					break;
+				case OPPONENT:
+					col = this.opponentHand;
+					break;
+				default:
+					throw new IllegalArgumentException();
+			}
+			col.setCard(new CardWindow(card.deploy()), i++);
+		}
+		this.validate();
+		this.repaint();
 	}
 }
