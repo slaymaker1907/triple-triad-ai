@@ -1,6 +1,5 @@
 package com.dyllongagnier.triad.gui.view;
 
-import javax.swing.ButtonModel;
 import javax.swing.JFrame;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
