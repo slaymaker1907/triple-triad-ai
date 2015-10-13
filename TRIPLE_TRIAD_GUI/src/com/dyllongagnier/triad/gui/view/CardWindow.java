@@ -21,7 +21,7 @@ public class CardWindow extends JPanel implements Transferable
 	
 	private static int defaultSize = 100;
 	
-	private final Card card;
+	public final Card card;
 	private final DataFlavor[] flavors = new DataFlavor[]{CardFlavor.cardFlavor};
 	@SuppressWarnings("unused")
 	private final DragGestureRecognizer dgr;

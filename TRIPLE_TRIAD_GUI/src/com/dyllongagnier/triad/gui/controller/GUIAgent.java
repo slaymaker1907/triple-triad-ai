@@ -39,6 +39,7 @@ public class GUIAgent implements GameAgent
 	@Override
 	public synchronized void takeTurn(TriadGame game)
 	{
+		Players.currentGame = game;
 		if (this.expectedPlayer != game.getCurrentPlayer())
 			throw new InvalidPlayerException();
 		this.currentGame = game;

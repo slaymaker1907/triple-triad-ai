@@ -15,6 +15,7 @@ import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.AscensionRule;
 import com.dyllongagnier.triad.core.BoardState;
 import com.dyllongagnier.triad.core.GameAgent;
+import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.card.ActionCard;
 
@@ -25,6 +26,7 @@ public class Players
 	private static BoardState.Builder gameBuilder = new BoardState.Builder();
 	private static int maxThreads;
 	private static long timeout = Long.MAX_VALUE;
+	static TriadGame currentGame;
 	
 	static
 	{
@@ -210,5 +212,11 @@ public class Players
 	{
 		Players.resetTimeout();
 		TriadGame.gameFactory(new PlayerGenerator(), gameBuilder, selfAgent, opponentAgent, new GUIListener()).startGame();
+	}
+	
+	public static void makeMove(PossibleMove move)
+	{
+		GUIAgent agent = (GUIAgent)Players.getAgent(currentGame.getCurrentPlayer());
+		agent.makeMove(move);
 	}
 }

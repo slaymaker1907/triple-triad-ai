@@ -8,6 +8,9 @@ import java.awt.dnd.DropTarget;
 
 import javax.swing.JPanel;
 
+import com.dyllongagnier.triad.card.Card;
+import com.dyllongagnier.triad.core.PossibleMove;
+
 
 public class CardCollection extends JPanel
 {
@@ -105,5 +108,12 @@ public class CardCollection extends JPanel
 			if (this.cards[i].getMousePosition() != null)
 				return i;
 		return -1;
+	}
+	
+	public static PossibleMove getMoveFromIndex(int index, Card card)
+	{
+		int row = index / 3;
+		int col = index % 3;
+		return new PossibleMove(card, row, col);
 	}
 }

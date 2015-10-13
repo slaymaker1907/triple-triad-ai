@@ -10,6 +10,10 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.io.Serializable;
 
+import javax.swing.JOptionPane;
+
+import com.dyllongagnier.triad.gui.controller.Players;
+
 public class CardDropHandler implements DropTargetListener, Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -57,6 +61,7 @@ public class CardDropHandler implements DropTargetListener, Serializable
 				DropTargetContext context = dtde.getDropTargetContext();
 				CardCollection comp = (CardCollection)context.getComponent();
 				Container parent = comp.getParent();
+				Players.makeMove(CardCollection.getMoveFromIndex(comp.getCardMouseLocation(), card.card));
 				if (parent != null)
 					parent.remove(card);
 				comp.setCard(card, comp.getCardMouseLocation());
@@ -70,13 +75,14 @@ public class CardDropHandler implements DropTargetListener, Serializable
 			{
 				dtde.rejectDrop();
 				dtde.dropComplete(false);
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(MainWindow.getMainWindow(), "Invalid move.", "Invalid Move Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else
 		{
 			dtde.rejectDrop();
 			dtde.dropComplete(false);
+			JOptionPane.showMessageDialog(MainWindow.getMainWindow(), "Invalid move.", "Invalid Move Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
