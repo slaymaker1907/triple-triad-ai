@@ -56,7 +56,6 @@ public class HandFactory
 					"Invalid file: can not have more than 5 guaranteed cards");
 
 		ArrayList<UndeployedCard> result = new ArrayList<>();
-		int i = 0;
 		HashSet<Card> inHand = new HashSet<>();
 
 		for (JsonValue cardName : guaranteed)
@@ -65,12 +64,9 @@ public class HandFactory
 		}
 
 		JsonArray randomized = ob.getJsonArray("maybe");
-		if (randomized.size() < 5 - i)
+		if (randomized.size() +  guaranteed.size()< 5)
 			throw new IllegalArgumentException(
 					"Invalid file: randomized and guaranteed cards must sum to at least 5.");
-		else if (i != 5 && randomized.size() != 0)
-			throw new IllegalArgumentException(
-					"There are 5 guaranteed cards so there can be no maybe cards.");
 
 		for (JsonValue cardName : randomized)
 		{
