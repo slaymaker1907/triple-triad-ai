@@ -1,7 +1,6 @@
 package com.dyllongagnier.triad.gui.view;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.*;
@@ -33,7 +32,6 @@ public class CardWindow extends JPanel
 	
 	private void init()
 	{
-		this.setSize(defaultSize, defaultSize);
 		this.setLayout(new GridLayout(3, 3));
 		this.add("upperleft", new JLabel());
 		this.add("uppermid", CardWindow.makeLabel(this.card.north));
@@ -45,10 +43,6 @@ public class CardWindow extends JPanel
 		this.add("lowermid", CardWindow.makeLabel(this.card.south));
 		this.add("lowerright", new JLabel());
 		this.setColor(this.card.holdingPlayer);
-		Dimension square = new Dimension(CardWindow.defaultSize, CardWindow.defaultSize);
-		this.setMaximumSize(square);
-		this.setSize(square);
-		this.setMinimumSize(square);
 	}
 	
 	private void setColor(Player player)
