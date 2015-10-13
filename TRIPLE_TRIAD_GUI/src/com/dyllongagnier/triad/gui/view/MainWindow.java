@@ -1,5 +1,7 @@
 package com.dyllongagnier.triad.gui.view;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -45,9 +47,49 @@ public class MainWindow extends JFrame
 		this.init();
 	}
 	
+	private static class WindowExit implements WindowListener
+	{
+		@Override
+		public void windowOpened(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e)
+		{
+			System.exit(0);
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowActivated(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e)
+		{
+		}
+	}
+	
 	private void init()
 	{
 		this.setSize(1000, 402);
+		this.addWindowListener(new WindowExit());
 		
 		selfHand = new CardCollection();
 		
