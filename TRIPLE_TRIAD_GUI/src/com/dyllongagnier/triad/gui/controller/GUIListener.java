@@ -14,6 +14,11 @@ public class GUIListener implements GameListener
 		{
 			Players.resetTimeout();
 			MainWindow.getMainWindow().displayBoardState(newState);
+			if (!isComplete)
+			{
+				MainWindow.getMainWindow().allowDraggingFromHand(newState.getCurrentPlayer(), true);
+				MainWindow.getMainWindow().setCanDropToField(true);
+			}
 		};
 	}
 	

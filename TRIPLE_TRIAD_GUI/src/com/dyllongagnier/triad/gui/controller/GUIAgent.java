@@ -43,7 +43,7 @@ public class GUIAgent implements GameAgent
 		if (this.expectedPlayer != game.getCurrentPlayer())
 			throw new InvalidPlayerException();
 		this.currentGame = game;
-		MainWindow.getMainWindow().allowDraggingFromHand(game.getCurrentPlayer(), true);
+		MainWindow.getMainWindow().allowDraggingFromHand(expectedPlayer, true);
 		MainWindow.getMainWindow().setCanDropToField(true);
 	}
 	
