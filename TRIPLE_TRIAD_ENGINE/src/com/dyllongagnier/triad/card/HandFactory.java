@@ -68,7 +68,7 @@ public class HandFactory
 		if (randomized.size() < 5 - i)
 			throw new IllegalArgumentException(
 					"Invalid file: randomized and guaranteed cards must sum to at least 5.");
-		else if (i == 5 && randomized.size() != 0)
+		else if (i != 5 && randomized.size() != 0)
 			throw new IllegalArgumentException(
 					"There are 5 guaranteed cards so there can be no maybe cards.");
 
