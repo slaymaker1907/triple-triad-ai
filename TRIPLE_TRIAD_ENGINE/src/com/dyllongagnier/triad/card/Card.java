@@ -1,13 +1,16 @@
 package com.dyllongagnier.triad.card;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * An immutable representation of a card.
  */
-public class Card implements UndeployedCard
+public class Card implements UndeployedCard, Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * The type/tribe of a card. Most of the time, this field does not matter.
 	 * However, this field is used in ascension.
