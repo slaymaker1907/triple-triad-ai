@@ -21,8 +21,7 @@ public class PlayerGenerator implements PlayerSupplier
 	private static Player askUserForFirstPlayer()
 	{
 		Object[] possiblePlayers = new Object[]{Player.SELF, Player.OPPONENT};
-		JOptionPane.showInputDialog(MainWindow.getMainWindow(), "Please enter the first player.", "First Player", JOptionPane.PLAIN_MESSAGE, null, possiblePlayers, Player.SELF);
-		throw new UnsupportedOperationException();
+		return (Player)JOptionPane.showInputDialog(MainWindow.getMainWindow(), "Please enter the first player.", "First Player", JOptionPane.PLAIN_MESSAGE, null, possiblePlayers, Player.SELF);
 	}
 
 	@Override

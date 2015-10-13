@@ -25,6 +25,9 @@ public class TriadGame
 			BoardState.Builder gameBuilder, GameAgent selfAgent,
 			GameAgent opponentAgent, GameListener listener)
 	{
+		assert selfAgent != null;
+		assert opponentAgent != null;
+		
 		if (gameBuilder.isSuddenDeath)
 			return new SuddenDeathGame(firstPlayerGen, gameBuilder, selfAgent,
 					opponentAgent, listener);
