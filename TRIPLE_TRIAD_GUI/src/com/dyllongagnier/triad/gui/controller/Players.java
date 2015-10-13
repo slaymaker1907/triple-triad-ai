@@ -190,7 +190,7 @@ public class Players
 	/**
 	 * This method starts a new game.
 	 */
-	public static void startNewGame(double timeout)
+	public static void startNewGame()
 	{
 		TriadGame.gameFactory(new PlayerGenerator(), gameBuilder, selfAgent, opponentAgent, new GUIListener()).startGame();
 	}

@@ -117,6 +117,7 @@ public class MainWindow extends JFrame
 		opponentManual.setSelected(true);
 		
 		JButton btnStart = new JButton("Start");
+		btnStart.addActionListener((act) -> Players.startNewGame());
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(

@@ -1,11 +1,14 @@
 package com.dyllongagnier.triad.gui.controller;
 
+import java.awt.EventQueue;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.core.PlayerSupplier;
+import com.dyllongagnier.triad.gui.view.MainWindow;
 
 public class PlayerGenerator implements PlayerSupplier
 {
@@ -17,6 +20,8 @@ public class PlayerGenerator implements PlayerSupplier
 	 */
 	private static Player askUserForFirstPlayer()
 	{
+		Object[] possiblePlayers = new Object[]{Player.SELF, Player.OPPONENT};
+		JOptionPane.showInputDialog(MainWindow.getMainWindow(), "Please enter the first player.", "First Player", JOptionPane.PLAIN_MESSAGE, null, possiblePlayers, Player.SELF);
 		throw new UnsupportedOperationException();
 	}
 
@@ -26,7 +31,10 @@ public class PlayerGenerator implements PlayerSupplier
 		// This may cause thread deadlock, be wary of this method.
 		try
 		{
-			SwingUtilities.invokeAndWait(() -> this.toReturn = PlayerGenerator.askUserForFirstPlayer());
+			if (!EventQueue.isDispatchThread())
+				SwingUtilities.invokeAndWait(() -> this.toReturn = PlayerGenerator.askUserForFirstPlayer());
+			else
+				this.toReturn = PlayerGenerator.askUserForFirstPlayer();
 			Player toReturn = this.toReturn;
 			this.toReturn = null;
 			return toReturn;
