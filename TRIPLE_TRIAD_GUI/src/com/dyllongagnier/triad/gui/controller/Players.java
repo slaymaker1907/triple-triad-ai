@@ -26,6 +26,13 @@ public class Players
 	private static int maxThreads;
 	private static long timeout = Long.MAX_VALUE;
 	
+	static
+	{
+		maxThreads = Runtime.getRuntime().availableProcessors();
+		defaultAI = new FastSearchAI(maxThreads);
+		selfAgent = opponentAgent = defaultAI;
+	}
+	
 	protected Players()
 	{
 	}
