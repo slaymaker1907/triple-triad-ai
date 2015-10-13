@@ -164,9 +164,9 @@ public class Players
 		Players.gameBuilder.build(Player.SELF);
 	}
 	
-	public static void setIsSuddenDeath()
+	public static void setIsSuddenDeath(boolean isSuddenDeath)
 	{
-		Players.gameBuilder.isSuddenDeath = true;
+		Players.gameBuilder.isSuddenDeath = isSuddenDeath;
 	}
 	
 	/**

@@ -26,6 +26,8 @@ public class MainWindow extends JFrame
 	private static final JFileChooser explorerWindow = new JFileChooser(System.getProperty("user.dir"));
 	private static MainWindow mainWindow;
 	
+	private final TriadSettings settings = new TriadSettings();
+	
 	public static MainWindow getMainWindow()
 	{
 		return MainWindow.mainWindow;
@@ -58,6 +60,7 @@ public class MainWindow extends JFrame
 		JButton opponentLoadDeck = new JButton("Load Deck");
 		
 		JButton btnGameSettings = new JButton("Game Settings");
+		btnGameSettings.addActionListener((act) -> this.settings.setVisible(true));
 		
 		JRadioButton playerAI = new JRadioButton("AI");
 		JRadioButton playerManual = new JRadioButton("Manual");
