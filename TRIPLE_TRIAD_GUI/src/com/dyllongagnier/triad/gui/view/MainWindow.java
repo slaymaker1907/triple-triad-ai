@@ -17,6 +17,8 @@ import javax.swing.ButtonGroup;
 
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
+import com.dyllongagnier.triad.core.BoardState;
+import com.dyllongagnier.triad.core.Field;
 import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.gui.controller.Players;
 
@@ -202,6 +204,21 @@ public class MainWindow extends JFrame
 	
 	public void displayBoardState(TriadGame game)
 	{
+		BoardState state = game.getCurrentState();
+		this.displayField(state.playedCards);
+		this.setHand(Player.SELF, state.getHand(Player.SELF));
+		this.setHand(Player.OPPONENT, state.getHand(Player.OPPONENT));
+	}
+	
+	private void displayField(Field field)
+	{
+		for(int row = 0; row < 3; row++)
+		{
+			for(int col = 0; col < 3; col++)
+			{
+				this.currentField.setCard(new CardWindow(field.getCard(row, col).card), row, col);
+			}
+		}
 	}
 	
 	public void setHand(Player player, Iterable<UndeployedCard> hand)
