@@ -146,6 +146,7 @@ public class Players
 	{
 		Players.gameBuilder = new BoardState.Builder();
 		Players.setMaxThreads(Runtime.getRuntime().availableProcessors());
+		Players.setTimeout(Integer.MAX_VALUE);
 	}
 	
 	static GameAgent getDefaultAI()
@@ -199,6 +200,7 @@ public class Players
 	 */
 	public static void startNewGame()
 	{
+		Players.resetTimeout();
 		TriadGame.gameFactory(new PlayerGenerator(), gameBuilder, selfAgent, opponentAgent, new GUIListener()).startGame();
 	}
 }

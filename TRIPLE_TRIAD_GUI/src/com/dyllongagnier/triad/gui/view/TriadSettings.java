@@ -21,13 +21,15 @@ import javax.swing.SwingConstants;
 public class TriadSettings extends JFrame
 {
 	private static final long serialVersionUID = 1L;
+	private static final String infinity = "INF";
 	
 	private JTextField maxThreadValue;
+	private JTextField maxThinkTime;
 	
 	public TriadSettings() 
 	{
 		setTitle("Settings");
-		setSize(new Dimension(299, 291));
+		setSize(new Dimension(299, 368));
 		JComboBox<AscensionRule> ascensionRuleValue = new JComboBox<>();
 		ascensionRuleValue.setModel(new DefaultComboBoxModel<AscensionRule>(AscensionRule.values()));
 		
@@ -47,6 +49,11 @@ public class TriadSettings extends JFrame
 		
 		JLabel lblMaximumThreads = new JLabel("Maximum Threads:");
 		
+		maxThinkTime = new JTextField();
+		maxThinkTime.setText("INF");
+		maxThinkTime.setHorizontalAlignment(SwingConstants.RIGHT);
+		maxThinkTime.setColumns(10);
+		
 		maxThreadValue = new JTextField();
 		maxThreadValue.setHorizontalAlignment(SwingConstants.RIGHT);
 		maxThreadValue.setColumns(10);
@@ -62,6 +69,7 @@ public class TriadSettings extends JFrame
 			Players.setIsCombo(chckbxCombo.isSelected());
 			Players.setIsSuddenDeath(chckbxSuddenDeath.isSelected());
 			Players.setMaxThreads(Integer.parseInt(maxThreadValue.getText()));
+			TriadSettings.parseThinkTime(maxThinkTime.getText());
 		};
 		
 		Runnable reset = () ->
@@ -75,10 +83,13 @@ public class TriadSettings extends JFrame
 			chckbxCombo.setSelected(false);
 			chckbxSuddenDeath.setSelected(false);
 			maxThreadValue.setText(String.valueOf(Players.getMaxThreads()));
+			maxThinkTime.setText(TriadSettings.infinity);
 		};
 		
 		JButton btnOk = new JButton("OK");
 		btnOk.addActionListener((act) -> this.okEvent(executeOptions, reset));
+		
+		JLabel maxThinkTimeLabel = new JLabel("Maximum Think Time:");
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -87,29 +98,33 @@ public class TriadSettings extends JFrame
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(29)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(chckbxSuddenDeath)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblAscensionRule)
+									.addGap(18)
+									.addComponent(ascensionRuleValue, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblMaximumThreads)
+									.addPreferredGap(ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+									.addComponent(maxThreadValue, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+									.addGap(7))
 								.addComponent(chckbxCombo)
 								.addComponent(chckbxPlus)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(lblAscensionRule)
-										.addGap(18)
-										.addComponent(ascensionRuleValue, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblMaximumThreads)
-											.addComponent(chckbxFallenAce))
-										.addPreferredGap(ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(chckbxReverse)
-											.addComponent(chckbxSame)
-											.addComponent(maxThreadValue, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(ComponentPlacement.RELATED)))))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(chckbxFallenAce)
+									.addPreferredGap(ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(chckbxReverse)
+										.addComponent(chckbxSame)
+										.addComponent(chckbxSuddenDeath)))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(maxThinkTimeLabel, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(maxThinkTime, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(117)
 							.addComponent(btnOk)))
-					.addContainerGap(22, Short.MAX_VALUE))
+					.addContainerGap(23, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -123,6 +138,12 @@ public class TriadSettings extends JFrame
 						.addComponent(lblMaximumThreads)
 						.addComponent(maxThreadValue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(maxThinkTime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(3)
+							.addComponent(maxThinkTimeLabel)))
+					.addGap(57)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(chckbxFallenAce)
 						.addComponent(chckbxReverse))
@@ -131,9 +152,9 @@ public class TriadSettings extends JFrame
 						.addComponent(chckbxPlus)
 						.addComponent(chckbxSame))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(chckbxCombo)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(chckbxSuddenDeath)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(chckbxCombo)
+						.addComponent(chckbxSuddenDeath))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(btnOk)
 					.addContainerGap(30, Short.MAX_VALUE))
@@ -154,5 +175,13 @@ public class TriadSettings extends JFrame
 			JOptionPane.showMessageDialog(this, "Invalid settings configuration.");
 			reset.run();
 		}
+	}
+	
+	private static void parseThinkTime(String str)
+	{
+		if (str.toUpperCase().equals(TriadSettings.infinity))
+			Players.setTimeout(Integer.MAX_VALUE);
+		else
+			Players.setTimeout(Double.parseDouble(str));
 	}
 }
