@@ -229,23 +229,27 @@ public class MainWindow extends JFrame
 	public void setHand(Player player, Iterable<UndeployedCard> hand)
 	{
 		int i = 0;
+		CardCollection col;
+		switch(player)
+		{
+			case SELF:
+				col = this.selfHand;
+				break;
+			case OPPONENT:
+				col = this.opponentHand;
+				break;
+			default:
+				throw new IllegalArgumentException();
+		}
+		
 		for(UndeployedCard card : hand)
 		{
 			assert card.isVisible();
-			CardCollection col;
-			switch(player)
-			{
-				case SELF:
-					col = this.selfHand;
-					break;
-				case OPPONENT:
-					col = this.opponentHand;
-					break;
-				default:
-					throw new IllegalArgumentException();
-			}
 			col.setCard(new CardWindow(card.deploy()), i++);
 		}
+		
+		for(; i < 9; i++)
+			col.setCard(new CardWindow(), i);
 		this.validate();
 		this.repaint();
 	}

@@ -2,19 +2,29 @@ package com.dyllongagnier.triad.gui.view;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragSource;
+import java.io.IOException;
 
 import javax.swing.*;
 
 import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.Player;
 
-public class CardWindow extends JPanel
+public class CardWindow extends JPanel implements Transferable
 {
 	private static final long serialVersionUID = 1L;
 	
 	private static int defaultSize = 100;
 	
 	private final Card card;
+	private final DataFlavor[] flavors = new DataFlavor[]{CardFlavor.cardFlavor};
+	private DragGestureRecognizer dgr;
+	private CardDragHandler handler;
 
 	public CardWindow(Card card)
 	{
@@ -81,5 +91,56 @@ public class CardWindow extends JPanel
 	public static int getDefaultSize()
 	{
 		return CardWindow.defaultSize;
+	}
+
+	@Override
+	public DataFlavor[] getTransferDataFlavors()
+	{
+		return this.flavors;
+	}
+
+	@Override
+	public boolean isDataFlavorSupported(DataFlavor flavor)
+	{
+		for(DataFlavor flav : this.getTransferDataFlavors())
+			if (flav.equals(flavor))
+				return true;
+		return false;
+	}
+
+	@Override
+	public Object getTransferData(DataFlavor flavor)
+			throws UnsupportedFlavorException, IOException
+	{
+		if (this.isDataFlavorSupported(flavor))
+			return this;
+		else
+			throw new UnsupportedFlavorException(flavor);
+	}
+	
+	@Override
+	public void addNotify()
+	{
+		super.addNotify();
+		
+		if (dgr == null)
+		{
+			handler = new CardDragHandler(this);
+			dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, handler);
+		}
+	}
+	
+	@Override
+	public void removeNotify()
+	{
+		if (dgr != null)
+		{
+			dgr.removeDragGestureListener(handler);
+			handler = null;
+		}
+		
+		dgr = null;
+		
+		super.removeNotify();
 	}
 }
