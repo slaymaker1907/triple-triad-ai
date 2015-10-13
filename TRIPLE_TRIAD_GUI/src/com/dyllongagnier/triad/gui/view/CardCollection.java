@@ -15,6 +15,7 @@ public class CardCollection extends JPanel
 	
 	private static int defaultSize = 100;
 	private final CardWindow[] cards;
+	@SuppressWarnings("unused")
 	private final DropTarget target;
 	private final CardDropHandler hander;
 
@@ -70,5 +71,21 @@ public class CardCollection extends JPanel
 		assert card != null;
 		this.cards[index] = card;
 		this.addCards();
+	}
+	
+	public int getCardLocation(CardWindow card)
+	{
+		for(int i = 0; i < this.cards.length; i++)
+			if (card == this.cards[i])
+				return i;
+		return -1;
+	}
+	
+	public int getCardMouseLocation()
+	{
+		for(int i = 0; i < this.cards.length; i++)
+			if (this.cards[i].getMousePosition() != null)
+				return i;
+		return -1;
 	}
 }

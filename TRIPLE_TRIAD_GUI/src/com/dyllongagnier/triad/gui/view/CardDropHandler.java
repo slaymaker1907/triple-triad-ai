@@ -9,8 +9,6 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 
-import javax.swing.JComponent;
-
 public class CardDropHandler implements DropTargetListener
 {
 	@Override
@@ -48,11 +46,11 @@ public class CardDropHandler implements DropTargetListener
 				Object data = trans.getTransferData(CardFlavor.cardFlavor);
 				CardWindow card =(CardWindow)data;
 				DropTargetContext context = dtde.getDropTargetContext();
-				JComponent comp = (JComponent)context.getComponent();
+				CardCollection comp = (CardCollection)context.getComponent();
 				Container parent = comp.getParent();
 				if (parent != null)
 					parent.remove(card);
-				comp.add(card);
+				comp.setCard(card, comp.getCardMouseLocation());
 				dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 				comp.validate();
 				comp.repaint();

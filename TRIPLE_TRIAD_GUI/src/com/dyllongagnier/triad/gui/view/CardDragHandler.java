@@ -1,6 +1,5 @@
 package com.dyllongagnier.triad.gui.view;
 
-import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureListener;
@@ -13,7 +12,8 @@ import java.awt.dnd.DragSourceListener;
 public class CardDragHandler implements DragGestureListener, DragSourceListener
 {
 	private final CardWindow card;
-	private Container oldParent = null;
+	private CardCollection oldParent = null;
+	private int location = -1;
 	
 	public CardDragHandler(CardWindow card)
 	{
@@ -45,7 +45,7 @@ public class CardDragHandler implements DragGestureListener, DragSourceListener
 	{
 		if (!dsde.getDropSuccess())
 		{
-			this.oldParent.add(this.card);
+			this.oldParent.setCard(this.card, this.location);
 			this.oldParent.validate();
 			this.oldParent.repaint();
 		}
@@ -54,8 +54,9 @@ public class CardDragHandler implements DragGestureListener, DragSourceListener
 	@Override
 	public void dragGestureRecognized(DragGestureEvent dge)
 	{
-		this.oldParent = this.card.getParent();
-		this.oldParent.remove(this.card);
+		this.oldParent = (CardCollection)this.card.getParent();
+		this.location = this.oldParent.getCardLocation(this.card);
+		this.oldParent.setCard(new CardWindow(), this.location);
 		this.oldParent.validate();
 		this.oldParent.repaint();
 		
