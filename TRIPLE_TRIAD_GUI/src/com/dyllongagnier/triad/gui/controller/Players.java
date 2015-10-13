@@ -160,6 +160,14 @@ public class Players
 			throw new IllegalArgumentException("Maximum number of threads must be greater than or equal to one.");
 		Players.maxThreads = maxThreads;
 		defaultAI = new FastSearchAI(maxThreads);
+		if (Players.selfAgent instanceof FastSearchAI)
+		{
+			Players.selfAgent = defaultAI;
+		}
+		if (Players.opponentAgent instanceof FastSearchAI)
+		{
+			Players.opponentAgent = defaultAI;
+		}
 	}
 	
 	public static int getMaxThreads()

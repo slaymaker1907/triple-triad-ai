@@ -46,7 +46,7 @@ public class FastSearchAI implements GameAgent
 		@Override
 		public void run()
 		{
-			if (finishQuickly)
+			if (finishQuickly.get())
 				this.listener.executeAfter.accept(this.heuristic);
 			else
 				this.clone.takeTurn(this.move.toPlay, this.move.row,
@@ -156,7 +156,7 @@ public class FastSearchAI implements GameAgent
 	}
 
 	private final ThreadPoolExecutor executor;
-	private volatile boolean finishQuickly = false;
+	private final BooleanReference finishQuickly = new BooleanReference(false);
 
 	public FastSearchAI(int cores)
 	{
@@ -170,7 +170,7 @@ public class FastSearchAI implements GameAgent
 
 	public void setMoveTimeout(long timeout)
 	{
-		this.finishQuickly = false;
+		this.finishQuickly.set(false);
 		Thread watcher = new Thread(() ->
 		{
 			try
@@ -180,7 +180,7 @@ public class FastSearchAI implements GameAgent
 			{
 				e.printStackTrace();
 			}
-			this.finishQuickly = true;
+			this.finishQuickly.set(true);
 		});
 		watcher.setDaemon(true);
 		watcher.start();
