@@ -19,10 +19,10 @@
     },
     {
       "name" : "Tonberry",
-      "north" : 4,
+      "north" : 2,
       "east" : 2,
-      "south" : 3,
-      "west" : 4,
+      "south" : 7,
+      "west" : 2,
       "type" : "NONE"
     },
     {
