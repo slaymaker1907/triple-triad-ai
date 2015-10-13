@@ -47,10 +47,14 @@ public class FastSearchAI implements GameAgent
 		public void run()
 		{
 			if (finishQuickly.get())
+			{
 				this.listener.executeAfter.accept(this.heuristic);
+			}
 			else
+			{
 				this.clone.takeTurn(this.move.toPlay, this.move.row,
 						this.move.col);
+			}
 		}
 	}
 
@@ -167,6 +171,7 @@ public class FastSearchAI implements GameAgent
 	public void setMoveTimeout(long timeout)
 	{
 		this.finishQuickly.setMaxTime(timeout);
+		this.finishQuickly.set(false);
 	}
 
 	@Override
