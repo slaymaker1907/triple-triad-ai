@@ -11,6 +11,13 @@ import java.awt.dnd.DropTargetListener;
 
 public class CardDropHandler implements DropTargetListener
 {
+	private boolean canDrop = false;
+	
+	public void setCanDrop(boolean choice)
+	{
+		this.canDrop = choice;
+	}
+	
 	@Override
 	public void dragEnter(DropTargetDragEvent dtde)
 	{
@@ -38,7 +45,7 @@ public class CardDropHandler implements DropTargetListener
 	@Override
 	public void drop(DropTargetDropEvent dtde)
 	{
-		if (dtde.isDataFlavorSupported(CardFlavor.cardFlavor))
+		if (dtde.isDataFlavorSupported(CardFlavor.cardFlavor) && this.canDrop)
 		{
 			Transferable trans = dtde.getTransferable();
 			try

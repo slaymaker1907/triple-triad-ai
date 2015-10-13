@@ -32,12 +32,21 @@ public class CardWindow extends JPanel implements Transferable
 		this.card = card;
 		if (card != null)
 			this.init();
+		handler = new CardDragHandler(this);
+		dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, handler);
+	}
+	
+	public void setCanDrag(boolean canDrag)
+	{
+		this.handler.setCanDrag(canDrag);
 	}
 	
 	public CardWindow()
 	{
 		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.card = null;
+		handler = new CardDragHandler(this);
+		dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, handler);
 	}
 	
 	private void init()
@@ -116,31 +125,5 @@ public class CardWindow extends JPanel implements Transferable
 			return this;
 		else
 			throw new UnsupportedFlavorException(flavor);
-	}
-	
-	@Override
-	public void addNotify()
-	{
-		super.addNotify();
-		
-		if (dgr == null)
-		{
-			handler = new CardDragHandler(this);
-			dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, handler);
-		}
-	}
-	
-	@Override
-	public void removeNotify()
-	{
-		if (dgr != null)
-		{
-			dgr.removeDragGestureListener(handler);
-			handler = null;
-		}
-		
-		dgr = null;
-		
-		super.removeNotify();
 	}
 }

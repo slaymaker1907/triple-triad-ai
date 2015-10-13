@@ -18,6 +18,8 @@ public class CardCollection extends JPanel
 	@SuppressWarnings("unused")
 	private final DropTarget target;
 	private final CardDropHandler hander;
+	
+	private boolean canDragFrom;
 
 	public CardCollection()
 	{
@@ -25,6 +27,18 @@ public class CardCollection extends JPanel
 		this.init();
 		this.hander = new CardDropHandler();
 		this.target = new DropTarget(this, DnDConstants.ACTION_MOVE, hander, true);
+		this.canDragFrom = true;
+		this.setCanDropTo(false);
+	}
+	
+	public void setCanDragFrom(boolean choice)
+	{
+		this.canDragFrom = choice;
+	}
+	
+	public void setCanDropTo(boolean choice)
+	{
+		this.hander.setCanDrop(choice);
 	}
 	
 	public static int getDefaultSize()
@@ -58,7 +72,10 @@ public class CardCollection extends JPanel
 	{
 		this.removeAll();
 		for(CardWindow window : this.cards)
+		{
+			window.setCanDrag(this.canDragFrom);
 			this.add(window);
+		}
 	}
 	
 	public void setCard(CardWindow card, int row, int col)

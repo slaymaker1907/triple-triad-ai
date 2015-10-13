@@ -14,6 +14,12 @@ public class CardDragHandler implements DragGestureListener, DragSourceListener
 	private final CardWindow card;
 	private CardCollection oldParent = null;
 	private int location = -1;
+	private boolean canDrag = false;
+	
+	public void setCanDrag(boolean canDrag)
+	{
+		this.canDrag = canDrag;
+	}
 	
 	public CardDragHandler(CardWindow card)
 	{
@@ -54,13 +60,16 @@ public class CardDragHandler implements DragGestureListener, DragSourceListener
 	@Override
 	public void dragGestureRecognized(DragGestureEvent dge)
 	{
-		this.oldParent = (CardCollection)this.card.getParent();
-		this.location = this.oldParent.getCardLocation(this.card);
-		this.oldParent.setCard(new CardWindow(), this.location);
-		this.oldParent.validate();
-		this.oldParent.repaint();
-		
-		DragSource source = dge.getDragSource();
-		source.startDrag(dge, Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR), this.card, this);
+		if (this.canDrag)
+		{
+			this.oldParent = (CardCollection)this.card.getParent();
+			this.location = this.oldParent.getCardLocation(this.card);
+			this.oldParent.setCard(new CardWindow(), this.location);
+			this.oldParent.validate();
+			this.oldParent.repaint();
+			
+			DragSource source = dge.getDragSource();
+			source.startDrag(dge, Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR), this.card, this);
+		}
 	}
 }
