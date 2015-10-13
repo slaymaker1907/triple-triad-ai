@@ -166,20 +166,7 @@ public class FastSearchAI implements GameAgent
 
 	public void setMoveTimeout(long timeout)
 	{
-		this.finishQuickly.set(false);
-		Thread watcher = new Thread(() ->
-		{
-			try
-			{
-				Thread.sleep(timeout);
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			this.finishQuickly.set(true);
-		});
-		watcher.setDaemon(true);
-		watcher.start();
+		this.finishQuickly.setMaxTime(timeout);
 	}
 
 	@Override

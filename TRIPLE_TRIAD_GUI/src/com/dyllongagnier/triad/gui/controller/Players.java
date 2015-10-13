@@ -212,8 +212,8 @@ public class Players
 	 */
 	public static void startNewGame()
 	{
-		Players.resetTimeout();
 		TriadGame.gameFactory(new PlayerGenerator(), gameBuilder, selfAgent, opponentAgent, new GUIListener()).startGame();
+		Players.resetTimeout();
 	}
 	
 	public static void makeMove(PossibleMove move)
