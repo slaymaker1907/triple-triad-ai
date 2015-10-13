@@ -1,5 +1,6 @@
 package com.dyllongagnier.triad.gui.view;
 
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -109,12 +110,14 @@ public class MainWindow extends JFrame
 		playerAIButtons.add(playerManual);
 		playerAIButtons.add(playerAI);
 		playerAI.setSelected(true);
+		MainWindow.setAIButtonEvents(playerAI, playerManual, Player.SELF);
 		
 		JRadioButton opponentAI = new JRadioButton("AI");
 		JRadioButton opponentManual = new JRadioButton("Manual");
 		opponentAIButtons.add(opponentAI);
 		opponentAIButtons.add(opponentManual);
 		opponentManual.setSelected(true);
+		MainWindow.setAIButtonEvents(opponentAI, opponentManual, Player.OPPONENT);
 		
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener((act) -> Players.startNewGame());
@@ -223,5 +226,12 @@ public class MainWindow extends JFrame
 		}
 		this.validate();
 		this.repaint();
+	}
+	
+	private static void setAIButtonEvents(JRadioButton ai, JRadioButton manual, Player player)
+	{
+		ActionListener handler = (act) -> Players.setAgent(player, ai.isSelected());
+		ai.addActionListener(handler);
+		manual.addActionListener(handler);
 	}
 }
