@@ -8,9 +8,11 @@ import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
+import java.io.Serializable;
 
-public class CardDragHandler implements DragGestureListener, DragSourceListener
+public class CardDragHandler implements DragGestureListener, DragSourceListener, Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private final CardWindow card;
 	private CardCollection oldParent = null;
 	private int location = -1;

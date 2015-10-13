@@ -27,13 +27,14 @@ public class CardCollection extends JPanel
 		this.init();
 		this.hander = new CardDropHandler();
 		this.target = new DropTarget(this, DnDConstants.ACTION_MOVE, hander, true);
-		this.canDragFrom = true;
+		this.setCanDragFrom(false);
 		this.setCanDropTo(false);
 	}
 	
 	public void setCanDragFrom(boolean choice)
 	{
 		this.canDragFrom = choice;
+		this.addCards();
 	}
 	
 	public void setCanDropTo(boolean choice)

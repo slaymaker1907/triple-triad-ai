@@ -209,6 +209,9 @@ public class MainWindow extends JFrame
 		this.displayField(state.playedCards);
 		this.setHand(Player.SELF, state.getHand(Player.SELF));
 		this.setHand(Player.OPPONENT, state.getHand(Player.OPPONENT));
+		this.setCanDropToField(false);
+		this.allowDraggingFromHand(Player.SELF, false);
+		this.allowDraggingFromHand(Player.OPPONENT, false);
 	}
 	
 	private void displayField(Field field)
@@ -259,5 +262,25 @@ public class MainWindow extends JFrame
 		ActionListener handler = (act) -> Players.setAgent(player, ai.isSelected());
 		ai.addActionListener(handler);
 		manual.addActionListener(handler);
+	}
+	
+	public void allowDraggingFromHand(Player player, boolean canDrag)
+	{
+		switch(player)
+		{
+			case SELF:
+				this.selfHand.setCanDragFrom(canDrag);
+				break;
+			case OPPONENT:
+				this.opponentHand.setCanDragFrom(canDrag);
+				break;
+			default:
+				throw new IllegalArgumentException();
+		}
+	}
+	
+	public void setCanDropToField(boolean choice)
+	{
+		this.currentField.setCanDropTo(choice);
 	}
 }

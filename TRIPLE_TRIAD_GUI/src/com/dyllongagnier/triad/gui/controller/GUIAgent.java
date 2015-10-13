@@ -7,6 +7,7 @@ import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.core.GameAgent;
 import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
+import com.dyllongagnier.triad.gui.view.MainWindow;
 
 public class GUIAgent implements GameAgent
 {
@@ -41,7 +42,8 @@ public class GUIAgent implements GameAgent
 		if (this.expectedPlayer != game.getCurrentPlayer())
 			throw new InvalidPlayerException();
 		this.currentGame = game;
-		throw new UnsupportedOperationException();
+		MainWindow.getMainWindow().allowDraggingFromHand(game.getCurrentPlayer(), true);
+		MainWindow.getMainWindow().setCanDropToField(true);
 	}
 	
 	public synchronized boolean canTakeTurn()

@@ -23,8 +23,9 @@ public class CardWindow extends JPanel implements Transferable
 	
 	private final Card card;
 	private final DataFlavor[] flavors = new DataFlavor[]{CardFlavor.cardFlavor};
-	private DragGestureRecognizer dgr;
-	private CardDragHandler handler;
+	@SuppressWarnings("unused")
+	private final DragGestureRecognizer dgr;
+	private final CardDragHandler handler;
 
 	public CardWindow(Card card)
 	{

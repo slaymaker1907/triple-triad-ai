@@ -8,9 +8,11 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.io.Serializable;
 
-public class CardDropHandler implements DropTargetListener
+public class CardDropHandler implements DropTargetListener, Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private boolean canDrop = false;
 	
 	public void setCanDrop(boolean choice)
@@ -68,6 +70,7 @@ public class CardDropHandler implements DropTargetListener
 			{
 				dtde.rejectDrop();
 				dtde.dropComplete(false);
+				e.printStackTrace();
 			}
 		}
 		else
