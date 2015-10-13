@@ -100,7 +100,7 @@ public class FastSearchAI implements GameAgent
 			this.size = 0;
 		}
 
-		public void addPossibleMove(PossibleMove move, Iterable<TriadGame> possibleConcreteGames)
+		public void addPossibleMove(PossibleMove move, TriadGame game)
 		{
 			// The possible move should be a concrete card and is therefore completely immutable.
 			assert move.toPlay.isVisible();
@@ -109,11 +109,8 @@ public class FastSearchAI implements GameAgent
 			this.moveValue.put(move, 0);
 			EndGameReporter listener = new EndGameReporter(
 					this.getConsumer(move), this.game.getCurrentPlayer());
-			for(TriadGame game : possibleConcreteGames)
-			{
-				GameRunner toRun = new GameRunner(move, game, listener);
-				executor.execute(toRun);
-			}
+			GameRunner toRun = new GameRunner(move, game, listener);
+			executor.execute(toRun);
 		}
 
 		private Consumer<Integer> getConsumer(PossibleMove move)
@@ -196,7 +193,7 @@ public class FastSearchAI implements GameAgent
 		MoveExecutor exec = new MoveExecutor(controls);
 		for (PossibleMove move : moves)
 		{
-			exec.addPossibleMove(move, controls.getConcreteCartesians());
+			exec.addPossibleMove(move, controls);
 		}
 	}
 

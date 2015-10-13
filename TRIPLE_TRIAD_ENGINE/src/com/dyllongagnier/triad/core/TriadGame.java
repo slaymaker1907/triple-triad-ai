@@ -167,9 +167,4 @@ public class TriadGame
 	{
 		return new TriadGame(this, listener);
 	}
-	
-	public Iterable<TriadGame> getConcreteCartesians()
-	{
-		throw new UnsupportedOperationException();
-	}
 }
