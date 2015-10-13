@@ -141,6 +141,11 @@ public class TriadGame
 
 		return result;
 	}
+	
+	public boolean isValidMove(PossibleMove move)
+	{
+		return this.moveValidator.apply(this.getCurrentState(), move.toPlay, this.getCurrentPlayer(), move.row, move.col);
+	}
 
 	protected TriadGame(TriadGame oldGame, GameListener newListener)
 	{

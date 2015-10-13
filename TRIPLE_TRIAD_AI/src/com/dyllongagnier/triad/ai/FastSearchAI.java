@@ -105,6 +105,7 @@ public class FastSearchAI implements GameAgent
 			// The possible move should be a concrete card and is therefore completely immutable.
 			assert move.toPlay.isVisible();
 			assert move.toPlay instanceof Card;
+			assert this.game == game;
 			
 			this.moveValue.put(move, 0);
 			EndGameReporter listener = new EndGameReporter(
