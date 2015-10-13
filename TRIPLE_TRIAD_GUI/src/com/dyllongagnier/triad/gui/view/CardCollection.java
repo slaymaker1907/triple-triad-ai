@@ -3,6 +3,8 @@ package com.dyllongagnier.triad.gui.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
 
 import javax.swing.JPanel;
 
@@ -13,11 +15,15 @@ public class CardCollection extends JPanel
 	
 	private static int defaultSize = 100;
 	private final CardWindow[] cards;
+	private final DropTarget target;
+	private final CardDropHandler hander;
 
 	public CardCollection()
 	{
 		this.cards = new CardWindow[9];
 		this.init();
+		this.hander = new CardDropHandler();
+		this.target = new DropTarget(this, DnDConstants.ACTION_MOVE, hander, true);
 	}
 	
 	public static int getDefaultSize()
