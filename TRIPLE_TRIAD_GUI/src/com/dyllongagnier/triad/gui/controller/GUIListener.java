@@ -12,7 +12,6 @@ public class GUIListener implements GameListener
 	{
 		return () ->
 		{
-			Players.resetTimeout();
 			MainWindow.getMainWindow().displayBoardState(newState);
 			if (!isComplete)
 			{
@@ -25,6 +24,7 @@ public class GUIListener implements GameListener
 	@Override
 	public synchronized void gameChanged(TriadGame changedGame)
 	{
+		Players.resetTimeout();
 		SwingUtilities.invokeLater(updateGUI(changedGame, false));
 	}
 
