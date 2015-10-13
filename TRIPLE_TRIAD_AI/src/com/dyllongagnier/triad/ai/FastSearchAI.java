@@ -1,5 +1,6 @@
 package com.dyllongagnier.triad.ai;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.core.GameListener;
 import com.dyllongagnier.triad.core.PossibleMove;
@@ -91,27 +91,23 @@ public class FastSearchAI implements GameAgent
 	{
 		private final HashMap<PossibleMove, Integer> moveValue = new HashMap<>();
 		private final TriadGame game;
-		private int expectedSize; // Only one thread will ever be adding possible moves.
-
+		private final int expectedSize;
+		
 		public MoveExecutor(TriadGame game)
 		{
+			List<PossibleMove> moves = game.getValidMoves();
+			this.expectedSize = moves.size();
 			this.game = game;
-			this.expectedSize = 0;
-		}
-
-		public void addPossibleMove(PossibleMove move, TriadGame game)
-		{
-			// The possible move should be a concrete card and is therefore completely immutable.
-			assert move.toPlay.isVisible();
-			assert move.toPlay instanceof Card;
-			assert this.game == game;
-			assert game.isValidMove(move);
+			ArrayList<Runnable> runners = new ArrayList<>();
+			for(PossibleMove move : moves)
+			{
+				EndGameReporter listener = new EndGameReporter(this.getConsumer(move), this.game.getCurrentPlayer());
+				GameRunner toRun = new GameRunner(move, game, listener);
+				runners.add(toRun);
+			}
 			
-			EndGameReporter listener = new EndGameReporter(
-					this.getConsumer(move), this.game.getCurrentPlayer());
-			GameRunner toRun = new GameRunner(move, game, listener);
-			this.expectedSize++;
-			executor.execute(toRun);
+			for(Runnable toRun : runners)
+				executor.execute(toRun);
 		}
 
 		private Consumer<Integer> getConsumer(PossibleMove move)
@@ -189,12 +185,7 @@ public class FastSearchAI implements GameAgent
 	@Override
 	public void takeTurn(TriadGame controls)
 	{
-		List<PossibleMove> moves = controls.getValidMoves();
-		MoveExecutor exec = new MoveExecutor(controls);
-		for (PossibleMove move : moves)
-		{
-			exec.addPossibleMove(move, controls);
-		}
+		new MoveExecutor(controls);
 	}
 
 	@Override

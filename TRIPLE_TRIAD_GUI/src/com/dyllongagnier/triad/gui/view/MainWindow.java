@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 
+import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.BoardState;
@@ -216,7 +217,11 @@ public class MainWindow extends JFrame
 		{
 			for(int col = 0; col < 3; col++)
 			{
-				this.currentField.setCard(new CardWindow(field.getCard(row, col).card), row, col);
+				DeployedCard card = field.getCard(row, col);
+				if (card != null)
+					this.currentField.setCard(new CardWindow(card.card), row, col);
+				else
+					this.currentField.setCard(new CardWindow(), row, col);
 			}
 		}
 	}
