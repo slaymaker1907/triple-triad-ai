@@ -196,7 +196,7 @@ public class MainWindow extends JFrame
 			}
 			catch (Exception e)
 			{
-				JOptionPane.showMessageDialog(MainWindow.explorerWindow, "Error, could not load deck from: " + file.getName());
+				JOptionPane.showMessageDialog(MainWindow.explorerWindow, "Error, could not load deck from: " + file.getName() + ". " + e.getMessage());
 				System.err.println(e.getMessage());
 				e.printStackTrace();
 			}
