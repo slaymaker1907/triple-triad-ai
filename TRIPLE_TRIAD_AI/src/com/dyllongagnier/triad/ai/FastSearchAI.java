@@ -91,13 +91,12 @@ public class FastSearchAI implements GameAgent
 	{
 		private final HashMap<PossibleMove, Integer> moveValue = new HashMap<>();
 		private final TriadGame game;
-		private int expectedSize, size; // Only one thread will ever be adding possible moves.
+		private int expectedSize; // Only one thread will ever be adding possible moves.
 
 		public MoveExecutor(TriadGame game)
 		{
 			this.game = game;
 			this.expectedSize = 0;
-			this.size = 0;
 		}
 
 		public void addPossibleMove(PossibleMove move, TriadGame game)
@@ -106,11 +105,12 @@ public class FastSearchAI implements GameAgent
 			assert move.toPlay.isVisible();
 			assert move.toPlay instanceof Card;
 			assert this.game == game;
+			assert game.isValidMove(move);
 			
-			this.moveValue.put(move, 0);
 			EndGameReporter listener = new EndGameReporter(
 					this.getConsumer(move), this.game.getCurrentPlayer());
 			GameRunner toRun = new GameRunner(move, game, listener);
+			this.expectedSize++;
 			executor.execute(toRun);
 		}
 
@@ -120,9 +120,8 @@ public class FastSearchAI implements GameAgent
 			{
 				synchronized (moveValue)
 				{
-					this.size++;
-					moveValue.compute(move, (mov, num) -> num + val);
-					if (this.size >= expectedSize)
+					moveValue.put(move, val);
+					if (this.moveValue.size() >= expectedSize)
 					{
 						this.makeMove();
 					}
