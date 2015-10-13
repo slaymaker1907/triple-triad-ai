@@ -33,6 +33,8 @@ public class Players
 		maxThreads = Runtime.getRuntime().availableProcessors();
 		defaultAI = new FastSearchAI(maxThreads);
 		selfAgent = opponentAgent = defaultAI;
+		Players.setAgent(Player.SELF, true);
+		Players.setAgent(Player.OPPONENT, false);
 	}
 	
 	protected Players()
