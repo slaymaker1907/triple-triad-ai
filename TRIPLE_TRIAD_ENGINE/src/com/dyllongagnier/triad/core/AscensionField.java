@@ -16,6 +16,7 @@ public class AscensionField extends Field
 {
 	private final EnumMap<Card.Type, Integer> typeMap;
 	private final AscensionTransform ascensionTransform;
+	private final DeployedCardComparator originalComp;
 
 	/**
 	 * This method initializes an empty field.
@@ -29,6 +30,7 @@ public class AscensionField extends Field
 			AscensionTransform ascensionTransform, CardPlayFunction playFunc)
 	{
 		super(cardComparator, playFunc);
+		this.originalComp = cardComparator;
 		this.typeMap = initTypeMap();
 		this.cardComparator = (toPlay, played) -> cardComparator.apply(this.buffCard(toPlay), this.buffCard(played));
 		this.ascensionTransform = ascensionTransform;
@@ -90,12 +92,14 @@ public class AscensionField extends Field
 			AscensionTransform ascensionTransform, CardPlayFunction playFunc)
 	{
 		super(playedCards, cardComparator, playFunc);
+		this.cardComparator = (toPlay, played) -> cardComparator.apply(this.buffCard(toPlay), this.buffCard(played));
+		this.originalComp = cardComparator;
 		this.typeMap = typeMap;
 		this.ascensionTransform = ascensionTransform;
 	}
 
 	@Override
-	public AscensionField playCard(DeployedCard cardToPlay)
+	public Field playCard(DeployedCard cardToPlay)
 	{
 		assert cardToPlay != null;
 		int row = cardToPlay.row;
@@ -119,6 +123,6 @@ public class AscensionField extends Field
 			newTypeMap = new EnumMap<>(this.typeMap);
 			newTypeMap.compute(cardToPlay.card.cardType, (type, old) -> old + 1);
 		}
-		return new AscensionField(newPlayedCards, this.cardComparator, newTypeMap, this.ascensionTransform, this.playFunc);
+		return new AscensionField(newPlayedCards, this.originalComp, newTypeMap, this.ascensionTransform, this.playFunc);
 	}
 }
