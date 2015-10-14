@@ -22,7 +22,7 @@ import com.dyllongagnier.triad.gui.view.MainWindow;
 
 public class Players
 {
-	private static GameAgent selfAgent, opponentAgent;
+	private static final GUIAgent selfAgent, opponentAgent;
 	private static GameAgent defaultAI;
 	private static BoardState.Builder gameBuilder = new BoardState.Builder();
 	private static int maxThreads;
@@ -33,7 +33,8 @@ public class Players
 	{
 		maxThreads = Runtime.getRuntime().availableProcessors();
 		defaultAI = new FastSearchAI(maxThreads);
-		selfAgent = opponentAgent = defaultAI;
+		selfAgent = new GUIAgent(Player.SELF);
+		opponentAgent = new GUIAgent(Player.OPPONENT);
 		Players.setAgent(Player.SELF, true);
 		Players.setAgent(Player.OPPONENT, false);
 	}
@@ -44,18 +45,13 @@ public class Players
 	
 	public static void setAgent(Player player, boolean isAI)
 	{
-		GameAgent agent;
-		if (isAI)
-			agent = Players.getDefaultAI();
-		else
-			agent = new GUIAgent(player);
 		switch(player)
 		{
 			case SELF:
-				Players.selfAgent = agent;
+				Players.selfAgent.setIsAI(isAI);
 				break;
 			case OPPONENT:
-				Players.opponentAgent = agent;
+				Players.opponentAgent.setIsAI(isAI);
 				break;
 			default:
 				throw new IllegalArgumentException("Player.NONE can not have an agent.");
@@ -165,14 +161,6 @@ public class Players
 			throw new IllegalArgumentException("Maximum number of threads must be greater than or equal to one.");
 		Players.maxThreads = maxThreads;
 		defaultAI = new FastSearchAI(maxThreads);
-		if (Players.selfAgent instanceof FastSearchAI)
-		{
-			Players.selfAgent = defaultAI;
-		}
-		if (Players.opponentAgent instanceof FastSearchAI)
-		{
-			Players.opponentAgent = defaultAI;
-		}
 	}
 	
 	public static int getMaxThreads()

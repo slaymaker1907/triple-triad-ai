@@ -14,6 +14,17 @@ public class GUIAgent implements GameAgent
 	public final Player expectedPlayer;
 	private volatile TriadGame currentGame;
 	private volatile PossibleMove lastMove;
+	private volatile boolean isAI;
+	
+	public void setIsAI(boolean isAI)
+	{
+		this.isAI = isAI;
+	}
+	
+	public boolean isAI()
+	{
+		return this.isAI;
+	}
 	
 	public GUIAgent(Player expectedPlayer)
 	{
@@ -39,12 +50,17 @@ public class GUIAgent implements GameAgent
 	@Override
 	public synchronized void takeTurn(TriadGame game)
 	{
-		Players.currentGame = game;
-		if (this.expectedPlayer != game.getCurrentPlayer())
-			throw new InvalidPlayerException();
-		this.currentGame = game;
-		MainWindow.getMainWindow().allowDraggingFromHand(expectedPlayer, true);
-		MainWindow.getMainWindow().setCanDropToField(true);
+		if (!this.isAI)
+		{
+			Players.currentGame = game;
+			if (this.expectedPlayer != game.getCurrentPlayer())
+				throw new InvalidPlayerException();
+			this.currentGame = game;
+			MainWindow.getMainWindow().allowDraggingFromHand(expectedPlayer, true);
+			MainWindow.getMainWindow().setCanDropToField(true);
+		}
+		else
+			Players.getDefaultAI().takeTurn(game);
 	}
 	
 	public synchronized boolean canTakeTurn()
