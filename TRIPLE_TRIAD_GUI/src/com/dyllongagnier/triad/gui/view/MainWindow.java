@@ -18,6 +18,7 @@ import javax.swing.ButtonGroup;
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
+import com.dyllongagnier.triad.core.AscensionField;
 import com.dyllongagnier.triad.core.BoardState;
 import com.dyllongagnier.triad.core.Field;
 import com.dyllongagnier.triad.core.TriadGame;
@@ -222,7 +223,17 @@ public class MainWindow extends JFrame
 			{
 				DeployedCard card = field.getCard(row, col);
 				if (card != null)
-					this.currentField.setCard(new CardWindow(card.card), row, col);
+				{
+					if (field instanceof AscensionField)
+					{
+						AscensionField asField = (AscensionField)field;
+						this.currentField.setCard(new CardWindow(card.card, asField.getAscensionNumber(card.card.cardType)), row, col);
+					}
+					else
+					{
+						this.currentField.setCard(new CardWindow(card.card, 0), row, col);
+					}
+				}
 				else
 					this.currentField.setCard(new CardWindow(), row, col);
 			}
@@ -248,7 +259,7 @@ public class MainWindow extends JFrame
 		for(UndeployedCard card : hand)
 		{
 			assert card.isVisible();
-			col.setCard(new CardWindow(card.deploy()), i++);
+			col.setCard(new CardWindow(card.deploy(), 0), i++);
 		}
 		
 		for(; i < 9; i++)

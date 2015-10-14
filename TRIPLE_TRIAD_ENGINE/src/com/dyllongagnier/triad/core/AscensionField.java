@@ -54,7 +54,10 @@ public class AscensionField extends Field
 	 */
 	public int getAscensionNumber(Card.Type type)
 	{
-		return this.typeMap.get(type);
+		if (type == Card.Type.NONE)
+			return 0;
+		else
+			return this.typeMap.get(type);
 	}
 
 	/**

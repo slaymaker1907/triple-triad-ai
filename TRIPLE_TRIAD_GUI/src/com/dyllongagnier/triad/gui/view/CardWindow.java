@@ -26,10 +26,12 @@ public class CardWindow extends JPanel implements Transferable
 	@SuppressWarnings("unused")
 	private final DragGestureRecognizer dgr;
 	private final CardDragHandler handler;
+	private final int ascensionBonus;
 
-	public CardWindow(Card card)
+	public CardWindow(Card card, int ascensionBonus)
 	{
 		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		this.ascensionBonus = ascensionBonus;
 		this.card = card;
 		if (card != null)
 			this.init();
@@ -44,6 +46,7 @@ public class CardWindow extends JPanel implements Transferable
 	
 	public CardWindow()
 	{
+		ascensionBonus = 0;
 		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.card = null;
 		handler = new CardDragHandler(this);
@@ -55,7 +58,7 @@ public class CardWindow extends JPanel implements Transferable
 		this.setLayout(new GridLayout(3, 3));
 		this.add("upperleft", new JLabel());
 		this.add("uppermid", CardWindow.makeLabel(this.card.north));
-		this.add("upperright", new JLabel());
+		this.add("upperright", this.getAscensionDisplay());
 		this.add("midleft", CardWindow.makeLabel(this.card.west));
 		this.add("center", CardWindow.makeLabel(this.card.cardType));
 		this.add("midright", CardWindow.makeLabel(this.card.east));
@@ -63,6 +66,21 @@ public class CardWindow extends JPanel implements Transferable
 		this.add("lowermid", CardWindow.makeLabel(this.card.south));
 		this.add("lowerright", new JLabel());
 		this.setColor(this.card.holdingPlayer);
+	}
+	
+	private JLabel getAscensionDisplay()
+	{
+		int bonus = Math.abs(this.ascensionBonus);
+		String text;
+		if (this.ascensionBonus < 0)
+			text = "-" + bonus;
+		else if (this.ascensionBonus > 0)
+			text = "+" + bonus;
+		else
+			text = "";
+		JLabel result = new JLabel(text);
+		result.setHorizontalAlignment(SwingConstants.CENTER);
+		return result;
 	}
 	
 	private void setColor(Player player)
