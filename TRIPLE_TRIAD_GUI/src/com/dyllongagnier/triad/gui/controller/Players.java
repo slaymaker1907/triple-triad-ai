@@ -203,8 +203,8 @@ public class Players
 	{
 		TriadGame result = TriadGame.gameFactory(new PlayerGenerator(), gameBuilder, selfAgent, opponentAgent, new GUIListener());
 		MainWindow.getMainWindow().displayBoardState(result);
-		result.startGame();
 		Players.resetTimeout();
+		result.startGame();
 		return result;
 	}
 	
