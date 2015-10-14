@@ -279,7 +279,7 @@ public interface CardPlayFunction
 			capturedThroughBattle.addAll(sameCards);
 		}
 
-		return sameCards;
+		return capturedThroughBattle;
 	}
 
 	/**
