@@ -57,7 +57,7 @@ public class CardWindow extends JPanel implements Transferable
 		this.add("uppermid", CardWindow.makeLabel(this.card.north));
 		this.add("upperright", new JLabel());
 		this.add("midleft", CardWindow.makeLabel(this.card.west));
-		this.add("center", new JLabel());
+		this.add("center", CardWindow.makeLabel(this.card.cardType));
 		this.add("midright", CardWindow.makeLabel(this.card.east));
 		this.add("lowerleft", new JLabel());
 		this.add("lowermid", CardWindow.makeLabel(this.card.south));
@@ -94,6 +94,30 @@ public class CardWindow extends JPanel implements Transferable
 		else
 			label = String.valueOf(num);
 		JLabel result = new JLabel(label);
+		result.setHorizontalAlignment(SwingConstants.CENTER);
+		return result;
+	}
+	
+	public static String getAscensionIcon(Card.Type type)
+	{
+		switch(type)
+		{
+			case BEASTMAN:
+				return "B";
+			case GARLEAN:
+				return "G";
+			case PRIMAL:
+				return "P";
+			case SCION:
+				return "S";
+			default:
+				return "";
+		}
+	}
+	
+	private static JLabel makeLabel(Card.Type type)
+	{
+		JLabel result = new JLabel(CardWindow.getAscensionIcon(type));
 		result.setHorizontalAlignment(SwingConstants.CENTER);
 		return result;
 	}
