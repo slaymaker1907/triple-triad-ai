@@ -17,7 +17,7 @@ import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
 public class Field
 {
 	protected final DeployedCard[][] playedCards;
-	protected final DeployedCardComparator cardComparator;
+	protected DeployedCardComparator cardComparator;
 	protected final CardPlayFunction playFunc;
 
 	/**
@@ -97,7 +97,7 @@ public class Field
 		return new Field(newPlayedCards, this.cardComparator, this.playFunc);
 	}
 
-	private DeployedCard[][] copyPlayedCards()
+	protected DeployedCard[][] copyPlayedCards()
 	{
 		DeployedCard[][] result = new DeployedCard[3][3];
 		for (int row = 0; row < 3; row++)

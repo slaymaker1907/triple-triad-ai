@@ -110,4 +110,9 @@ public class DeployedCard
 			return false;
 		}
 	}
+	
+	public DeployedCard increaseStats(int amt)
+	{
+		return new DeployedCard(this.card.increaseAllStats(amt), this.row, this.col);
+	}
 }

@@ -1,6 +1,5 @@
 package com.dyllongagnier.triad.core;
 
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Set;
 
@@ -15,7 +14,7 @@ import com.dyllongagnier.triad.core.functions.DeployedCardComparator;
  */
 public class AscensionField extends Field
 {
-	private final EnumMap<Card.Type, DeployedCard[]> typeMap;
+	private final EnumMap<Card.Type, Integer> typeMap;
 	private final AscensionTransform ascensionTransform;
 
 	/**
@@ -31,7 +30,29 @@ public class AscensionField extends Field
 	{
 		super(cardComparator, playFunc);
 		this.typeMap = initTypeMap();
+		this.cardComparator = (toPlay, played) -> cardComparator.apply(this.buffCard(toPlay), this.buffCard(played));
 		this.ascensionTransform = ascensionTransform;
+	}
+	
+	public DeployedCard buffCard(DeployedCard card)
+	{
+		switch(card.card.cardType)
+		{
+			case NONE:
+				return card;
+			default:
+				return this.ascensionTransform.apply(card, this.typeMap.get(card.card.cardType));
+		}
+	}
+	
+	/**
+	 * This method returns the number of cards played with the specified type.
+	 * @param type The type to lookup.
+	 * @return The number of cards with type type.
+	 */
+	public int getAscensionNumber(Card.Type type)
+	{
+		return this.typeMap.get(type);
 	}
 
 	/**
@@ -40,14 +61,14 @@ public class AscensionField extends Field
 	 * 
 	 * @return A initialized type map for use in the constructor.
 	 */
-	private static EnumMap<Card.Type, DeployedCard[]> initTypeMap()
+	private static EnumMap<Card.Type, Integer> initTypeMap()
 	{
-		EnumMap<Card.Type, DeployedCard[]> result = new EnumMap<>(
+		EnumMap<Card.Type, Integer> result = new EnumMap<>(
 				Card.Type.class);
-		result.put(Card.Type.BEASTMAN, new DeployedCard[0]);
-		result.put(Card.Type.GARLEAN, new DeployedCard[0]);
-		result.put(Card.Type.PRIMAL, new DeployedCard[0]);
-		result.put(Card.Type.SCION, new DeployedCard[0]);
+		result.put(Card.Type.BEASTMAN, 0);
+		result.put(Card.Type.GARLEAN, 0);
+		result.put(Card.Type.PRIMAL, 0);
+		result.put(Card.Type.SCION, 0);
 		return result;
 	}
 
@@ -63,9 +84,9 @@ public class AscensionField extends Field
 	 * @param ascensionTransform
 	 *            The ascension function to use.
 	 */
-	public AscensionField(DeployedCard[][] playedCards,
+	protected AscensionField(DeployedCard[][] playedCards,
 			DeployedCardComparator cardComparator,
-			EnumMap<Card.Type, DeployedCard[]> typeMap,
+			EnumMap<Card.Type, Integer> typeMap,
 			AscensionTransform ascensionTransform, CardPlayFunction playFunc)
 	{
 		super(playedCards, cardComparator, playFunc);
@@ -74,27 +95,16 @@ public class AscensionField extends Field
 	}
 
 	@Override
-	public Field playCard(DeployedCard cardToPlay)
+	public AscensionField playCard(DeployedCard cardToPlay)
 	{
 		assert cardToPlay != null;
 		int row = cardToPlay.row;
 		int col = cardToPlay.col;
 		assert !this.isCardInPos(row, col);
 
-		EnumMap<Card.Type, DeployedCard[]> newTypeMap = this.typeMap;
-		DeployedCard[][] newPlayedCards;
-		if (cardToPlay.card.cardType != Card.Type.NONE)
-		{
-			// Make sure not to mutate the old map.
-			newPlayedCards = this.increaseTypeStats(cardToPlay.card.cardType);
-			newTypeMap = new EnumMap<Card.Type, DeployedCard[]>(this.typeMap);
-			cardToPlay = this.ascensionTransform.apply(cardToPlay,
-					addCardToMap(newTypeMap, cardToPlay) - 1);
-		} else
-			newPlayedCards = this.playedCards.clone();
-
 		Set<DeployedCard> takeOver = this.playFunc.updateField(this,
 				cardToPlay, this.cardComparator);
+		DeployedCard[][] newPlayedCards = this.copyPlayedCards();
 		newPlayedCards[row][col] = cardToPlay;
 		for (DeployedCard card : takeOver)
 		{
@@ -102,52 +112,13 @@ public class AscensionField extends Field
 					.setPlayer(cardToPlay.card.holdingPlayer);
 			newPlayedCards[newCard.row][newCard.col] = newCard;
 		}
-
-		newPlayedCards[row][col] = cardToPlay;
-		return new AscensionField(newPlayedCards, this.cardComparator,
-				newTypeMap, this.ascensionTransform, this.playFunc);
-	}
-
-	/**
-	 * This method adds the input card to the type map and returns the total
-	 * size of the array in the type map after adding the card.
-	 * 
-	 * @param typeMap
-	 *            The type map to mutate.
-	 * @param toAdd
-	 *            The card to add.
-	 * @return The total size of the array for the type of toAdd after toAdd is
-	 *         added.
-	 */
-	private static int addCardToMap(EnumMap<Card.Type, DeployedCard[]> typeMap,
-			DeployedCard toAdd)
-	{
-		assert toAdd.card.cardType != Card.Type.NONE;
-		assert typeMap != null;
-
-		DeployedCard[] oldArr = typeMap.get(toAdd.card.cardType);
-		DeployedCard[] newArr = Arrays.copyOf(oldArr, oldArr.length + 1);
-		assert newArr.length == oldArr.length + 1;
-		newArr[oldArr.length] = toAdd;
-		typeMap.put(toAdd.card.cardType, newArr);
-		assert newArr.length > 0;
-		return newArr.length;
-	}
-
-	/**
-	 * This method increases the input type's deployed cards by 1.
-	 * 
-	 * @param typeToIncrease
-	 *            The type to increase the stats of.
-	 * @return A new DeployedCard[][] with the reflected stat changes.
-	 */
-	private DeployedCard[][] increaseTypeStats(Card.Type typeToIncrease)
-	{
-		DeployedCard[][] result = this.playedCards.clone();
-		for (DeployedCard card : this.typeMap.get(typeToIncrease))
+		
+		EnumMap<Card.Type, Integer> newTypeMap = this.typeMap;
+		if (cardToPlay.card.cardType != Card.Type.NONE)
 		{
-			result[card.row][card.col] = this.ascensionTransform.apply(card, 1);
+			newTypeMap = new EnumMap<>(this.typeMap);
+			newTypeMap.compute(cardToPlay.card.cardType, (type, old) -> old + 1);
 		}
-		return result;
+		return new AscensionField(newPlayedCards, this.cardComparator, newTypeMap, this.ascensionTransform, this.playFunc);
 	}
 }
