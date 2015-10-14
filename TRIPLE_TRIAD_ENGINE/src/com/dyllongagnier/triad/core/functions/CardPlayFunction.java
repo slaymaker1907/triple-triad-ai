@@ -170,7 +170,7 @@ public interface CardPlayFunction
 			case SOUTH:
 				return toPlay.card.south + otherCard.card.north;
 			case WEST:
-				return toPlay.card.west + toPlay.card.east;
+				return toPlay.card.west + otherCard.card.east;
 			default:
 				throw new RuntimeException("Unsupported enum value.");
 		}
@@ -240,8 +240,9 @@ public interface CardPlayFunction
 		Set<DeployedCard> capturedThroughRule = sums.cardsToCapture();
 		for (DeployedCard card : capturedThroughRule)
 		{
-			capturedThroughBattle.addAll(CardPlayFunction
-					.recursiveNormalCapture(field, card, cardComparator));
+			if (card.card.holdingPlayer != toPlay.card.holdingPlayer)
+				capturedThroughBattle.addAll(CardPlayFunction
+						.recursiveNormalCapture(field, card, cardComparator));
 		}
 		capturedThroughBattle.addAll(capturedThroughRule);
 		return capturedThroughBattle;
@@ -273,8 +274,9 @@ public interface CardPlayFunction
 		{
 			for (DeployedCard card : sameCards)
 			{
-				capturedThroughBattle.addAll(CardPlayFunction
-						.recursiveNormalCapture(field, card, cardComparator));
+				if (card.card.holdingPlayer != toPlay.card.holdingPlayer)
+					capturedThroughBattle.addAll(CardPlayFunction
+							.recursiveNormalCapture(field, card, cardComparator));
 			}
 			capturedThroughBattle.addAll(sameCards);
 		}
