@@ -113,7 +113,7 @@ public interface CardPlayFunction
 		tryCapture(toPlay, field.getCard(row - 1, col), cardComparator, result);
 		tryCapture(toPlay, field.getCard(row + 1, col), cardComparator, result);
 		tryCapture(toPlay, field.getCard(row, col - 1), cardComparator, result);
-		tryCapture(toPlay, field.getCard(row, col - 1), cardComparator, result);
+		tryCapture(toPlay, field.getCard(row, col + 1), cardComparator, result);
 
 		return result;
 	}
