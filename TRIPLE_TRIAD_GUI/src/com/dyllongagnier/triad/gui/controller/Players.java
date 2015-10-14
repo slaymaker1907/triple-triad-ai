@@ -18,6 +18,7 @@ import com.dyllongagnier.triad.core.GameAgent;
 import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.card.ActionCard;
+import com.dyllongagnier.triad.gui.view.MainWindow;
 
 public class Players
 {
@@ -210,10 +211,13 @@ public class Players
 	/**
 	 * This method starts a new game.
 	 */
-	public static void startNewGame()
+	public static TriadGame startNewGame()
 	{
-		TriadGame.gameFactory(new PlayerGenerator(), gameBuilder, selfAgent, opponentAgent, new GUIListener()).startGame();
+		TriadGame result = TriadGame.gameFactory(new PlayerGenerator(), gameBuilder, selfAgent, opponentAgent, new GUIListener());
+		MainWindow.getMainWindow().displayBoardState(result);
+		result.startGame();
 		Players.resetTimeout();
+		return result;
 	}
 	
 	public static void makeMove(PossibleMove move)
