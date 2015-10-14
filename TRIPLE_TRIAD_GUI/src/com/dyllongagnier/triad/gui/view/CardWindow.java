@@ -89,12 +89,12 @@ public class CardWindow extends JPanel implements Transferable
 		switch(player)
 		{
 			case SELF:
-				// Red
-				toSet = new Color(255, 200, 200);
-				break;
-			case OPPONENT:
 				// Blue
 				toSet = new Color(200, 200, 255);
+				break;
+			case OPPONENT:
+				// Red
+				toSet = new Color(255, 200, 200);
 				break;
 			default:
 				// Grey
