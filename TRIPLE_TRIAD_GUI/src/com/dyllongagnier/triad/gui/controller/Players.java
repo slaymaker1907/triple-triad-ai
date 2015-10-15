@@ -147,7 +147,7 @@ public class Players
 	{
 		Players.gameBuilder = new BoardState.Builder();
 		Players.setMaxThreads(Runtime.getRuntime().availableProcessors());
-		Players.setTimeout(Integer.MAX_VALUE);
+		Players.setTimeout(8);
 	}
 	
 	static GameAgent getDefaultAI()
