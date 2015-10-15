@@ -1,5 +1,6 @@
 package com.dyllongagnier.triad.gui.controller;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import com.dyllongagnier.triad.card.Player;
@@ -22,6 +23,7 @@ public class GUIListener implements GameListener
 			else
 			{
 				MainWindow.getMainWindow().setCurrentTurn(Player.NONE);
+				JOptionPane.showMessageDialog(MainWindow.getMainWindow(), "Winner: " + newState.getCurrentState().getWinner());
 			}
 		};
 	}
