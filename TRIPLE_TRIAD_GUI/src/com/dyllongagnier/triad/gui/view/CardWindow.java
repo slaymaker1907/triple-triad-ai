@@ -175,7 +175,7 @@ public class CardWindow extends JPanel implements Transferable
 	public void setLastPlayedCard(boolean lastPlayed)
 	{
 		if (lastPlayed)
-			this.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+			this.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
 		else
 			this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
