@@ -26,7 +26,7 @@ public class BoardState
 {
 	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
 	public final Field playedCards;
-	private Player firstPlayer;
+	private final Player firstPlayer;
 
 	/**
 	 * Constructs a new BoardState. Unless doing something particular, the
@@ -47,6 +47,7 @@ public class BoardState
 	{
 		this.playerHands = playerHands;
 		this.playedCards = playedCards;
+		this.firstPlayer = firstPlayer;
 	}
 
 	@Override
@@ -349,11 +350,23 @@ public class BoardState
 			assert player != null;
 			assert cards != null;
 			assert player != Player.NONE;
+			assert assertAllCardsNonNull(cards);
 
 			Set<UndeployedCard> playerCards = playerHands.get(player);
 			playerCards.clear();
 			playerCards.addAll(Arrays.asList(cards));
 			return this;
+		}
+		
+		private static boolean assertAllCardsNonNull(UndeployedCard[] cards)
+		{
+			for(UndeployedCard card : cards)
+			{
+				if (card == null)
+					return false;
+			}
+			
+			return true;
 		}
 
 		/**
