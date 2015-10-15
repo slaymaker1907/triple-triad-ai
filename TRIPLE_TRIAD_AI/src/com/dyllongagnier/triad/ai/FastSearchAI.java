@@ -23,7 +23,7 @@ public class FastSearchAI implements GameAgent
 		private final PossibleMove move;
 		private final TriadGame clone;
 		private final int heuristic;
-		private final EndGameReporter listener;
+		protected final EndGameReporter listener;
 
 		public GameRunner(PossibleMove move, TriadGame currentState,
 				EndGameReporter listener)

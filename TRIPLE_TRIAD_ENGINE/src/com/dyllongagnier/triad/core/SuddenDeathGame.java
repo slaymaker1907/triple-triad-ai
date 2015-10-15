@@ -56,7 +56,13 @@ public class SuddenDeathGame extends TriadGame
 			newBuilder.setHand(Player.SELF, cardFunc.apply(Player.SELF));
 			newBuilder.setHand(Player.OPPONENT,
 					cardFunc.apply(Player.OPPONENT));
-			new SuddenDeathGame(this.firstPlayerGen, newBuilder, this.getGameAgent(Player.SELF), this.getGameAgent(Player.OPPONENT), this.listener).startGame();
+			
+			assert cardFunc.apply(Player.SELF).length >= 5;
+			assert cardFunc.apply(Player.OPPONENT).length >= 5;
+			
+			this.init(this.firstPlayerGen.get(), newBuilder);
+			this.listener.gameChanged(this);
+			this.startTurn();
 		}
 	}
 }
