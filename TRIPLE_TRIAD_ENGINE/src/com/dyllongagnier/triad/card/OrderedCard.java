@@ -16,7 +16,14 @@ public class OrderedCard implements UndeployedCard
 	@Override
 	public int compareTo(UndeployedCard o)
 	{
-		return Integer.compare(this.hashCode(), o.hashCode());
+		if (o instanceof OrderedCard)
+		{
+			return Integer.compare(this.hashCode(), o.hashCode());
+		}
+		else
+		{
+			return this.toString().compareTo(o.toString());
+		}
 	}
 
 	@Override
