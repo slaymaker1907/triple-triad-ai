@@ -28,4 +28,9 @@ public class CardGuesser
 		
 		return null;
 	}
+	
+	public static boolean isValidCard(String name)
+	{
+		return CardList.getCard(name) != null;
+	}
 }

@@ -1,15 +1,24 @@
 package com.dyllongagnier.triad.deckbuilder.view;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.GroupLayout;
+import javax.swing.JOptionPane;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JLabel;
+
+import com.dyllongagnier.triad.deckbuilder.controller.DeckWriter;
+
 import java.awt.Font;
+import java.io.File;
 
 public class DeckBuilderWindow extends JFrame
 {
+	private static final JFileChooser explorerWindow = new JFileChooser(System.getProperty("user.dir"));
+	private final DeckPanel deckPanel;
+	
 	public static void main(String[] args)
 	{
 		new DeckBuilderWindow().setVisible(true);
@@ -19,9 +28,11 @@ public class DeckBuilderWindow extends JFrame
 		this.setSize(450, 400);
 		setTitle("Deck Builder");
 		
-		DeckPanel deckPanel = new DeckPanel();
+		deckPanel = new DeckPanel();
 		
 		JButton btnSave = new JButton("Save");
+		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnSave.addActionListener((act) -> this.saveDeck());
 		
 		JLabel lblCard1 = new JLabel("Card 1:");
 		lblCard1.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -49,13 +60,21 @@ public class DeckBuilderWindow extends JFrame
 		
 		JLabel card9 = new JLabel("Card 9:");
 		card9.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		JButton btnClear = new JButton("Clear");
+		btnClear.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnClear.addActionListener((act) -> deckPanel.clearNames());
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(50)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnClear, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addComponent(card9)
@@ -94,13 +113,32 @@ public class DeckBuilderWindow extends JFrame
 							.addComponent(card8, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(card9, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(31, Short.MAX_VALUE))
+						.addComponent(deckPanel, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnClear, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(29, Short.MAX_VALUE))
 		);
 		getContentPane().setLayout(groupLayout);
 	}
+	
 	private static final long serialVersionUID = 1L;
+	
+	private void saveDeck()
+	{
+		int opened = DeckBuilderWindow.explorerWindow.showSaveDialog(this);
+		if (opened == JFileChooser.APPROVE_OPTION)
+		{
+			File file = explorerWindow.getSelectedFile();
+			try
+			{
+				DeckWriter.writeDeckToDisk(file.getAbsolutePath(), this.deckPanel.getNames());
+			}
+			catch (Exception e)
+			{
+				JOptionPane.showMessageDialog(this, "Error, could save deck to: " + file.getName() + ". " + e.getMessage());
+			}
+		}
+	}
 }

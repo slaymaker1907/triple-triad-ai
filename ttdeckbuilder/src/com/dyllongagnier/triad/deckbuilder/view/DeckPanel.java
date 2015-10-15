@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
@@ -27,6 +28,32 @@ public class DeckPanel extends JPanel
 			inputCards[i].setColumns(10);
 			inputCards[i].addKeyListener(new PredictiveTextListener(inputCards[i]));
 		}
+		this.clearNames();
+	}
+	
+	public String[] getNames()
+	{
+		ArrayList<String> result = new ArrayList<>();
+		for(JTextField textField : this.inputCards)
+		{
+			String text = textField.getText();
+			if (!text.equals(""))
+			{
+				if (!CardGuesser.isValidCard(text))
+					throw new IllegalArgumentException(text + " is not a card.");
+				result.add(text);
+			}
+		}
+		
+		if (result.size() < 5)
+			throw new IllegalArgumentException("A deck must contain five or more cards.");
+		return result.toArray(new String[0]);
+	}
+	
+	public void clearNames()
+	{
+		for(JTextField textField : this.inputCards)
+			textField.setText("");
 	}
 	
 	public static class PredictiveTextListener implements KeyListener
@@ -64,7 +91,8 @@ public class DeckPanel extends JPanel
 		
 		private boolean canPredict()
 		{
-			boolean result = System.currentTimeMillis() - this.lastPredict > 100;
+			// Wait just a little bit to ensure a smooth user interaction.
+			boolean result = System.currentTimeMillis() - this.lastPredict > 75;
 			if (result)
 				this.lastPredict = System.currentTimeMillis();
 			return result;
