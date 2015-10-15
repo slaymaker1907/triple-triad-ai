@@ -171,4 +171,9 @@ public class CardWindow extends JPanel implements Transferable
 		else
 			throw new UnsupportedFlavorException(flavor);
 	}
+	
+	public void setLastPlayedCard(int index)
+	{
+		throw new UnsupportedOperationException();
+	}
 }

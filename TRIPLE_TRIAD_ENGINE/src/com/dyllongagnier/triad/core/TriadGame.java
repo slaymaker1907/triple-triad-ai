@@ -17,6 +17,7 @@ public class TriadGame
 	protected Player currentPlayer;
 	protected BoardState currentState;
 	protected int turnCount;
+	private PossibleMove lastMove;
 
 	private final EnumMap<Player, GameAgent> gameAgentMap;
 	protected final GameListener listener;
@@ -99,7 +100,7 @@ public class TriadGame
 			throw new IllegalArgumentException();
 		this.currentState = this.currentState.playCard(this.currentPlayer,
 				card, row, col);
-
+		this.lastMove = new PossibleMove(card, row, col);
 		this.changeTurn();
 	}
 
@@ -171,5 +172,10 @@ public class TriadGame
 	public TriadGame clone(GameListener listener)
 	{
 		return new TriadGame(this, listener);
+	}
+	
+	public PossibleMove getLastMove()
+	{
+		return this.lastMove;
 	}
 }
