@@ -2,6 +2,7 @@ package com.dyllongagnier.triad.gui.controller;
 
 import javax.swing.SwingUtilities;
 
+import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.core.GameListener;
 import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.gui.view.MainWindow;
@@ -17,6 +18,10 @@ public class GUIListener implements GameListener
 			{
 				MainWindow.getMainWindow().allowDraggingFromHand(newState.getCurrentPlayer(), true);
 				MainWindow.getMainWindow().setCanDropToField(true);
+			}
+			else
+			{
+				MainWindow.getMainWindow().setCurrentTurn(Player.NONE);
 			}
 		};
 	}

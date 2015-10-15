@@ -35,6 +35,7 @@ public class MainWindow extends JFrame
 	private CardCollection selfHand, opponentHand, currentField;
 	private static final JFileChooser explorerWindow = new JFileChooser(System.getProperty("user.dir"));
 	private static MainWindow mainWindow;
+	public CurrentTurnIndicator currentTurnIndicatorSelf, currentTurnIndicatorOpponent;
 	
 	private final TriadSettings settings = new TriadSettings();
 	
@@ -53,6 +54,7 @@ public class MainWindow extends JFrame
 	{
 		setTitle("Triple Triad Simulator");
 		this.init();
+		this.setCurrentTurn(Player.NONE);
 	}
 	
 	private static class WindowExit implements WindowListener
@@ -132,6 +134,10 @@ public class MainWindow extends JFrame
 		JButton btnDeckBuilder = new JButton("Deck Builder");
 		btnDeckBuilder.addActionListener((act) -> new DeckBuilderWindow().setVisible(true));
 		
+		currentTurnIndicatorSelf = new CurrentTurnIndicator(Player.SELF);
+		
+		currentTurnIndicatorOpponent = new CurrentTurnIndicator(Player.OPPONENT);
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -144,8 +150,10 @@ public class MainWindow extends JFrame
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(playerAI)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(playerManual)))
-					.addGap(31)
+							.addComponent(playerManual)
+							.addGap(18)
+							.addComponent(currentTurnIndicatorSelf, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+					.addGap(30)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(currentField, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -154,33 +162,38 @@ public class MainWindow extends JFrame
 							.addComponent(btnStart)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnDeckBuilder)))
-					.addPreferredGap(ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGap(25)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(opponentLoadDeck, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(opponentAI, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(opponentManual, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE))
+							.addComponent(opponentManual)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(currentTurnIndicatorOpponent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addComponent(opponentHand, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
+					.addContainerGap(19, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap(18, Short.MAX_VALUE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(selfLoadDeck)
-							.addComponent(opponentLoadDeck)
-							.addComponent(btnGameSettings)
-							.addComponent(playerAI)
-							.addComponent(playerManual)
-							.addComponent(btnStart)
-							.addComponent(btnDeckBuilder))
-						.addComponent(opponentAI)
-						.addComponent(opponentManual))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(currentTurnIndicatorSelf, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addComponent(currentTurnIndicatorOpponent, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+							.addComponent(opponentManual)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(selfLoadDeck)
+								.addComponent(opponentLoadDeck)
+								.addComponent(btnGameSettings)
+								.addComponent(playerAI)
+								.addComponent(playerManual)
+								.addComponent(btnStart)
+								.addComponent(btnDeckBuilder))
+							.addComponent(opponentAI)))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(currentField, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
 						.addComponent(opponentHand, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
@@ -215,6 +228,7 @@ public class MainWindow extends JFrame
 	
 	public void displayBoardState(TriadGame game)
 	{
+		this.setCurrentTurn(game.getCurrentPlayer());
 		BoardState state = game.getCurrentState();
 		this.displayField(state.playedCards);
 		this.setHand(Player.SELF, state.getHand(Player.SELF));
@@ -293,6 +307,25 @@ public class MainWindow extends JFrame
 		}
 		this.validate();
 		this.repaint();
+	}
+	
+	public void setCurrentTurn(Player player)
+	{
+		switch(player)
+		{
+			case SELF:
+				this.currentTurnIndicatorSelf.setVisible(true);
+				this.currentTurnIndicatorOpponent.setVisible(false);
+				break;
+			case OPPONENT:
+				this.currentTurnIndicatorSelf.setVisible(false);
+				this.currentTurnIndicatorOpponent.setVisible(true);
+				break;
+			default:
+				this.currentTurnIndicatorSelf.setVisible(false);
+				this.currentTurnIndicatorOpponent.setVisible(false);
+				break;
+		}
 	}
 	
 	private static void setAIButtonEvents(JRadioButton ai, JRadioButton manual, Player player)

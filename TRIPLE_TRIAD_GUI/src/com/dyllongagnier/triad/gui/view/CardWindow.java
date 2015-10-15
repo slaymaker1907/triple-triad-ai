@@ -39,6 +39,8 @@ public class CardWindow extends JPanel implements Transferable
 			this.init();
 		handler = new CardDragHandler(this);
 		dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, handler);
+		this.setToolTipText(card.name);
+		ToolTipManager.sharedInstance().setInitialDelay(0);
 	}
 	
 	public void setCanDrag(boolean canDrag)
@@ -70,22 +72,7 @@ public class CardWindow extends JPanel implements Transferable
 		this.setColor(this.card.holdingPlayer);
 	}
 	
-	private JLabel getAscensionDisplay()
-	{
-		int bonus = Math.abs(this.ascensionBonus);
-		String text;
-		if (this.ascensionBonus < 0)
-			text = "-" + bonus;
-		else if (this.ascensionBonus > 0)
-			text = "+" + bonus;
-		else
-			text = "";
-		JLabel result = new JLabel(text);
-		result.setHorizontalAlignment(SwingConstants.CENTER);
-		return result;
-	}
-	
-	private void setColor(Player player)
+	public static Color getPlayerColor(Player player)
 	{
 		Color toSet;
 		switch(player)
@@ -103,6 +90,28 @@ public class CardWindow extends JPanel implements Transferable
 				toSet = new Color(204, 204, 204);
 				break;
 		}
+		
+		return toSet;
+	}
+	
+	private JLabel getAscensionDisplay()
+	{
+		int bonus = Math.abs(this.ascensionBonus);
+		String text;
+		if (this.ascensionBonus < 0)
+			text = "-" + bonus;
+		else if (this.ascensionBonus > 0)
+			text = "+" + bonus;
+		else
+			text = "";
+		JLabel result = new JLabel(text);
+		result.setHorizontalAlignment(SwingConstants.CENTER);
+		return result;
+	}
+	
+	private void setColor(Player player)
+	{
+		Color toSet = CardWindow.getPlayerColor(player);
 		this.setBackground(toSet);
 	}
 	
