@@ -3,7 +3,6 @@ package com.dyllongagnier.triad.core;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -182,17 +181,9 @@ public class BoardState
 		ArrayList<UndeployedCard> selfCards = boardFunc.apply(Player.SELF);
 		ArrayList<UndeployedCard> opponentCards = boardFunc
 				.apply(Player.OPPONENT);
-		switch(this.firstPlayer)
-		{
-			case SELF:
-				opponentCards.addAll(this.getHand(Player.OPPONENT));
-				break;
-			case OPPONENT:
-				selfCards.addAll(this.getHand(Player.SELF));
-				break;
-			default:
-				throw new RuntimeException("Player must be SELF or OPPONENT.");
-		}
+		
+		opponentCards.addAll(this.getHand(Player.OPPONENT));
+		selfCards.addAll(this.getHand(Player.SELF));
 
 		return (player) ->
 		{
