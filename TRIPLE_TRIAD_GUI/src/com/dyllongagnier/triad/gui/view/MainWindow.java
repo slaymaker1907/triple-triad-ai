@@ -22,6 +22,7 @@ import com.dyllongagnier.triad.core.AscensionField;
 import com.dyllongagnier.triad.core.BoardState;
 import com.dyllongagnier.triad.core.Field;
 import com.dyllongagnier.triad.core.TriadGame;
+import com.dyllongagnier.triad.deckbuilder.view.DeckBuilderWindow;
 import com.dyllongagnier.triad.gui.controller.Players;
 
 public class MainWindow extends JFrame
@@ -126,6 +127,9 @@ public class MainWindow extends JFrame
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener((act) -> Players.startNewGame());
 		
+		JButton btnDeckBuilder = new JButton("Deck Builder");
+		btnDeckBuilder.addActionListener((act) -> new DeckBuilderWindow().setVisible(true));
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -145,7 +149,9 @@ public class MainWindow extends JFrame
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(btnGameSettings)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnStart)))
+							.addComponent(btnStart)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnDeckBuilder)))
 					.addPreferredGap(ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -168,7 +174,8 @@ public class MainWindow extends JFrame
 							.addComponent(btnGameSettings)
 							.addComponent(playerAI)
 							.addComponent(playerManual)
-							.addComponent(btnStart))
+							.addComponent(btnStart)
+							.addComponent(btnDeckBuilder))
 						.addComponent(opponentAI)
 						.addComponent(opponentManual))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
