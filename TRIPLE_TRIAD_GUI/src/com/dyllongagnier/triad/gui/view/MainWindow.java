@@ -249,7 +249,6 @@ public class MainWindow extends JFrame
 	
 	public void setHand(Player player, Iterable<UndeployedCard> hand)
 	{
-		int i = 0;
 		CardCollection col;
 		switch(player)
 		{
@@ -262,15 +261,15 @@ public class MainWindow extends JFrame
 			default:
 				throw new IllegalArgumentException();
 		}
+		for(int i = 0; i < 9; i++)
+			col.setCard(new CardWindow(), i);
 		
 		for(UndeployedCard card : hand)
 		{
 			assert card.isVisible();
-			col.setCard(new CardWindow(card.deploy(), 0), i++);
+			// Use the hashcode to determine position (kind of hacky fix).
+			col.setCard(new CardWindow(card.deploy(), 0), card.hashCode());
 		}
-		
-		for(; i < 9; i++)
-			col.setCard(new CardWindow(), i);
 		this.validate();
 		this.repaint();
 	}
