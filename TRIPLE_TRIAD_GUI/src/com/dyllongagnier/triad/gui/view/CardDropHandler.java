@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 import javax.swing.JOptionPane;
 
+import com.dyllongagnier.triad.card.OrderedCard;
 import com.dyllongagnier.triad.gui.controller.Players;
 
 public class CardDropHandler implements DropTargetListener, Serializable
@@ -61,7 +62,7 @@ public class CardDropHandler implements DropTargetListener, Serializable
 				DropTargetContext context = dtde.getDropTargetContext();
 				CardCollection comp = (CardCollection)context.getComponent();
 				Container parent = comp.getParent();
-				Players.makeMove(CardCollection.getMoveFromIndex(comp.getCardMouseLocation(), card.card));
+				Players.makeMove(CardCollection.getMoveFromIndex(comp.getCardMouseLocation(), new OrderedCard(card.card, card.cardLocation)));
 				if (parent != null)
 					parent.remove(card);
 				comp.setCard(card, comp.getCardMouseLocation());
@@ -76,6 +77,7 @@ public class CardDropHandler implements DropTargetListener, Serializable
 				dtde.rejectDrop();
 				dtde.dropComplete(false);
 				JOptionPane.showMessageDialog(MainWindow.getMainWindow(), "Invalid move.", "Invalid Move Error", JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
 			}
 		}
 		else

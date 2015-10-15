@@ -66,6 +66,7 @@ public class CardDragHandler implements DragGestureListener, DragSourceListener,
 		{
 			this.oldParent = (CardCollection)this.card.getParent();
 			this.location = this.oldParent.getCardLocation(this.card);
+			this.card.cardLocation = this.location;
 			this.oldParent.setCard(new CardWindow(), this.location);
 			this.oldParent.validate();
 			this.oldParent.repaint();

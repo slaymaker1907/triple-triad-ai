@@ -27,6 +27,8 @@ public class CardWindow extends JPanel implements Transferable
 	private final DragGestureRecognizer dgr;
 	private final CardDragHandler handler;
 	private final int ascensionBonus;
+	
+	public int cardLocation;
 
 	public CardWindow(Card card, int ascensionBonus)
 	{

@@ -8,7 +8,7 @@ import java.awt.dnd.DropTarget;
 
 import javax.swing.JPanel;
 
-import com.dyllongagnier.triad.card.Card;
+import com.dyllongagnier.triad.card.OrderedCard;
 import com.dyllongagnier.triad.core.PossibleMove;
 
 
@@ -110,10 +110,10 @@ public class CardCollection extends JPanel
 		return -1;
 	}
 	
-	public static PossibleMove getMoveFromIndex(int index, Card card)
+	public static PossibleMove getMoveFromIndex(int index, OrderedCard orderedCard)
 	{
 		int row = index / 3;
 		int col = index % 3;
-		return new PossibleMove(card, row, col);
+		return new PossibleMove(orderedCard, row, col);
 	}
 }

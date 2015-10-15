@@ -83,7 +83,7 @@ public class GUIAgent implements GameAgent
 	{
 		if (this.currentGame == null)
 			throw new InvalidPlayerException();
-		else if (!(move.toPlay instanceof Card))
+		else if (!(move.toPlay.isVisible()))
 			throw new IllegalArgumentException("Move to play must be of a concrete Card.");
 			
 		this.lastMove = move;
