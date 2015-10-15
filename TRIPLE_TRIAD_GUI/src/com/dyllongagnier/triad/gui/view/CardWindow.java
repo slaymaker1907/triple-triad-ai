@@ -62,14 +62,31 @@ public class CardWindow extends JPanel implements Transferable
 		this.setLayout(new GridLayout(3, 3));
 		this.add("upperleft", new JLabel());
 		this.add("uppermid", CardWindow.makeLabel(this.card.north));
-		this.add("upperright", this.getAscensionDisplay());
+		this.add("upperright", CardWindow.makeLabel(this.card.cardType, this.card.holdingPlayer));
 		this.add("midleft", CardWindow.makeLabel(this.card.west));
-		this.add("center", CardWindow.makeLabel(this.card.cardType));
+		this.add("center", this.getAscensionDisplay());
 		this.add("midright", CardWindow.makeLabel(this.card.east));
 		this.add("lowerleft", new JLabel());
 		this.add("lowermid", CardWindow.makeLabel(this.card.south));
 		this.add("lowerright", new JLabel());
 		this.setColor(this.card.holdingPlayer);
+	}
+	
+	public static Color getTypeColor(Card.Type type, Player player)
+	{
+		switch(type)
+		{
+			case BEASTMAN:
+				return Color.GREEN;
+			case GARLEAN:
+				return Color.LIGHT_GRAY;
+			case PRIMAL:
+				return Color.RED;
+			case SCION:
+				return Color.YELLOW;
+			default:
+				return CardWindow.getPlayerColor(player);
+		}
 	}
 	
 	public static Color getPlayerColor(Player player)
@@ -144,9 +161,11 @@ public class CardWindow extends JPanel implements Transferable
 		}
 	}
 	
-	private static JLabel makeLabel(Card.Type type)
+	private static JLabel makeLabel(Card.Type type, Player player)
 	{
 		JLabel result = new JLabel(CardWindow.getAscensionIcon(type));
+		result.setBackground(CardWindow.getTypeColor(type, player));
+		result.setOpaque(true);
 		result.setHorizontalAlignment(SwingConstants.CENTER);
 		return result;
 	}
