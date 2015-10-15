@@ -252,6 +252,31 @@ public class BoardState
 			this.ascensionRule = AscensionRule.NONE;
 			this.isSuddenDeath = this.isReverse = this.isPlus = this.isSame = this.isCombo = false;
 		}
+		
+		public Builder(Builder other)
+		{
+			this();
+			this.isCombo = other.isCombo;
+			this.isFallenAce = other.isFallenAce;
+			this.isPlus = other.isPlus;
+			this.isReverse = other.isReverse;
+			this.isSame = other.isSame;
+			this.isSuddenDeath = other.isSuddenDeath;
+			this.setAscensionTransform(this.getAscensionRule());
+			this.setHand(Player.SELF, other.copyPlayerHand(Player.SELF));
+			this.setHand(Player.OPPONENT, other.copyPlayerHand(Player.OPPONENT));
+			this.setIsOrder(other.isOrder);
+		}
+		
+		private UndeployedCard[] copyPlayerHand(Player player)
+		{
+			SortedSet<UndeployedCard> cards = this.playerHands.get(player);
+			UndeployedCard[] result = new UndeployedCard[cards.size()];
+			int i = 0;
+			for(UndeployedCard card : cards)
+				result[i++] = card;
+			return result;
+		}
 
 		/**
 		 * This method sets isOrder. If isOrder is true, then an extra check is
@@ -351,10 +376,8 @@ public class BoardState
 			assert cards != null;
 			assert player != Player.NONE;
 			assert assertAllCardsNonNull(cards);
-
-			Set<UndeployedCard> playerCards = playerHands.get(player);
-			playerCards.clear();
-			playerCards.addAll(Arrays.asList(cards));
+			
+			this.playerHands.put(player, new TreeSet<>(Arrays.asList(cards)));
 			return this;
 		}
 		

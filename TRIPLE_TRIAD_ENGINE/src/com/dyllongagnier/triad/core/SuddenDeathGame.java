@@ -24,8 +24,7 @@ public class SuddenDeathGame extends TriadGame
 	{
 		super(game, listener);
 		this.firstPlayerGen = firstPlayerGen.clone();
-		this.builder = builder; // This should be safe for now, no need for
-								// defensive copying since only hand is mutated.
+		this.builder = builder;
 	}
 
 	@Override
@@ -38,8 +37,7 @@ public class SuddenDeathGame extends TriadGame
 	@Override
 	public TriadGame clone(GameListener listener)
 	{
-		return new SuddenDeathGame(this, listener, this.firstPlayerGen,
-				this.builder);
+		return new SuddenDeathGame(this, listener, this.firstPlayerGen, this.builder);
 	}
 
 	@Override
@@ -54,10 +52,11 @@ public class SuddenDeathGame extends TriadGame
 			// No winner so need to set up new game.
 			Function<Player, UndeployedCard[]> cardFunc = this
 					.getCurrentState().getCardsUnderPlayers();
-			this.builder.setHand(Player.SELF, cardFunc.apply(Player.SELF));
-			this.builder.setHand(Player.OPPONENT,
+			BoardState.Builder newBuilder = new BoardState.Builder(this.builder);
+			newBuilder.setHand(Player.SELF, cardFunc.apply(Player.SELF));
+			newBuilder.setHand(Player.OPPONENT,
 					cardFunc.apply(Player.OPPONENT));
-			this.init(this.firstPlayerGen.get(), this.builder);
+			new SuddenDeathGame(this.firstPlayerGen, newBuilder, this.getGameAgent(Player.SELF), this.getGameAgent(Player.OPPONENT), this.listener).startGame();
 		}
 	}
 }
