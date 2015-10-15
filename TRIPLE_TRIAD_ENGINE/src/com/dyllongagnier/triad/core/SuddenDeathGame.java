@@ -31,13 +31,13 @@ public class SuddenDeathGame extends TriadGame
 	public TriadGame clone()
 	{
 		return new SuddenDeathGame(this, TriadGame.defaultListener,
-				this.firstPlayerGen.clone(), this.builder);
+				this.firstPlayerGen, this.builder);
 	}
 
 	@Override
 	public TriadGame clone(GameListener listener)
 	{
-		return new SuddenDeathGame(this, listener, this.firstPlayerGen.clone(), this.builder);
+		return new SuddenDeathGame(this, listener, this.firstPlayerGen, this.builder);
 	}
 
 	@Override

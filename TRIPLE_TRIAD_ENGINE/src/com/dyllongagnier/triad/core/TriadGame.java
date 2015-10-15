@@ -138,7 +138,10 @@ public class TriadGame
 				for (int col = 0; col < 3; col++)
 					if (this.moveValidator.apply(this.currentState, card,
 							this.currentPlayer, row, col))
+					{
+						assert this.currentState.getHand(this.currentPlayer).contains(card);
 						result.add(new PossibleMove(card, row, col));
+					}
 
 		return result;
 	}
