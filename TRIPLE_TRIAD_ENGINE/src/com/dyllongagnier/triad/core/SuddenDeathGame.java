@@ -2,6 +2,7 @@ package com.dyllongagnier.triad.core;
 
 import java.util.function.Function;
 
+import com.dyllongagnier.triad.card.OrderedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
 
@@ -50,8 +51,7 @@ public class SuddenDeathGame extends TriadGame
 		} else
 		{
 			// No winner so need to set up new game.
-			Function<Player, UndeployedCard[]> cardFunc = this
-					.getCurrentState().getCardsUnderPlayers();
+			Function<Player, UndeployedCard[]> cardFunc = (player) -> OrderedCard.convertToOrderedCard(this.getCurrentState().getCardsUnderPlayers().apply(player));
 			BoardState.Builder newBuilder = new BoardState.Builder(this.builder);
 			newBuilder.setHand(Player.SELF, cardFunc.apply(Player.SELF));
 			newBuilder.setHand(Player.OPPONENT,
@@ -60,6 +60,7 @@ public class SuddenDeathGame extends TriadGame
 			assert cardFunc.apply(Player.SELF).length >= 5;
 			assert cardFunc.apply(Player.OPPONENT).length >= 5;
 			
+			this.listener.gameChanged(this);
 			this.init(this.firstPlayerGen.get(), newBuilder);
 			this.listener.gameChanged(this);
 			this.startTurn();

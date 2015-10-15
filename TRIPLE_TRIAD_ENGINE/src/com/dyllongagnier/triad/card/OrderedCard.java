@@ -70,4 +70,11 @@ public class OrderedCard implements UndeployedCard
 	{
 		return this.order;
 	}
+	
+	public static UndeployedCard[] convertToOrderedCard(UndeployedCard[] cards)
+	{
+		for(int i = 0; i < cards.length; i++)
+			cards[i] = new OrderedCard(cards[i].deploy(), i);
+		return cards;
+	}
 }
