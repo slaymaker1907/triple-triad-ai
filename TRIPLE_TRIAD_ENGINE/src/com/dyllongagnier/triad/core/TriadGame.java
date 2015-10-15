@@ -10,7 +10,7 @@ import com.dyllongagnier.triad.core.functions.MoveValidator;
 
 public class TriadGame
 {
-	protected static final GameListener defaultListener = new DefaultListener();
+	public static final GameListener defaultListener = new DefaultListener();
 
 	public final MoveValidator moveValidator;
 
