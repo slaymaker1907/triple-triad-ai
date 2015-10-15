@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.function.Function;
 
 import javax.json.Json;
@@ -56,11 +55,10 @@ public class HandFactory
 					"Invalid file: can not have more than 5 guaranteed cards");
 
 		ArrayList<UndeployedCard> result = new ArrayList<>();
-		HashSet<Card> inHand = new HashSet<>();
-
+		int handSize = 0;
 		for (JsonValue cardName : guaranteed)
 		{
-			result.add(getCardSafely(cardName, player, inHand));
+			result.add(getCardSafely(cardName, player, handSize++));
 		}
 
 		JsonArray randomized = ob.getJsonArray("maybe");
@@ -70,7 +68,7 @@ public class HandFactory
 
 		for (JsonValue cardName : randomized)
 		{
-			result.add(getCardSafely(cardName, player, inHand));
+			result.add(getCardSafely(cardName, player, handSize++));
 		}
 		
 		return result.toArray(new UndeployedCard[result.size()]);
@@ -96,20 +94,16 @@ public class HandFactory
 	 *            one's hand.
 	 * @return A valid card.
 	 */
-	private static Card getCardSafely(JsonValue cardName, Player player,
-			HashSet<Card> alreadyInHand)
+	private static OrderedCard getCardSafely(JsonValue cardName, Player player, int handSize)
 	{
 		assert player != Player.NONE;
 		Card toAdd = CardList.getCard(((JsonString) cardName).getString());
 		if (toAdd == null)
 			throw new IllegalArgumentException(
 					((JsonString) cardName).getString() + " is not a card.");
-		else if (alreadyInHand.contains(toAdd))
-			throw new IllegalArgumentException("Duplicate card:" + toAdd.name);
 		else
 		{
-			alreadyInHand.add(toAdd);
-			return toAdd.setHoldingPlayer(player);
+			return new OrderedCard(toAdd.setHoldingPlayer(player), handSize);
 		}
 	}
 }
