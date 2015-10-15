@@ -82,11 +82,16 @@ public class DeckPanel extends JPanel
 		{
 			String original = this.textField.getText();
 			String match = CardGuesser.getClosestMatch(original);
-			if (match != null && !original.equals("") && this.canPredict())
+			if (match != null && !original.equals("") && this.canPredict() && this.isValidChar(e.getKeyCode()))
 			{
 				this.textField.setText(match);
 				this.textField.select(original.length(), match.length());
 			}
+		}
+		
+		public boolean isValidChar(int character)
+		{
+			return character >= 32 && character <= 126;
 		}
 		
 		private boolean canPredict()
