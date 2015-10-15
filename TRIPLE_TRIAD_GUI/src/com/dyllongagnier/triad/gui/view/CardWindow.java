@@ -172,8 +172,11 @@ public class CardWindow extends JPanel implements Transferable
 			throw new UnsupportedFlavorException(flavor);
 	}
 	
-	public void setLastPlayedCard(int index)
+	public void setLastPlayedCard(boolean lastPlayed)
 	{
-		throw new UnsupportedOperationException();
+		if (lastPlayed)
+			this.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+		else
+			this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
 }

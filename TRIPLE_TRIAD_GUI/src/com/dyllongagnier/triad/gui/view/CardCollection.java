@@ -94,6 +94,11 @@ public class CardCollection extends JPanel
 		this.addCards();
 	}
 	
+	public CardWindow getCard(int row, int col)
+	{
+		return this.cards[row * 3 + col];
+	}
+	
 	public int getCardLocation(CardWindow card)
 	{
 		for(int i = 0; i < this.cards.length; i++)
@@ -115,5 +120,12 @@ public class CardCollection extends JPanel
 		int row = index / 3;
 		int col = index % 3;
 		return new PossibleMove(orderedCard, row, col);
+	}
+	
+	public void setLastPlayed(int row, int col)
+	{
+		for(CardWindow card : this.cards)
+			card.setLastPlayedCard(false);
+		this.getCard(row, col).setLastPlayedCard(true);
 	}
 }

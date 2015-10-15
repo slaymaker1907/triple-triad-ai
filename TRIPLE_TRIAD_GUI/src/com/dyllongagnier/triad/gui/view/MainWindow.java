@@ -21,8 +21,10 @@ import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.AscensionField;
 import com.dyllongagnier.triad.core.BoardState;
 import com.dyllongagnier.triad.core.Field;
+import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.deckbuilder.view.DeckBuilderWindow;
+import com.dyllongagnier.triad.gui.controller.InvalidPlayerException;
 import com.dyllongagnier.triad.gui.controller.Players;
 
 public class MainWindow extends JFrame
@@ -220,6 +222,25 @@ public class MainWindow extends JFrame
 		this.setCanDropToField(false);
 		this.allowDraggingFromHand(Player.SELF, false);
 		this.allowDraggingFromHand(Player.OPPONENT, false);
+		
+		PossibleMove lastMove = game.getLastMove();
+		if (lastMove != null)
+		{
+			this.currentField.setLastPlayed(lastMove.row, lastMove.col);
+		}
+	}
+	
+	public CardCollection getHand(Player player)
+	{
+		switch(player)
+		{
+			case SELF:
+				return this.selfHand;
+			case OPPONENT:
+				return this.opponentHand;
+			default:
+				throw new InvalidPlayerException();
+		}
 	}
 	
 	private void displayField(Field field)
