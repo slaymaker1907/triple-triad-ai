@@ -2,15 +2,11 @@ package com.dyllongagnier.triad.deckbuilder.view;
 
 import javax.swing.JPanel;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter.HighlightPainter;
 
 import com.dyllongagnier.triad.deckbuilder.controller.CardGuesser;
 
@@ -36,28 +32,17 @@ public class DeckPanel extends JPanel
 	public static class PredictiveTextListener implements KeyListener
 	{
 		private final JTextField textField;
+		private long lastPredict;
 		
 		public PredictiveTextListener(JTextField textField)
 		{
 			this.textField = textField;
+			this.lastPredict = System.currentTimeMillis();
 		}
 		
 		@Override
 		public void keyTyped(KeyEvent e)
 		{
-			String original = this.textField.getText();
-			String match = CardGuesser.getClosestMatch(original);
-			if (match != null && !original.equals(""))
-			{
-				HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
-				try
-				{
-					this.textField.getHighlighter().addHighlight(original.length(), match.length(), painter);
-				} catch (BadLocationException e1)
-				{
-					e1.printStackTrace();
-				}
-			}
 		}
 
 		@Override
@@ -68,6 +53,21 @@ public class DeckPanel extends JPanel
 		@Override
 		public void keyReleased(KeyEvent e)
 		{
+			String original = this.textField.getText();
+			String match = CardGuesser.getClosestMatch(original);
+			if (match != null && !original.equals("") && this.canPredict())
+			{
+				this.textField.setText(match);
+				this.textField.select(original.length(), match.length());
+			}
+		}
+		
+		private boolean canPredict()
+		{
+			boolean result = System.currentTimeMillis() - this.lastPredict > 100;
+			if (result)
+				this.lastPredict = System.currentTimeMillis();
+			return result;
 		}
 	}
 }
