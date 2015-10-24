@@ -75,7 +75,11 @@ public class GUIAgent implements GameAgent
 			MainWindow.getMainWindow().setCanDropToField(true);
 		}
 		else
+		{
+			MainWindow.getMainWindow().allowDraggingFromHand(expectedPlayer, false);
+			MainWindow.getMainWindow().setCanDropToField(false);
 			Players.getDefaultAI().takeTurn(game);
+		}
 	}
 	
 	private void setCurrentGame(TriadGame game)
