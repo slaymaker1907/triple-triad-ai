@@ -83,6 +83,8 @@ public class TriadSettings extends JFrame
 			maxThinkTime.setText("8");
 		};
 		
+		reset.run();
+		
 		JButton btnOk = new JButton("OK");
 		btnOk.addActionListener((act) -> this.okEvent(executeOptions, reset));
 		
