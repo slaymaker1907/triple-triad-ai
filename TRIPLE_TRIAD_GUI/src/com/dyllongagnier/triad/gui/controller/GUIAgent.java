@@ -18,6 +18,10 @@ public class GUIAgent implements GameAgent
 	
 	public void setIsAI(boolean isAI)
 	{
+		if (this.isAI && !isAI)
+		{
+			Players.resetAI();
+		}
 		this.isAI = isAI;
 	}
 	

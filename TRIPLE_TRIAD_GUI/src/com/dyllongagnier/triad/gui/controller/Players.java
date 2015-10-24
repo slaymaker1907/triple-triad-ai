@@ -196,6 +196,12 @@ public class Players
 		((FastSearchAI)getDefaultAI()).setMoveTimeout(timeout);
 	}
 	
+	public static void resetAI()
+	{
+		((FastSearchAI)getDefaultAI()).destroy();
+		Players.defaultAI = new FastSearchAI(Players.maxThreads);
+	}
+	
 	/**
 	 * This method starts a new game.
 	 */
