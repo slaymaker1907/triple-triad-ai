@@ -1,0 +1,1 @@
+java -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC -XX:NewSize=1200m -XX:SurvivorRatio=16 -jar TripleTriadSimulator.jar
