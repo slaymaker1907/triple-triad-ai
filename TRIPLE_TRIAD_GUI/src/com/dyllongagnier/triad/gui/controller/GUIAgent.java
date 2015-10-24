@@ -22,17 +22,19 @@ public class GUIAgent implements GameAgent
 		{
 			Players.resetAI();
 		}
-		boolean isDiff = isAI;
+		boolean isDiff = isAI ^ this.isAI;
 		this.isAI = isAI;
 		if (isDiff && this.gameInProgress())
+		{
 			this.takeTurn(this.currentGame);
+		}
 	}
 	
 	public boolean gameInProgress()
 	{
 		if (currentGame == null)
 			return false;
-		return currentGame.getCurrentState().gameComplete();
+		return !currentGame.getCurrentState().gameComplete();
 	}
 	
 	public boolean isAI()
@@ -64,10 +66,9 @@ public class GUIAgent implements GameAgent
 	@Override
 	public synchronized void takeTurn(TriadGame game)
 	{
-		this.currentGame = game;
+		this.setCurrentGame(game);
 		if (!this.isAI)
 		{
-			Players.currentGame = game;
 			if (this.expectedPlayer != game.getCurrentPlayer())
 				throw new InvalidPlayerException();
 			MainWindow.getMainWindow().allowDraggingFromHand(expectedPlayer, true);
@@ -75,6 +76,12 @@ public class GUIAgent implements GameAgent
 		}
 		else
 			Players.getDefaultAI().takeTurn(game);
+	}
+	
+	private void setCurrentGame(TriadGame game)
+	{
+		Players.currentGame = game;
+		this.currentGame = game;
 	}
 	
 	public synchronized boolean canTakeTurn()
