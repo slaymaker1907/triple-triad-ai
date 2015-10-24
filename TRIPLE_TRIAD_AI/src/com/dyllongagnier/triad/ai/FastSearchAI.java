@@ -156,7 +156,7 @@ public class FastSearchAI implements GameAgent
 	}
 
 	private final ThreadPoolExecutor executor;
-	private final BooleanReference finishQuickly = new BooleanReference(false);
+	private final BooleanReference finishQuickly;
 
 	public FastSearchAI(int cores)
 	{
@@ -165,13 +165,13 @@ public class FastSearchAI implements GameAgent
 				comp);
 		this.executor = new ThreadPoolExecutor(cores, cores, Long.MAX_VALUE,
 				TimeUnit.DAYS, queue);
-
+		this.finishQuickly = new BooleanReference(queue::size);
 	}
 
 	public void setMoveTimeout(long timeout)
 	{
-		this.finishQuickly.setMaxTime(timeout);
 		this.finishQuickly.set(false);
+		this.finishQuickly.setMaxTime(timeout);
 	}
 
 	@Override

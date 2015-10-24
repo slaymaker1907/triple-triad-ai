@@ -1,66 +1,71 @@
 package com.dyllongagnier.triad.ai;
 
+import java.util.function.Supplier;
+
 public class BooleanReference
 {
 	private volatile boolean value;
-	private volatile TimerThread currentThread;
+	private final HitCounter counter = new HitCounter();
+	private long maxTime, startTime;
+	private final Supplier<Integer> getQueueSize;
+	private double nodesPerMilli;
 	
-	private class TimerThread extends Thread
-	{
-		private final long timeout;
-		private volatile boolean timerValid;
-		
-		public TimerThread(long timeout)
-		{
-			this.timeout = timeout;
-			this.timerValid = true;
-		}
-		
-		@Override
-		public void run()
-		{
-			try
-			{
-				Thread.sleep(timeout);
-			} catch (InterruptedException e)
-			{
-			}
-			
-			if (timerValid)
-				set(true);
-		}
-		
-		public void invalidate()
-		{
-			timerValid = false;
-		}
-	}
+	private static final double SLOWEST_THINK_TIME = 100;
 	
-	public BooleanReference()
+	public BooleanReference(Supplier<Integer> getQueueSize)
 	{
-		this.value = false;
-	}
-	
-	public BooleanReference(boolean value)
-	{
-		this.value = value;
+		this.getQueueSize = getQueueSize;
+		this.setMaxTime(Long.MAX_VALUE);
+		this.nodesPerMilli = SLOWEST_THINK_TIME;
 	}
 	
 	public boolean get()
 	{
+		this.updateCounter();
 		return this.value;
+	}
+	
+	private void updateCounter()
+	{
+		if (!this.value && this.calculationOver())
+		{
+			this.value = true;
+			this.counter.startTimer(this.getQueueSize.get());
+		}
+	}
+	
+	private boolean calculationOver()
+	{
+		long elapsedTime = this.getElapsedTime();
+		long expectedDelay = (long)(this.getQueueSize.get() / this.nodesPerMilli);
+		long adjustedTime = elapsedTime + expectedDelay;
+		return adjustedTime > this.maxTime;
+	}
+	
+	private long getElapsedTime()
+	{
+		return System.currentTimeMillis() - this.startTime;
 	}
 	
 	public void set(boolean value)
 	{
+		if (this.value && !value)
+		{
+			this.setEstimation();
+		}
 		this.value = value;
 	}
 	
-	public void setMaxTime(long timeout)
+	private void setEstimation()
 	{
-		if (this.currentThread != null)
-			this.currentThread.invalidate();
-		this.currentThread = new TimerThread(timeout);
-		this.currentThread.start();
+		double newTime = this.counter.stopTimer();
+		if (newTime > BooleanReference.SLOWEST_THINK_TIME)
+			this.nodesPerMilli = newTime;
+	}
+	
+	public synchronized void setMaxTime(long timeout)
+	{
+		this.maxTime = timeout;
+		this.startTime = System.currentTimeMillis();
 	}
 }
