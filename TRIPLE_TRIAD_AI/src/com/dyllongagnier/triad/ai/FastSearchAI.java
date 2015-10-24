@@ -185,4 +185,9 @@ public class FastSearchAI implements GameAgent
 	{
 		return this;
 	}
+	
+	public void destroy()
+	{
+		this.executor.shutdownNow();
+	}
 }
