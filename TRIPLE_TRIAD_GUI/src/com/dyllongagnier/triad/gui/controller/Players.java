@@ -161,6 +161,11 @@ public class Players
 		Players.gameBuilder.setIsOrder(isOrder);
 	}
 	
+	public static boolean getIsOrder()
+	{
+		return Players.gameBuilder.getIsOrder();
+	}
+	
 	public static void setDefaultOptions()
 	{
 		Players.gameBuilder = new BoardState.Builder();
