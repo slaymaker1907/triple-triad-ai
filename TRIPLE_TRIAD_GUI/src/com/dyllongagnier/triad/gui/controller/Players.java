@@ -10,6 +10,7 @@ import com.dyllongagnier.triad.ai.FastSearchAI;
 import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.HandFactory;
+import com.dyllongagnier.triad.card.OrderedCard;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.RandomCard;
 import com.dyllongagnier.triad.card.UndeployedCard;
@@ -83,7 +84,7 @@ public class Players
 		{
 			case SELF:
 			case OPPONENT:
-				UndeployedCard[] result = CardList.generateHand(player, deck);
+				UndeployedCard[] result = OrderedCard.convertToOrderedCard(CardList.generateHand(player, deck));
 				Players.gameBuilder.setHand(player, result);
 				return Arrays.asList(result);
 			default:
