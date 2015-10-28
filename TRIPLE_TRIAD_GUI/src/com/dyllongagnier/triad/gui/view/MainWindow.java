@@ -98,7 +98,7 @@ public class MainWindow extends JFrame
 	
 	private void init()
 	{
-		this.setSize(1000, 402);
+		this.setSize(1000, 437);
 		this.addWindowListener(new WindowExit());
 		
 		selfHand = new CardCollection();
@@ -138,47 +138,62 @@ public class MainWindow extends JFrame
 		
 		currentTurnIndicatorOpponent = new CurrentTurnIndicator(Player.OPPONENT);
 		
+		JButton quickLoadSelf = new JButton("QuickLoad");
+		
+		JButton quickLoadOpp = new JButton("QuickLoad");
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(selfHand, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(selfLoadDeck)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(playerAI)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(playerManual)
-							.addGap(18)
-							.addComponent(currentTurnIndicatorSelf, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-					.addGap(30)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(currentField, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(selfHand, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(selfLoadDeck)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(playerAI)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(playerManual)
+									.addGap(18)
+									.addComponent(currentTurnIndicatorSelf, GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)))
+							.addGap(30)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(currentField, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(btnGameSettings)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnStart)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnDeckBuilder)))
+							.addGap(25))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnGameSettings)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnStart)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnDeckBuilder)))
-					.addGap(25)
+							.addComponent(quickLoadSelf, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+							.addGap(574)))
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(opponentHand, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(opponentLoadDeck, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(quickLoadOpp, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(opponentLoadDeck, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(opponentAI, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(opponentManual)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(currentTurnIndicatorOpponent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addComponent(opponentHand, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE))
+							.addComponent(currentTurnIndicatorOpponent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
 					.addContainerGap(19, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(18, Short.MAX_VALUE)
+					.addContainerGap(29, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(quickLoadSelf)
+						.addComponent(quickLoadOpp))
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(currentTurnIndicatorSelf, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
