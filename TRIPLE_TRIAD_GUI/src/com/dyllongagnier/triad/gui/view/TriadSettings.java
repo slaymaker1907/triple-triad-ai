@@ -57,6 +57,8 @@ public class TriadSettings extends JFrame
 		maxThreadValue.setColumns(10);
 		maxThreadValue.setText(String.valueOf(Runtime.getRuntime().availableProcessors()));
 		
+		JCheckBox orderButton = new JCheckBox("Order");
+		
 		Runnable executeOptions = () ->
 		{
 			Players.setAscensionRule((AscensionRule)ascensionRuleValue.getSelectedItem());
@@ -68,6 +70,7 @@ public class TriadSettings extends JFrame
 			Players.setIsSuddenDeath(chckbxSuddenDeath.isSelected());
 			Players.setMaxThreads(Integer.parseInt(maxThreadValue.getText()));
 			TriadSettings.parseThinkTime(maxThinkTime.getText());
+			Players.setIsOrder(orderButton.isSelected());
 		};
 		
 		Runnable reset = () ->
@@ -81,6 +84,7 @@ public class TriadSettings extends JFrame
 			chckbxSuddenDeath.setSelected(false);
 			maxThreadValue.setText(String.valueOf(Players.getMaxThreads()));
 			maxThinkTime.setText("8");
+			orderButton.setSelected(Players.getIsOrder());
 		};
 		
 		reset.run();
@@ -92,38 +96,40 @@ public class TriadSettings extends JFrame
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(29)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblAscensionRule)
-							.addGap(18)
-							.addComponent(ascensionRuleValue, 0, 167, Short.MAX_VALUE))
+							.addContainerGap()
+							.addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGap(29)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblAscensionRule)
+									.addGap(18)
+									.addComponent(ascensionRuleValue, 0, 167, Short.MAX_VALUE))
 								.addGroup(groupLayout.createSequentialGroup()
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblMaximumThreads, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-										.addComponent(maxThinkTimeLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
-									.addGap(18))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(chckbxSuddenDeath)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(lblMaximumThreads, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+												.addComponent(maxThinkTimeLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
+											.addGap(18))
 										.addGroup(groupLayout.createSequentialGroup()
 											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 												.addComponent(chckbxFallenAce)
-												.addComponent(chckbxSame))
-											.addGap(23)
-											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(chckbxSame)
+												.addComponent(chckbxSuddenDeath))
+											.addGap(5)
+											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 												.addComponent(chckbxPlus)
-												.addComponent(chckbxReverse))))
-									.addGap(16)))
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(maxThreadValue, 0, 0, Short.MAX_VALUE)
-									.addComponent(maxThinkTime, GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))
-								.addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE))))
+												.addComponent(chckbxReverse, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(orderButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+											.addGap(16)))
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(maxThreadValue, 0, 0, Short.MAX_VALUE)
+										.addComponent(maxThinkTime, GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))))))
 					.addGap(30))
 		);
 		groupLayout.setVerticalGroup(
@@ -155,8 +161,10 @@ public class TriadSettings extends JFrame
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(chckbxSuddenDeath)
-						.addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(46, Short.MAX_VALUE))
+						.addComponent(orderButton))
+					.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+					.addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		getContentPane().setLayout(groupLayout);
 	}
