@@ -76,6 +76,6 @@ public class OrderedCard implements UndeployedCard
 		UndeployedCard[] result = new UndeployedCard[cards.length];
 		for(int i = 0; i < cards.length; i++)
 			result[i] = new OrderedCard(cards[i].deploy(), i);
-		return cards;
+		return result;
 	}
 }
