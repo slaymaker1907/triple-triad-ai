@@ -17,7 +17,7 @@ import java.io.File;
 public class DeckBuilderWindow extends JFrame
 {
 	private static final JFileChooser explorerWindow = new JFileChooser(System.getProperty("user.dir"));
-	private final DeckPanel deckPanel;
+	protected final DeckPanel deckPanel;
 	
 	public static void main(String[] args)
 	{
@@ -125,7 +125,7 @@ public class DeckBuilderWindow extends JFrame
 	
 	private static final long serialVersionUID = 1L;
 	
-	private void saveDeck()
+	protected void saveDeck()
 	{
 		int opened = DeckBuilderWindow.explorerWindow.showSaveDialog(this);
 		if (opened == JFileChooser.APPROVE_OPTION)
