@@ -26,6 +26,7 @@ public class QuickBuilderWindow extends DeckBuilderWindow
 		catch (Exception e)
 		{
 			JOptionPane.showMessageDialog(this, "Error, could not create deck. " + e.getMessage());
+			e.printStackTrace();
 		}
 		this.setVisible(false);
 	}

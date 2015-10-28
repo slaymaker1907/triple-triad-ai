@@ -27,6 +27,7 @@ import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.deckbuilder.view.DeckBuilderWindow;
 import com.dyllongagnier.triad.gui.controller.InvalidPlayerException;
 import com.dyllongagnier.triad.gui.controller.Players;
+import com.dyllongagnier.triad.deckbuilder.view.QuickBuilderWindow;
 
 public class MainWindow extends JFrame
 {
@@ -140,8 +141,10 @@ public class MainWindow extends JFrame
 		currentTurnIndicatorOpponent = new CurrentTurnIndicator(Player.OPPONENT);
 		
 		JButton quickLoadSelf = new JButton("QuickLoad");
+		quickLoadSelf.addActionListener((act) -> new QuickBuilderWindow(this.getDeckConsumer(Player.SELF)));
 		
 		JButton quickLoadOpp = new JButton("QuickLoad");
+		quickLoadOpp.addActionListener((act) -> new QuickBuilderWindow(this.getDeckConsumer(Player.OPPONENT)));
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -149,30 +152,27 @@ public class MainWindow extends JFrame
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(selfHand, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(selfHand, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(selfLoadDeck)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(playerAI)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(playerManual)
-									.addGap(18)
-									.addComponent(currentTurnIndicatorSelf, GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)))
-							.addGap(30)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(currentField, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(btnGameSettings)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnStart)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnDeckBuilder)))
-							.addGap(25))
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(quickLoadSelf, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(selfLoadDeck, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(playerAI)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(playerManual)
+							.addGap(18)
+							.addComponent(currentTurnIndicatorSelf, GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)))
+					.addGap(30)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(currentField, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(quickLoadSelf, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-							.addGap(574)))
+							.addComponent(btnGameSettings)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnStart)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnDeckBuilder)))
+					.addGap(25)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(opponentHand, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
@@ -192,8 +192,8 @@ public class MainWindow extends JFrame
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap(29, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(quickLoadSelf)
-						.addComponent(quickLoadOpp))
+						.addComponent(quickLoadOpp)
+						.addComponent(quickLoadSelf))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(currentTurnIndicatorSelf, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
@@ -224,7 +224,11 @@ public class MainWindow extends JFrame
 	
 	private Consumer<String[]> getDeckConsumer(Player player)
 	{
-		return (deck) -> Players.setPlayerDeck(player, deck);
+		return (deck) ->
+		{
+			Iterable<UndeployedCard> result = Players.setPlayerDeck(player, deck);
+			setHand(player, result);
+		};
 	}
 	
 	private void loadDeck(Player player)
