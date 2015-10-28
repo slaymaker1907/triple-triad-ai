@@ -281,7 +281,7 @@ public class BoardState
 		{
 			if (isOrder)
 			{
-				this.validator = MoveValidator::orderValidator;
+				this.validator = MoveValidator::partialOrderValidator;
 			} else
 			{
 				this.validator = MoveValidator::normalValidator;
