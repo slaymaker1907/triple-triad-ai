@@ -80,4 +80,30 @@ public interface MoveValidator
 			return false;
 		return true;
 	}
+	 
+	/**
+	 * This function returns true if it legal to play toPlay at (row,col) under
+	 * the order rule for the self player but does not limit the opponent player.
+	 * 
+	 * @param currentState
+	 *            The current state of the game.
+	 * @param toPlay
+	 *            The card being played.
+	 * @param player
+	 *            The player playing toPlay.
+	 * @param row
+	 *            The row the card is played at.
+	 * @param col
+	 *            The column the card is played at.
+	 * @return True if toPlay can be played at (row,col).
+	 */
+	public static boolean partialOrderValidator(BoardState currentState,
+			UndeployedCard toPlay, Player player, int row, int col)
+	{
+		if (player == Player.SELF && !currentState.getFirstCardInHand(player).equals(toPlay))
+			return false;
+		if (currentState.playedCards.isCardInPos(row, col))
+			return false;
+		return true;
+	}
 }
