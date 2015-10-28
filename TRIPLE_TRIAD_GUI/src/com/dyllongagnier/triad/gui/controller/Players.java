@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import com.dyllongagnier.triad.ai.FastSearchAI;
 import com.dyllongagnier.triad.card.Card;
+import com.dyllongagnier.triad.card.CardList;
 import com.dyllongagnier.triad.card.HandFactory;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.RandomCard;
@@ -67,6 +68,22 @@ public class Players
 			case SELF:
 			case OPPONENT:
 				UndeployedCard[] result = HandFactory.getDeck(player, filename, Players.getGUIFunction(player));
+				Players.gameBuilder.setHand(player, result);
+				return Arrays.asList(result);
+			default:
+				throw new IllegalArgumentException("Player.NONE can not have a deck.");
+		}
+	}
+	
+	public static Iterable<UndeployedCard> setPlayerDeck(Player player, String[] deck)
+	{
+		if (player == null)
+			throw new NullPointerException();
+		switch(player)
+		{
+			case SELF:
+			case OPPONENT:
+				UndeployedCard[] result = CardList.generateHand(player, deck);
 				Players.gameBuilder.setHand(player, result);
 				return Arrays.asList(result);
 			default:

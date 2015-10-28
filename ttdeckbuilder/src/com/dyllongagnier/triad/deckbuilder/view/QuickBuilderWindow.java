@@ -13,6 +13,7 @@ public class QuickBuilderWindow extends DeckBuilderWindow
 	public QuickBuilderWindow(Consumer<String[]> useBuiltDeck)
 	{
 		this.useBuiltDeck = useBuiltDeck;
+		this.setVisible(true);
 	}
 	
 	@Override
@@ -26,5 +27,6 @@ public class QuickBuilderWindow extends DeckBuilderWindow
 		{
 			JOptionPane.showMessageDialog(this, "Error, could not create deck. " + e.getMessage());
 		}
+		this.setVisible(false);
 	}
 }

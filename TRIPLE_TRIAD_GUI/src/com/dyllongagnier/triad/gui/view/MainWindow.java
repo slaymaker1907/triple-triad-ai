@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.function.Consumer;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -219,6 +220,11 @@ public class MainWindow extends JFrame
 		
 		selfLoadDeck.addActionListener((arg) -> this.loadDeck(Player.SELF));
 		opponentLoadDeck.addActionListener((arg) -> this.loadDeck(Player.OPPONENT));
+	}
+	
+	private Consumer<String[]> getDeckConsumer(Player player)
+	{
+		return (deck) -> Players.setPlayerDeck(player, deck);
 	}
 	
 	private void loadDeck(Player player)
