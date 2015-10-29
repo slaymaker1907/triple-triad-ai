@@ -59,12 +59,10 @@ public class DeckPanel extends JPanel
 	public static class PredictiveTextListener implements KeyListener
 	{
 		private final JTextField textField;
-		private long lastPredict;
 		
 		public PredictiveTextListener(JTextField textField)
 		{
 			this.textField = textField;
-			this.lastPredict = System.currentTimeMillis();
 		}
 		
 		@Override
@@ -82,7 +80,7 @@ public class DeckPanel extends JPanel
 		{
 			String original = this.textField.getText();
 			String match = CardGuesser.getClosestMatch(original);
-			if (match != null && !original.equals("") && this.canPredict() && this.isValidChar(e.getKeyCode()))
+			if (match != null && !original.equals("") && this.isValidChar(e.getKeyCode()))
 			{
 				this.textField.setText(match);
 				this.textField.select(original.length(), match.length());
@@ -92,15 +90,6 @@ public class DeckPanel extends JPanel
 		public boolean isValidChar(int character)
 		{
 			return character >= 32;
-		}
-		
-		private boolean canPredict()
-		{
-			// Wait just a little bit to ensure a smooth user interaction.
-			boolean result = System.currentTimeMillis() - this.lastPredict > 20;
-			if (result)
-				this.lastPredict = System.currentTimeMillis();
-			return result;
 		}
 	}
 }
