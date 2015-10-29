@@ -91,13 +91,13 @@ public class DeckPanel extends JPanel
 		
 		public boolean isValidChar(int character)
 		{
-			return character >= 32 && character <= 126;
+			return character >= 32;
 		}
 		
 		private boolean canPredict()
 		{
 			// Wait just a little bit to ensure a smooth user interaction.
-			boolean result = System.currentTimeMillis() - this.lastPredict > 75;
+			boolean result = System.currentTimeMillis() - this.lastPredict > 20;
 			if (result)
 				this.lastPredict = System.currentTimeMillis();
 			return result;

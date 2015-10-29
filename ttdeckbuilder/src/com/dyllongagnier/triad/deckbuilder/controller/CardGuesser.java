@@ -1,6 +1,7 @@
 package com.dyllongagnier.triad.deckbuilder.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -20,13 +21,20 @@ public class CardGuesser
 	
 	public static String getClosestMatch(String partialName)
 	{
-		for(String name : sortedCards)
+		int point = Collections.binarySearch(sortedCards, partialName);
+		int negPoint = -1 * point - 1;
+		if (point >= 0)
+			return sortedCards.get(point);
+		else if (negPoint < sortedCards.size())
 		{
-			if (name.startsWith(partialName))
-				return name;
+			String fullName = sortedCards.get(negPoint);
+			if (fullName.startsWith(partialName))
+				return fullName;
+			else
+				return null;
 		}
-		
-		return null;
+		else
+			return null;
 	}
 	
 	public static boolean isValidCard(String name)
