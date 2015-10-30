@@ -8,7 +8,7 @@ import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.core.GameAgent;
 import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
-import com.dyllongagnier.triad.gui.view.MainWindow;
+import com.dyllongagnier.triad.gui.view.GameView;
 
 public class GUIAgent implements GameAgent
 {
@@ -107,17 +107,12 @@ public class GUIAgent implements GameAgent
 	public synchronized void takeTurn(TriadGame game)
 	{
 		this.setCurrentGame(game);
-		if (!this.isAI)
+		GameView view = GameView.getGameView(true);
+		view.displayBoard(game.getCurrentState(), game.getLastMove());
+		view.setTurn(game.getCurrentPlayer());
+		
+		if (this.isAI())
 		{
-			if (this.expectedPlayer != game.getCurrentPlayer())
-				throw new InvalidPlayerException();
-			MainWindow.getMainWindow().allowDraggingFromHand(expectedPlayer, true);
-			MainWindow.getMainWindow().setCanDropToField(true);
-		}
-		else
-		{
-			MainWindow.getMainWindow().allowDraggingFromHand(expectedPlayer, false);
-			MainWindow.getMainWindow().setCanDropToField(false);
 			GUIAgent.resetAI();
 			GUIAgent.agentAI.takeTurn(game);
 		}

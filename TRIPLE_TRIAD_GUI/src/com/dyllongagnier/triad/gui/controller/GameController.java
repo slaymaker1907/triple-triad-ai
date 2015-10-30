@@ -32,6 +32,7 @@ public interface GameController
 	public boolean getIsSame();
 	public boolean getIsSuddenDeath();
 	public double getTimeout();
+	public boolean getIsAI(Player player);
 	public AscensionRule getAscensionRule();
 	public void verifyOptionValidity();
 	public void setTimeout(double timeout);

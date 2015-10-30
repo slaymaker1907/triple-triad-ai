@@ -201,4 +201,11 @@ public class ClientController implements GameController
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean getIsAI(Player player)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

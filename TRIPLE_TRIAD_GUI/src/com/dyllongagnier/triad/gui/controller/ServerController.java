@@ -217,4 +217,10 @@ public class ServerController implements GameController
 	{
 		this.agents.get(this.currentGame.getCurrentPlayer()).makeMove(move);
 	}
+
+	@Override
+	public boolean getIsAI(Player player)
+	{
+		return this.agents.get(player).isAI();
+	}
 }

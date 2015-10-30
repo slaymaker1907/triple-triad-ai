@@ -15,6 +15,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import javax.swing.SwingUtilities;
 
 import com.dyllongagnier.triad.card.DeployedCard;
 import com.dyllongagnier.triad.card.Player;
@@ -23,13 +24,12 @@ import com.dyllongagnier.triad.core.AscensionField;
 import com.dyllongagnier.triad.core.BoardState;
 import com.dyllongagnier.triad.core.Field;
 import com.dyllongagnier.triad.core.PossibleMove;
-import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.deckbuilder.view.DeckBuilderWindow;
 import com.dyllongagnier.triad.gui.controller.GameController;
 import com.dyllongagnier.triad.gui.controller.InvalidPlayerException;
 import com.dyllongagnier.triad.deckbuilder.view.QuickBuilderWindow;
 
-public class MainWindow extends JFrame
+public class MainWindow extends JFrame implements GameView
 {
 	private static final long serialVersionUID = 1L;
 	private final ButtonGroup playerAIButtons = new ButtonGroup();
@@ -133,8 +133,7 @@ public class MainWindow extends JFrame
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener((act) ->
 		{
-			TriadGame toDisplay = GameController.getController(false).startNewGame();
-			this.displayBoardState(toDisplay);
+			GameController.getController(false).startNewGame();
 		});
 		
 		JButton btnDeckBuilder = new JButton("Deck Builder");
@@ -255,22 +254,41 @@ public class MainWindow extends JFrame
 		}
 	}
 	
-	public void displayBoardState(TriadGame game)
+	@Override
+	public Player getFirstPlayer()
 	{
-		this.setCurrentTurn(game.getCurrentPlayer());
-		BoardState state = game.getCurrentState();
-		this.displayField(state.playedCards);
-		this.setHand(Player.SELF, state.getHand(Player.SELF));
-		this.setHand(Player.OPPONENT, state.getHand(Player.OPPONENT));
-		this.setCanDropToField(false);
-		this.allowDraggingFromHand(Player.SELF, false);
-		this.allowDraggingFromHand(Player.OPPONENT, false);
+		Object[] possiblePlayers = new Object[]{Player.SELF, Player.OPPONENT};
+		return (Player)JOptionPane.showInputDialog(MainWindow.getMainWindow(), "Please enter the first player.", "First Player", JOptionPane.PLAIN_MESSAGE, null, possiblePlayers, Player.SELF);
+	}
 		
-		PossibleMove lastMove = game.getLastMove();
-		if (lastMove != null)
+	@Override
+	public void displayBoard(BoardState state, PossibleMove lastMove)
+	{
+		Runnable toRun = () ->
 		{
-			this.currentField.setLastPlayed(lastMove.row, lastMove.col);
-		}
+			this.displayField(state.playedCards);
+			this.setHand(Player.SELF, state.getHand(Player.SELF));
+			this.setHand(Player.OPPONENT, state.getHand(Player.OPPONENT));
+			this.setCanDropToField(false);
+			this.allowDraggingFromHand(Player.SELF, false);
+			this.allowDraggingFromHand(Player.OPPONENT, false);
+			
+			if (lastMove != null)
+			{
+				this.currentField.setLastPlayed(lastMove.row, lastMove.col);
+			}
+			if (state.gameComplete())
+				this.displayWinner(state.getWinner());
+		};
+		if (!SwingUtilities.isEventDispatchThread())
+			SwingUtilities.invokeLater(toRun);
+		else
+			toRun.run();
+	}
+	
+	private void displayWinner(Player winner)
+	{
+		JOptionPane.showMessageDialog(this, "Winner: " + winner);
 	}
 	
 	public CardCollection getHand(Player player)
@@ -382,5 +400,29 @@ public class MainWindow extends JFrame
 	public void setCanDropToField(boolean choice)
 	{
 		this.currentField.setCanDropTo(choice);
+	}
+
+	@Override
+	public void setTurn(Player player)
+	{
+		Runnable toRun = () ->
+		{
+			this.setCurrentTurn(player);
+			if (player == Player.NONE)
+			{
+				this.allowDraggingFromHand(Player.SELF, false);
+				this.allowDraggingFromHand(Player.OPPONENT, false);
+			}
+			else
+			{
+				this.allowDraggingFromHand(player, !GameController.getController(false).getIsAI(player));
+				this.allowDraggingFromHand(player.swapPlayer(), false);
+			}
+		};
+		
+		if (SwingUtilities.isEventDispatchThread())
+			toRun.run();
+		else
+			SwingUtilities.invokeLater(toRun);
 	}
 }
