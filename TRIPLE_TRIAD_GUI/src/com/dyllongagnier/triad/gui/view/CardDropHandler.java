@@ -13,7 +13,7 @@ import java.io.Serializable;
 import javax.swing.JOptionPane;
 
 import com.dyllongagnier.triad.card.OrderedCard;
-import com.dyllongagnier.triad.gui.controller.Players;
+import com.dyllongagnier.triad.gui.controller.GameController;
 
 public class CardDropHandler implements DropTargetListener, Serializable
 {
@@ -62,7 +62,8 @@ public class CardDropHandler implements DropTargetListener, Serializable
 				DropTargetContext context = dtde.getDropTargetContext();
 				CardCollection comp = (CardCollection)context.getComponent();
 				Container parent = comp.getParent();
-				Players.makeMove(CardCollection.getMoveFromIndex(comp.getCardMouseLocation(), new OrderedCard(card.card, card.cardLocation)));
+				GameController.getController(false)
+					.makeMove(CardCollection.getMoveFromIndex(comp.getCardMouseLocation(), new OrderedCard(card.card, card.cardLocation)));
 				if (parent != null)
 					parent.remove(card);
 				comp.setCard(card, comp.getCardMouseLocation());

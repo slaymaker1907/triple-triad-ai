@@ -37,4 +37,12 @@ public interface GameController
 	public void setTimeout(double timeout);
 	public TriadGame startNewGame();
 	public void makeMove(PossibleMove move);
+	
+	static final ServerController serverController = new ServerController();
+	
+	public static GameController getController(boolean isServer)
+	{
+		// TODO Actually make this choose a different controller depending on input.
+		return GameController.serverController;
+	}
 }

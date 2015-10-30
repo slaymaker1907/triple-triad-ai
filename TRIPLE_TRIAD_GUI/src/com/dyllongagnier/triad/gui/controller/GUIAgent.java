@@ -18,12 +18,16 @@ public class GUIAgent implements GameAgent
 	private volatile boolean isAI;
 	private static FastSearchAI agentAI;
 	
+	static
+	{
+		GUIAgent.setMaxThreads(1);
+	}
+	
 	public void setIsAI(boolean isAI)
 	{
 		if (this.isAI && !isAI)
 		{
-			// TODO Replace me.
-			Players.resetAI();
+			GUIAgent.resetAI();
 		}
 		boolean isDiff = isAI ^ this.isAI;
 		this.isAI = isAI;
@@ -94,9 +98,7 @@ public class GUIAgent implements GameAgent
 	@Override
 	public GameAgent clone()
 	{
-		// Divide by two since there are two agents every game.
-		// Make default AI singleton.
-		return Players.getDefaultAI();
+		return GUIAgent.agentAI;
 	}
 
 	@Override
@@ -114,13 +116,14 @@ public class GUIAgent implements GameAgent
 		{
 			MainWindow.getMainWindow().allowDraggingFromHand(expectedPlayer, false);
 			MainWindow.getMainWindow().setCanDropToField(false);
-			Players.getDefaultAI().takeTurn(game);
+			GUIAgent.resetAI();
+			GUIAgent.agentAI.takeTurn(game);
 		}
 	}
 	
 	private void setCurrentGame(TriadGame game)
 	{
-		Players.currentGame = game;
+		// TODO Need to alert the server controller to the presence of a new game.
 		this.currentGame = game;
 	}
 	

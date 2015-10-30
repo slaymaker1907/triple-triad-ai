@@ -6,7 +6,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
-import com.dyllongagnier.triad.gui.controller.Players;
+import com.dyllongagnier.triad.gui.controller.GameController;
 
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
@@ -14,8 +14,11 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
+
 import com.dyllongagnier.triad.core.AscensionRule;
+
 import java.awt.Dimension;
+
 import javax.swing.SwingConstants;
 
 public class TriadSettings extends JFrame
@@ -61,30 +64,32 @@ public class TriadSettings extends JFrame
 		
 		Runnable executeOptions = () ->
 		{
-			Players.setAscensionRule((AscensionRule)ascensionRuleValue.getSelectedItem());
-			Players.setIsFallenAce(chckbxFallenAce.isSelected());
-			Players.setIsReverse(chckbxReverse.isSelected());
-			Players.setIsPlus(chckbxPlus.isSelected());
-			Players.setIsSame(chckbxSame.isSelected());
-			Players.setIsCombo(chckbxSame.isSelected() || chckbxPlus.isSelected());
-			Players.setIsSuddenDeath(chckbxSuddenDeath.isSelected());
-			Players.setMaxThreads(Integer.parseInt(maxThreadValue.getText()));
+			GameController controller = GameController.getController(false);
+			controller.setAscensionRule((AscensionRule)ascensionRuleValue.getSelectedItem());
+			controller.setIsFallenAce(chckbxFallenAce.isSelected());
+			controller.setIsReverse(chckbxReverse.isSelected());
+			controller.setIsPlus(chckbxPlus.isSelected());
+			controller.setIsSame(chckbxSame.isSelected());
+			controller.setIsCombo(chckbxSame.isSelected() || chckbxPlus.isSelected());
+			controller.setIsSuddenDeath(chckbxSuddenDeath.isSelected());
+			controller.setMaxThreads(Integer.parseInt(maxThreadValue.getText()));
 			TriadSettings.parseThinkTime(maxThinkTime.getText());
-			Players.setIsOrder(orderButton.isSelected());
+			controller.setIsOrder(orderButton.isSelected());
 		};
 		
 		Runnable reset = () ->
 		{
-			Players.setDefaultOptions();
-			Players.setAscensionRule(AscensionRule.NONE);
-			chckbxFallenAce.setSelected(false);
-			chckbxReverse.setSelected(false);
-			chckbxPlus.setSelected(false);
-			chckbxSame.setSelected(false);
-			chckbxSuddenDeath.setSelected(false);
-			maxThreadValue.setText(String.valueOf(Players.getMaxThreads()));
+			GameController controller = GameController.getController(false);
+			controller.setDefaultOptions();
+			controller.setAscensionRule(controller.getAscensionRule());
+			chckbxFallenAce.setSelected(controller.getIsFallenAce());
+			chckbxReverse.setSelected(controller.getIsReverse());
+			chckbxPlus.setSelected(controller.getIsPlus());
+			chckbxSame.setSelected(controller.getIsSame());
+			chckbxSuddenDeath.setSelected(controller.getIsSuddenDeath());
+			maxThreadValue.setText(String.valueOf(controller.getMaxThreads()));
 			maxThinkTime.setText("8");
-			orderButton.setSelected(Players.getIsOrder());
+			orderButton.setSelected(controller.getIsOrder());
 		};
 		
 		reset.run();
@@ -174,7 +179,7 @@ public class TriadSettings extends JFrame
 		try
 		{
 			toRun.run();
-			Players.verifyOptionValidity();
+			GameController.getController(false).verifyOptionValidity();
 			this.setVisible(false);
 		}
 		catch (Exception e)
@@ -186,9 +191,10 @@ public class TriadSettings extends JFrame
 	
 	private static void parseThinkTime(String str)
 	{
+		GameController controller = GameController.getController(false);
 		if (str.toUpperCase().equals(TriadSettings.infinity))
-			Players.setTimeout(Integer.MAX_VALUE);
+			controller.setTimeout(Integer.MAX_VALUE);
 		else
-			Players.setTimeout(Double.parseDouble(str));
+			controller.setTimeout(Double.parseDouble(str));
 	}
 }

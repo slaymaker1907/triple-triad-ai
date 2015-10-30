@@ -25,8 +25,8 @@ import com.dyllongagnier.triad.core.Field;
 import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.deckbuilder.view.DeckBuilderWindow;
+import com.dyllongagnier.triad.gui.controller.GameController;
 import com.dyllongagnier.triad.gui.controller.InvalidPlayerException;
-import com.dyllongagnier.triad.gui.controller.Players;
 import com.dyllongagnier.triad.deckbuilder.view.QuickBuilderWindow;
 
 public class MainWindow extends JFrame
@@ -133,7 +133,7 @@ public class MainWindow extends JFrame
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener((act) ->
 		{
-			TriadGame toDisplay = Players.startNewGame();
+			TriadGame toDisplay = GameController.getController(false).startNewGame();
 			this.displayBoardState(toDisplay);
 		});
 		
@@ -230,7 +230,7 @@ public class MainWindow extends JFrame
 	{
 		return (deck) ->
 		{
-			Iterable<UndeployedCard> result = Players.setPlayerDeck(player, deck);
+			Iterable<UndeployedCard> result = GameController.getController(false).setPlayerDeck(player, deck);
 			setHand(player, result);
 		};
 	}
@@ -243,7 +243,7 @@ public class MainWindow extends JFrame
 			File file = MainWindow.explorerWindow.getSelectedFile();
 			try
 			{
-				Iterable<UndeployedCard> newHand = Players.setPlayerDeck(player, file.getAbsolutePath());
+				Iterable<UndeployedCard> newHand = GameController.getController(false).setPlayerDeck(player, file.getAbsolutePath());
 				this.setHand(player, newHand);
 			}
 			catch (Exception e)
@@ -359,7 +359,7 @@ public class MainWindow extends JFrame
 	
 	private static void setAIButtonEvents(JRadioButton ai, JRadioButton manual, Player player)
 	{
-		ActionListener handler = (act) -> Players.setAgent(player, ai.isSelected());
+		ActionListener handler = (act) -> GameController.getController(false).setAgent(player, ai.isSelected());
 		ai.addActionListener(handler);
 		manual.addActionListener(handler);
 	}
