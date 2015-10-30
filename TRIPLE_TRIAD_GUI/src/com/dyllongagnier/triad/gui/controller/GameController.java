@@ -12,7 +12,6 @@ public interface GameController
 	public void setAgent(Player player, boolean isAI);
 	public Iterable<UndeployedCard> setPlayerDeck(Player player, String filename);
 	public Iterable<UndeployedCard> setPlayerDeck(Player player, String[] cardNames);
-	public GameAgent getAgent(Player player);
 	public void setIsCombo(boolean isCombo);
 	public void setIsFallenAce(boolean isFallenAce);
 	public void setIsPlus(boolean isPlus);
