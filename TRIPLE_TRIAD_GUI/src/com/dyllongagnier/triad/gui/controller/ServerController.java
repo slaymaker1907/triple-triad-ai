@@ -69,7 +69,7 @@ public class ServerController implements GameController
 	@Override
 	public void setIsCombo(boolean isCombo)
 	{
-		this.gameBuilder.isCombo = true;
+		this.gameBuilder.isCombo = isCombo;
 	}
 
 	@Override

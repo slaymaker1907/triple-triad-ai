@@ -125,7 +125,6 @@ public class GUIAgent implements GameAgent
 	
 	private void setCurrentGame(TriadGame game)
 	{
-		// TODO Need to alert the server controller to the presence of a new game.
 		this.currentGame = game;
 	}
 	
