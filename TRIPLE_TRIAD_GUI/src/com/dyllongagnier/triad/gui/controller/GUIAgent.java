@@ -2,6 +2,7 @@ package com.dyllongagnier.triad.gui.controller;
 
 import java.util.List;
 
+import com.dyllongagnier.triad.ai.FastSearchAI;
 import com.dyllongagnier.triad.card.Card;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.core.GameAgent;
@@ -15,11 +16,13 @@ public class GUIAgent implements GameAgent
 	private volatile TriadGame currentGame;
 	private volatile PossibleMove lastMove;
 	private volatile boolean isAI;
+	private static FastSearchAI agentAI;
 	
 	public void setIsAI(boolean isAI)
 	{
 		if (this.isAI && !isAI)
 		{
+			// TODO Replace me.
 			Players.resetAI();
 		}
 		boolean isDiff = isAI ^ this.isAI;
@@ -28,6 +31,39 @@ public class GUIAgent implements GameAgent
 		{
 			this.takeTurn(this.currentGame);
 		}
+	}
+	
+	public static void setMaxThreads(int maxThreads)
+	{
+		long maxThinkTime;
+		if (GUIAgent.agentAI != null)
+			maxThinkTime = Long.MAX_VALUE;
+		else
+			maxThinkTime = 8_000;
+		GUIAgent.agentAI = new FastSearchAI(maxThreads);
+		GUIAgent.agentAI.setMoveTimeout(maxThinkTime);
+	}
+	
+	public static long getMaxTime()
+	{
+		return GUIAgent.agentAI.getMaxTime();
+	}
+	
+	private static void resetAI()
+	{
+		GUIAgent.agentAI.destroy();
+		int maxThreads = GUIAgent.getMaxThreads();
+		GUIAgent.setMaxThreads(maxThreads);
+	}
+	
+	public static int getMaxThreads()
+	{
+		return GUIAgent.agentAI.getMaxThreads();
+	}
+	
+	public static void setMaxThinkTime(long timeout)
+	{
+		GUIAgent.agentAI.setMoveTimeout(timeout);
 	}
 	
 	public boolean gameInProgress()

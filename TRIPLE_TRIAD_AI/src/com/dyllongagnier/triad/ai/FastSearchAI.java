@@ -190,4 +190,14 @@ public class FastSearchAI implements GameAgent
 	{
 		this.executor.shutdownNow();
 	}
+	
+	public long getMaxTime()
+	{
+		return this.finishQuickly.getTimeout();
+	}
+	
+	public int getMaxThreads()
+	{
+		return this.executor.getMaximumPoolSize();
+	}
 }

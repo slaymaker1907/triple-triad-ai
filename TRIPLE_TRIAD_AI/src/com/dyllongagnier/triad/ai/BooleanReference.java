@@ -68,4 +68,9 @@ public class BooleanReference
 		this.maxTime = timeout;
 		this.startTime = System.currentTimeMillis();
 	}
+	
+	public long getTimeout()
+	{
+		return this.maxTime;
+	}
 }

@@ -131,7 +131,11 @@ public class MainWindow extends JFrame
 		MainWindow.setAIButtonEvents(opponentAI, opponentManual, Player.OPPONENT);
 		
 		JButton btnStart = new JButton("Start");
-		btnStart.addActionListener((act) -> Players.startNewGame());
+		btnStart.addActionListener((act) ->
+		{
+			TriadGame toDisplay = Players.startNewGame();
+			this.displayBoardState(toDisplay);
+		});
 		
 		JButton btnDeckBuilder = new JButton("Deck Builder");
 		btnDeckBuilder.addActionListener((act) -> new DeckBuilderWindow().setVisible(true));
