@@ -18,8 +18,6 @@ public class ServerController implements GameController
 {
 	private final EnumMap<Player, GUIAgent> agents;
 	private BoardState.Builder gameBuilder = new BoardState.Builder();
-	private int maxThreads;
-	private long timeout = Long.MAX_VALUE;
 	private TriadGame currentGame;
 	
 	ServerController()
@@ -125,10 +123,9 @@ public class ServerController implements GameController
 	@Override
 	public void setDefaultOptions()
 	{
-		// TODO Auto-generated method stub
 		this.gameBuilder = new BoardState.Builder();
 		this.setMaxThreads(Runtime.getRuntime().availableProcessors());
-		this.setTimeout(Integer.MAX_VALUE);
+		this.setTimeout(8.0);
 		this.setAgent(Player.SELF, true);
 		this.setAgent(Player.OPPONENT, false);
 	}
@@ -136,13 +133,13 @@ public class ServerController implements GameController
 	@Override
 	public void setMaxThreads(int maxThreads)
 	{
-		// TODO Auto-generated method stub
+		GUIAgent.setMaxThreads(maxThreads);
 	}
 
 	@Override
 	public int getMaxThreads()
 	{
-		return this.maxThreads;
+		return GUIAgent.getMaxThreads();
 	}
 
 	@Override
@@ -184,7 +181,7 @@ public class ServerController implements GameController
 	@Override
 	public double getTimeout()
 	{
-		return this.timeout / 1000.0;
+		return GUIAgent.getMaxTime() / 1000.0;
 	}
 
 	@Override

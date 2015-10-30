@@ -57,7 +57,9 @@ public class GUIAgent implements GameAgent
 	{
 		GUIAgent.agentAI.destroy();
 		int maxThreads = GUIAgent.getMaxThreads();
+		long maxTime = GUIAgent.getMaxTime();
 		GUIAgent.setMaxThreads(maxThreads);
+		GUIAgent.setMaxThinkTime(maxTime);
 	}
 	
 	public static int getMaxThreads()
