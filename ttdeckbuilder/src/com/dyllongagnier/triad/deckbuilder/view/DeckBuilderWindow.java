@@ -33,6 +33,7 @@ public class DeckBuilderWindow extends JFrame
 		JButton btnSave = new JButton("Save");
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnSave.addActionListener((act) -> this.saveDeck());
+		this.getRootPane().setDefaultButton(btnSave);
 		
 		JLabel lblCard1 = new JLabel("Card 1:");
 		lblCard1.setFont(new Font("Tahoma", Font.PLAIN, 14));
