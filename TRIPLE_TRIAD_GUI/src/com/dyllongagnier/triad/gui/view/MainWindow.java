@@ -415,8 +415,10 @@ public class MainWindow extends JFrame implements GameView
 			}
 			else
 			{
-				this.allowDraggingFromHand(player, !GameController.getController(false).getIsAI(player));
+				boolean notAi = !GameController.getController(false).getIsAI(player);
+				this.allowDraggingFromHand(player, notAi);
 				this.allowDraggingFromHand(player.swapPlayer(), false);
+				this.setCanDropToField(notAi);
 			}
 		};
 		
