@@ -52,19 +52,7 @@ public class BoardState
 	@Override
 	public BoardState clone()
 	{
-		// Do a deep clone on the player hands to ensure immutability.
-		EnumMap<Player, SortedSet<UndeployedCard>> newPlayerHands = new EnumMap<>(
-				Player.class);
-		SortedSet<UndeployedCard> selfHand = new TreeSet<>();
-		for (UndeployedCard card : this.playerHands.get(Player.BLUE))
-			selfHand.add(card.clone());
-		SortedSet<UndeployedCard> opponentHand = new TreeSet<>();
-		for (UndeployedCard card : this.playerHands.get(Player.RED))
-			opponentHand.add(card.clone());
-		newPlayerHands.put(Player.BLUE, selfHand);
-		newPlayerHands.put(Player.RED, opponentHand);
-
-		return new BoardState(newPlayerHands, this.playedCards, this.firstPlayer);
+		return this;
 	}
 
 	/**
