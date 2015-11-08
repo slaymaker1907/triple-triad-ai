@@ -23,8 +23,8 @@ public class ServerController implements GameController
 	ServerController()
 	{
 		this.agents = new EnumMap<>(Player.class);
-		this.agents.put(Player.SELF, new GUIAgent(Player.SELF));
-		this.agents.put(Player.OPPONENT, new GUIAgent(Player.OPPONENT));
+		this.agents.put(Player.BLUE, new GUIAgent(Player.BLUE));
+		this.agents.put(Player.RED, new GUIAgent(Player.RED));
 		this.currentGame = null;
 		this.setDefaultOptions();
 	}
@@ -40,8 +40,8 @@ public class ServerController implements GameController
 	{
 		switch(player)
 		{
-			case SELF:
-			case OPPONENT:
+			case BLUE:
+			case RED:
 				UndeployedCard[] result = HandFactory.getDeck(player, filename, null);
 				this.gameBuilder.setHand(player, result);
 				return Arrays.asList(result);
@@ -56,8 +56,8 @@ public class ServerController implements GameController
 	{
 		switch(player)
 		{
-			case SELF:
-			case OPPONENT:
+			case BLUE:
+			case RED:
 				UndeployedCard[] result = OrderedCard.convertToOrderedCard(CardList.generateHand(player, cardNames));
 				this.gameBuilder.setHand(player, result);
 				return Arrays.asList(result);
@@ -126,8 +126,8 @@ public class ServerController implements GameController
 		this.gameBuilder = new BoardState.Builder();
 		this.setMaxThreads(Runtime.getRuntime().availableProcessors());
 		this.setTimeout(8.0);
-		this.setAgent(Player.SELF, true);
-		this.setAgent(Player.OPPONENT, false);
+		this.setAgent(Player.BLUE, true);
+		this.setAgent(Player.RED, false);
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class ServerController implements GameController
 	@Override
 	public void verifyOptionValidity()
 	{
-		this.gameBuilder.build(Player.SELF);
+		this.gameBuilder.build(Player.BLUE);
 	}
 
 	@Override
@@ -206,7 +206,7 @@ public class ServerController implements GameController
 	public TriadGame startNewGame()
 	{
 		TriadGame result = TriadGame.gameFactory(new PlayerGenerator(), gameBuilder,
-				this.agents.get(Player.SELF), this.agents.get(Player.OPPONENT), new GUIListener());
+				this.agents.get(Player.BLUE), this.agents.get(Player.RED), new GUIListener());
 		this.currentGame = result;
 		result.startGame();
 		return result;

@@ -12,9 +12,9 @@ import com.dyllongagnier.triad.core.Field;
 public class CardPlayFunctionTest
 {
 	public static final Card perfectAce = new Card(10, 10, 10, 10, "Ace",
-			Card.Type.NONE, 5, Player.SELF);
+			Card.Type.NONE, 5, Player.BLUE);
 	public static final Card lowlyOne = new Card(1, 1, 1, 1, "One",
-			Card.Type.NONE, 5, Player.OPPONENT);
+			Card.Type.NONE, 5, Player.RED);
 	public static final Field testField = new Field(
 			DeployedCardComparator::regularCompare,
 			CardPlayFunction::basicCapture);
@@ -25,7 +25,7 @@ public class CardPlayFunctionTest
 		Field newField = testField.playCard(new DeployedCard(lowlyOne, 1, 1))
 				.playCard(new DeployedCard(perfectAce, 0, 1));
 		assertEquals(newField.getCard(1, 1),
-				new DeployedCard(lowlyOne, 1, 1).setPlayer(Player.SELF));
+				new DeployedCard(lowlyOne, 1, 1).setPlayer(Player.BLUE));
 		assertEquals(newField.getCard(0, 1), new DeployedCard(perfectAce, 0, 1));
 	}
 

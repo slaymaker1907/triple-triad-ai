@@ -56,13 +56,13 @@ public class BoardState
 		EnumMap<Player, SortedSet<UndeployedCard>> newPlayerHands = new EnumMap<>(
 				Player.class);
 		SortedSet<UndeployedCard> selfHand = new TreeSet<>();
-		for (UndeployedCard card : this.playerHands.get(Player.SELF))
+		for (UndeployedCard card : this.playerHands.get(Player.BLUE))
 			selfHand.add(card.clone());
 		SortedSet<UndeployedCard> opponentHand = new TreeSet<>();
-		for (UndeployedCard card : this.playerHands.get(Player.OPPONENT))
+		for (UndeployedCard card : this.playerHands.get(Player.RED))
 			opponentHand.add(card.clone());
-		newPlayerHands.put(Player.SELF, selfHand);
-		newPlayerHands.put(Player.OPPONENT, opponentHand);
+		newPlayerHands.put(Player.BLUE, selfHand);
+		newPlayerHands.put(Player.RED, opponentHand);
 
 		return new BoardState(newPlayerHands, this.playedCards, this.firstPlayer);
 	}
@@ -109,13 +109,13 @@ public class BoardState
 		
 		Function<Player, Integer> playerPoints = this.getPlayerScore();
 		int selfPoints, opponentPoints;
-		selfPoints = playerPoints.apply(Player.SELF);
-		opponentPoints = playerPoints.apply(Player.OPPONENT);
+		selfPoints = playerPoints.apply(Player.BLUE);
+		opponentPoints = playerPoints.apply(Player.RED);
 		
 		if (selfPoints > opponentPoints)
-			return Player.SELF;
+			return Player.BLUE;
 		else if (opponentPoints > selfPoints)
-			return Player.OPPONENT;
+			return Player.RED;
 		else
 			return Player.NONE;
 	}
@@ -178,21 +178,21 @@ public class BoardState
 	{
 		Function<Player, ArrayList<UndeployedCard>> boardFunc = this.playedCards
 				.getCardsUnderPlayers();
-		ArrayList<UndeployedCard> selfCards = boardFunc.apply(Player.SELF);
+		ArrayList<UndeployedCard> selfCards = boardFunc.apply(Player.BLUE);
 		ArrayList<UndeployedCard> opponentCards = boardFunc
-				.apply(Player.OPPONENT);
+				.apply(Player.RED);
 		
-		opponentCards.addAll(this.getHand(Player.OPPONENT));
-		selfCards.addAll(this.getHand(Player.SELF));
+		opponentCards.addAll(this.getHand(Player.RED));
+		selfCards.addAll(this.getHand(Player.BLUE));
 
 		return (player) ->
 		{
 			switch (player)
 			{
-				case SELF:
+				case BLUE:
 					return selfCards.toArray(new UndeployedCard[selfCards
 							.size()]);
-				case OPPONENT:
+				case RED:
 					return opponentCards
 							.toArray(new UndeployedCard[opponentCards.size()]);
 				default:
@@ -235,8 +235,8 @@ public class BoardState
 		public Builder()
 		{
 			this.playerHands = new EnumMap<>(Player.class);
-			this.playerHands.put(Player.SELF, new TreeSet<>());
-			this.playerHands.put(Player.OPPONENT, new TreeSet<>());
+			this.playerHands.put(Player.BLUE, new TreeSet<>());
+			this.playerHands.put(Player.RED, new TreeSet<>());
 			this.validator = MoveValidator::normalValidator;
 			this.ascensionTransform = AscensionTransform::noAscension;
 			this.isOrder = false;
@@ -254,8 +254,8 @@ public class BoardState
 			this.isSame = other.isSame;
 			this.isSuddenDeath = other.isSuddenDeath;
 			this.setAscensionTransform(this.getAscensionRule());
-			this.setHand(Player.SELF, other.copyPlayerHand(Player.SELF));
-			this.setHand(Player.OPPONENT, other.copyPlayerHand(Player.OPPONENT));
+			this.setHand(Player.BLUE, other.copyPlayerHand(Player.BLUE));
+			this.setHand(Player.RED, other.copyPlayerHand(Player.RED));
 			this.setIsOrder(other.isOrder);
 		}
 		

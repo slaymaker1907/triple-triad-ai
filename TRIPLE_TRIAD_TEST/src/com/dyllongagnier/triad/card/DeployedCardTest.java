@@ -66,8 +66,8 @@ public class DeployedCardTest
 	{
 		Card dodo = CardList.getCard("Dodo");
 		DeployedCard actual = new DeployedCard(dodo, 0, 1)
-				.setPlayer(Player.SELF);
-		Card expected = dodo.setHoldingPlayer(Player.SELF);
+				.setPlayer(Player.BLUE);
+		Card expected = dodo.setHoldingPlayer(Player.BLUE);
 		assertEquals(expected, actual.card);
 		assertEquals(0, actual.row);
 		assertEquals(1, actual.col);
@@ -78,7 +78,7 @@ public class DeployedCardTest
 	{
 		Card dodo = CardList.getCard("Dodo");
 		DeployedCard original = new DeployedCard(dodo, 0, 1);
-		original.setPlayer(Player.SELF);
+		original.setPlayer(Player.BLUE);
 		assertEquals(Player.NONE, original.card.holdingPlayer);
 		assertTrue(dodo == original.card);
 	}

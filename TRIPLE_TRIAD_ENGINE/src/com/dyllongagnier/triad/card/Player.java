@@ -4,7 +4,7 @@ import java.util.Random;
 
 public enum Player
 {
-	SELF, OPPONENT, NONE;
+	BLUE, RED, NONE;
 
 	/**
 	 * This method swaps SELF->OPPONENT or vice versa. This method will throw an
@@ -16,10 +16,10 @@ public enum Player
 	{
 		switch (this)
 		{
-			case SELF:
-				return OPPONENT;
-			case OPPONENT:
-				return SELF;
+			case BLUE:
+				return RED;
+			case RED:
+				return BLUE;
 			default:
 				throw new IllegalArgumentException();
 		}
@@ -36,8 +36,8 @@ public enum Player
 	{
 		int roll = gen.nextInt(2);
 		if (roll == 0)
-			return Player.SELF;
+			return Player.BLUE;
 		else
-			return Player.OPPONENT;
+			return Player.RED;
 	}
 }

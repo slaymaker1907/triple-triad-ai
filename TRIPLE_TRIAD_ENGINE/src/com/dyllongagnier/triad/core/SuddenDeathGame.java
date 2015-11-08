@@ -53,12 +53,12 @@ public class SuddenDeathGame extends TriadGame
 			// No winner so need to set up new game.
 			Function<Player, UndeployedCard[]> cardFunc = (player) -> OrderedCard.convertToOrderedCard(this.getCurrentState().getCardsUnderPlayers().apply(player));
 			BoardState.Builder newBuilder = new BoardState.Builder(this.builder);
-			newBuilder.setHand(Player.SELF, cardFunc.apply(Player.SELF));
-			newBuilder.setHand(Player.OPPONENT,
-					cardFunc.apply(Player.OPPONENT));
+			newBuilder.setHand(Player.BLUE, cardFunc.apply(Player.BLUE));
+			newBuilder.setHand(Player.RED,
+					cardFunc.apply(Player.RED));
 			
-			assert cardFunc.apply(Player.SELF).length >= 5;
-			assert cardFunc.apply(Player.OPPONENT).length >= 5;
+			assert cardFunc.apply(Player.BLUE).length >= 5;
+			assert cardFunc.apply(Player.RED).length >= 5;
 			
 			this.listener.gameChanged(this);
 			this.init(this.firstPlayerGen.get(), newBuilder);

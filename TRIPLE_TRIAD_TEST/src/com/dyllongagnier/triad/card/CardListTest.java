@@ -100,12 +100,12 @@ public class CardListTest
 	{
 		String[] cardNames = new String[] { "Coblyn", "Morbol", "Coeurl",
 				"Ahriman", "Garuda" };
-		Card[] actualHand = CardList.generateHand(Player.SELF, cardNames);
+		Card[] actualHand = CardList.generateHand(Player.BLUE, cardNames);
 		Card[] expectedHand = new Card[5];
 		for (int i = 0; i < 5; i++)
 		{
 			expectedHand[i] = CardList.getCard(cardNames[i]).setHoldingPlayer(
-					Player.SELF);
+					Player.BLUE);
 		}
 		Assert.assertArrayEquals(expectedHand, actualHand);
 	}
@@ -115,7 +115,7 @@ public class CardListTest
 	{
 		String[] cardNames = new String[] { "Coblyn", "NotACard", "Coeurl",
 				"Ahriman", "Garuda" };
-		CardList.generateHand(Player.SELF, cardNames);
+		CardList.generateHand(Player.BLUE, cardNames);
 	}
 
 	@Test

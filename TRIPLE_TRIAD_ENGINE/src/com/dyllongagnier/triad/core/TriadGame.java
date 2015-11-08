@@ -43,8 +43,8 @@ public class TriadGame
 		this.init(firstPlayer, gameBuilder);
 
 		this.gameAgentMap = new EnumMap<>(Player.class);
-		this.gameAgentMap.put(Player.SELF, selfAgent);
-		this.gameAgentMap.put(Player.OPPONENT, opponentAgent);
+		this.gameAgentMap.put(Player.BLUE, selfAgent);
+		this.gameAgentMap.put(Player.RED, opponentAgent);
 
 		this.moveValidator = gameBuilder.getMoveValidator();
 		this.listener = listener;
@@ -157,10 +157,10 @@ public class TriadGame
 		this.currentState = oldGame.currentState.clone();
 		this.turnCount = oldGame.turnCount;
 		this.gameAgentMap = new EnumMap<>(Player.class);
-		this.gameAgentMap.put(Player.SELF, oldGame.getGameAgent(Player.SELF)
+		this.gameAgentMap.put(Player.BLUE, oldGame.getGameAgent(Player.BLUE)
 				.clone());
-		this.gameAgentMap.put(Player.OPPONENT,
-				oldGame.getGameAgent(Player.OPPONENT).clone());
+		this.gameAgentMap.put(Player.RED,
+				oldGame.getGameAgent(Player.RED).clone());
 		this.listener = newListener;
 		this.moveValidator = oldGame.moveValidator;
 	}

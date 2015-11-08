@@ -15,7 +15,7 @@ public class DeckWriter
 	public static void writeDeckToDisk(String fileName, String[] cardNames) throws FileNotFoundException
 	{
 		// Do this to check deck validity.
-		CardList.generateHand(Player.SELF, cardNames);
+		CardList.generateHand(Player.BLUE, cardNames);
 		
 		JsonObjectBuilder mainBuilder = Json.createObjectBuilder();
 		JsonArrayBuilder arrBuilder = Json.createArrayBuilder();

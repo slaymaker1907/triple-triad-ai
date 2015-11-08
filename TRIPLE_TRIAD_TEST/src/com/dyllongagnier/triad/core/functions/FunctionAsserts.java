@@ -94,7 +94,7 @@ public class FunctionAsserts
 		Field expectedField = new Field(DeployedCardComparator::regularCompare,
 				expected);
 		DeployedCard center = new DeployedCard(new Card(3, 5, 2, 3, "center",
-				Card.Type.NONE, 1, Player.SELF), 1, 1);
+				Card.Type.NONE, 1, Player.BLUE), 1, 1);
 		actualField = FunctionAsserts.getSamePlusComboTriggerField(actualField);
 		expectedField = FunctionAsserts
 				.getSamePlusComboTriggerField(expectedField);
@@ -107,15 +107,15 @@ public class FunctionAsserts
 	private static Field getSamePlusComboTriggerField(Field start)
 	{
 		Card opponentOne = new Card(1, 1, 1, 1, "one", Card.Type.NONE, 1,
-				Player.OPPONENT);
+				Player.RED);
 		DeployedCard west = new DeployedCard(new Card(2, 6, 1, 1, "west",
-				Card.Type.NONE, 1, Player.OPPONENT), 1, 0);
+				Card.Type.NONE, 1, Player.RED), 1, 0);
 		DeployedCard north = new DeployedCard(new Card(1, 2, 6, 1, "north",
-				Card.Type.NONE, 1, Player.OPPONENT), 0, 1);
+				Card.Type.NONE, 1, Player.RED), 0, 1);
 		DeployedCard east = new DeployedCard(new Card(1, 1, 2, 5, "east",
-				Card.Type.NONE, 1, Player.OPPONENT), 1, 2);
+				Card.Type.NONE, 1, Player.RED), 1, 2);
 		DeployedCard south = new DeployedCard(new Card(2, 1, 1, 2, "south",
-				Card.Type.NONE, 1, Player.OPPONENT), 2, 1);
+				Card.Type.NONE, 1, Player.RED), 2, 1);
 		return start.playCard(new DeployedCard(opponentOne, 0, 0))
 				.playCard(new DeployedCard(opponentOne, 0, 2))
 				.playCard(new DeployedCard(opponentOne, 2, 0))

@@ -148,8 +148,8 @@ public class Field
 	public Function<Player, ArrayList<UndeployedCard>> getCardsUnderPlayers()
 	{
 		EnumMap<Player, ArrayList<UndeployedCard>> result = new EnumMap<>(Player.class);
-		result.put(Player.SELF, new ArrayList<>());
-		result.put(Player.OPPONENT, new ArrayList<>());
+		result.put(Player.BLUE, new ArrayList<>());
+		result.put(Player.RED, new ArrayList<>());
 		for (int row = 0; row < 3; row++)
 		{
 			for (int col = 0; col < 3; col++)
@@ -168,8 +168,8 @@ public class Field
 		public Function<Player, Integer> getVictoryPoints()
 		{
 			EnumMap<Player, Integer> playerPoints = new EnumMap<>(Player.class);
-			playerPoints.put(Player.SELF, 0);
-			playerPoints.put(Player.OPPONENT, 0);
+			playerPoints.put(Player.BLUE, 0);
+			playerPoints.put(Player.RED, 0);
 			for (int row = 0; row < 3; row++)
 			{
 				for (int col = 0; col < 3; col++)

@@ -17,13 +17,13 @@ public class PlayerTest
 	@Test
 	public void testSwapPlayerSelf()
 	{
-		assertEquals(Player.OPPONENT, Player.SELF.swapPlayer());
+		assertEquals(Player.RED, Player.BLUE.swapPlayer());
 	}
 
 	@Test
 	public void testSwapPlayerOpponent()
 	{
-		assertEquals(Player.SELF, Player.OPPONENT.swapPlayer());
+		assertEquals(Player.BLUE, Player.RED.swapPlayer());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -36,8 +36,8 @@ public class PlayerTest
 	public void randomPlayerGeneratesBothPlayers()
 	{
 		EnumMap<Player, Integer> playerBag = new EnumMap<>(Player.class);
-		playerBag.put(Player.SELF, 0);
-		playerBag.put(Player.OPPONENT, 0);
+		playerBag.put(Player.BLUE, 0);
+		playerBag.put(Player.RED, 0);
 		playerBag.put(Player.NONE, 0);
 		for (int i = 0; i < 100; i++)
 		{
@@ -46,7 +46,7 @@ public class PlayerTest
 		}
 
 		assertEquals(0, playerBag.get(Player.NONE).intValue());
-		assertNotEquals(0, playerBag.get(Player.SELF).intValue());
-		assertNotEquals(0, playerBag.get(Player.OPPONENT).intValue());
+		assertNotEquals(0, playerBag.get(Player.BLUE).intValue());
+		assertNotEquals(0, playerBag.get(Player.RED).intValue());
 	}
 }

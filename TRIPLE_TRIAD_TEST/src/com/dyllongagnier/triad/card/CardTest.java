@@ -34,7 +34,7 @@ public class CardTest
 	public void assertFieldsInOrder2()
 	{
 		Card test = new Card(1, 2, 3, 4, "", Card.Type.BEASTMAN, 5,
-				Player.OPPONENT);
+				Player.RED);
 		assertEquals(test.cardRarity, 5);
 		assertEquals(test.north, 1);
 		assertEquals(test.east, 2);
@@ -42,14 +42,14 @@ public class CardTest
 		assertEquals(test.west, 4);
 		assertEquals(test.name, "");
 		assertEquals(test.cardType, Card.Type.BEASTMAN);
-		assertEquals(test.holdingPlayer, Player.OPPONENT);
+		assertEquals(test.holdingPlayer, Player.RED);
 	}
 
 	@Test
 	public void setHoldingPlayerTest()
 	{
 		Card test = new Card(1, 2, 3, 4, "", Card.Type.BEASTMAN, 5)
-				.setHoldingPlayer(Player.OPPONENT);
+				.setHoldingPlayer(Player.RED);
 		assertEquals(test.cardRarity, 5);
 		assertEquals(test.north, 1);
 		assertEquals(test.east, 2);
@@ -57,13 +57,13 @@ public class CardTest
 		assertEquals(test.west, 4);
 		assertEquals(test.name, "");
 		assertEquals(test.cardType, Card.Type.BEASTMAN);
-		assertEquals(test.holdingPlayer, Player.OPPONENT);
+		assertEquals(test.holdingPlayer, Player.RED);
 	}
 
 	@Test
 	public void setHoldingPlayerNoMutate()
 	{
-		testCard.setHoldingPlayer(Player.SELF);
+		testCard.setHoldingPlayer(Player.BLUE);
 		assertEquals(testCard.cardRarity, 5);
 		assertEquals(testCard.north, 1);
 		assertEquals(testCard.east, 2);
@@ -184,7 +184,7 @@ public class CardTest
 	public void testNotEqualsPlayer()
 	{
 		Card testCopy = new Card(1, 2, 3, 4, "", Card.Type.BEASTMAN, 5)
-				.setHoldingPlayer(Player.SELF);
+				.setHoldingPlayer(Player.BLUE);
 		assertFalse(testCopy.equals(testCard));
 	}
 
@@ -295,7 +295,7 @@ public class CardTest
 	public void testCompareNotEqualPlayer()
 	{
 		Card other = new Card(1, 2, 3, 4, "", Card.Type.BEASTMAN, 5)
-				.setHoldingPlayer(Player.SELF);
+				.setHoldingPlayer(Player.BLUE);
 		assertNotEquals(0, this.testCard.compareTo(other));
 	}
 

@@ -121,14 +121,14 @@ public class MainWindow extends JFrame implements GameView
 		playerAIButtons.add(playerManual);
 		playerAIButtons.add(playerAI);
 		playerAI.setSelected(true);
-		MainWindow.setAIButtonEvents(playerAI, playerManual, Player.SELF);
+		MainWindow.setAIButtonEvents(playerAI, playerManual, Player.BLUE);
 		
 		JRadioButton opponentAI = new JRadioButton("AI");
 		JRadioButton opponentManual = new JRadioButton("Manual");
 		opponentAIButtons.add(opponentAI);
 		opponentAIButtons.add(opponentManual);
 		opponentManual.setSelected(true);
-		MainWindow.setAIButtonEvents(opponentAI, opponentManual, Player.OPPONENT);
+		MainWindow.setAIButtonEvents(opponentAI, opponentManual, Player.RED);
 		
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener((act) ->
@@ -139,15 +139,15 @@ public class MainWindow extends JFrame implements GameView
 		JButton btnDeckBuilder = new JButton("Deck Builder");
 		btnDeckBuilder.addActionListener((act) -> new DeckBuilderWindow().setVisible(true));
 		
-		currentTurnIndicatorSelf = new CurrentTurnIndicator(Player.SELF);
+		currentTurnIndicatorSelf = new CurrentTurnIndicator(Player.BLUE);
 		
-		currentTurnIndicatorOpponent = new CurrentTurnIndicator(Player.OPPONENT);
+		currentTurnIndicatorOpponent = new CurrentTurnIndicator(Player.RED);
 		
 		JButton quickLoadSelf = new JButton("QuickLoad");
-		quickLoadSelf.addActionListener((act) -> new QuickBuilderWindow(this.getDeckConsumer(Player.SELF)));
+		quickLoadSelf.addActionListener((act) -> new QuickBuilderWindow(this.getDeckConsumer(Player.BLUE)));
 		
 		JButton quickLoadOpp = new JButton("QuickLoad");
-		quickLoadOpp.addActionListener((act) -> new QuickBuilderWindow(this.getDeckConsumer(Player.OPPONENT)));
+		quickLoadOpp.addActionListener((act) -> new QuickBuilderWindow(this.getDeckConsumer(Player.RED)));
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -221,8 +221,8 @@ public class MainWindow extends JFrame implements GameView
 		);
 		getContentPane().setLayout(groupLayout);
 		
-		selfLoadDeck.addActionListener((arg) -> this.loadDeck(Player.SELF));
-		opponentLoadDeck.addActionListener((arg) -> this.loadDeck(Player.OPPONENT));
+		selfLoadDeck.addActionListener((arg) -> this.loadDeck(Player.BLUE));
+		opponentLoadDeck.addActionListener((arg) -> this.loadDeck(Player.RED));
 	}
 	
 	private Consumer<String[]> getDeckConsumer(Player player)
@@ -257,8 +257,8 @@ public class MainWindow extends JFrame implements GameView
 	@Override
 	public Player getFirstPlayer()
 	{
-		Object[] possiblePlayers = new Object[]{Player.SELF, Player.OPPONENT};
-		return (Player)JOptionPane.showInputDialog(MainWindow.getMainWindow(), "Please enter the first player.", "First Player", JOptionPane.PLAIN_MESSAGE, null, possiblePlayers, Player.SELF);
+		Object[] possiblePlayers = new Object[]{Player.BLUE, Player.RED};
+		return (Player)JOptionPane.showInputDialog(MainWindow.getMainWindow(), "Please enter the first player.", "First Player", JOptionPane.PLAIN_MESSAGE, null, possiblePlayers, Player.BLUE);
 	}
 		
 	@Override
@@ -267,11 +267,11 @@ public class MainWindow extends JFrame implements GameView
 		Runnable toRun = () ->
 		{
 			this.displayField(state.playedCards);
-			this.setHand(Player.SELF, state.getHand(Player.SELF));
-			this.setHand(Player.OPPONENT, state.getHand(Player.OPPONENT));
+			this.setHand(Player.BLUE, state.getHand(Player.BLUE));
+			this.setHand(Player.RED, state.getHand(Player.RED));
 			this.setCanDropToField(false);
-			this.allowDraggingFromHand(Player.SELF, false);
-			this.allowDraggingFromHand(Player.OPPONENT, false);
+			this.allowDraggingFromHand(Player.BLUE, false);
+			this.allowDraggingFromHand(Player.RED, false);
 			
 			if (lastMove != null)
 			{
@@ -295,9 +295,9 @@ public class MainWindow extends JFrame implements GameView
 	{
 		switch(player)
 		{
-			case SELF:
+			case BLUE:
 				return this.selfHand;
-			case OPPONENT:
+			case RED:
 				return this.opponentHand;
 			default:
 				throw new InvalidPlayerException();
@@ -334,10 +334,10 @@ public class MainWindow extends JFrame implements GameView
 		CardCollection col;
 		switch(player)
 		{
-			case SELF:
+			case BLUE:
 				col = this.selfHand;
 				break;
-			case OPPONENT:
+			case RED:
 				col = this.opponentHand;
 				break;
 			default:
@@ -360,11 +360,11 @@ public class MainWindow extends JFrame implements GameView
 	{
 		switch(player)
 		{
-			case SELF:
+			case BLUE:
 				this.currentTurnIndicatorSelf.setVisible(true);
 				this.currentTurnIndicatorOpponent.setVisible(false);
 				break;
-			case OPPONENT:
+			case RED:
 				this.currentTurnIndicatorSelf.setVisible(false);
 				this.currentTurnIndicatorOpponent.setVisible(true);
 				break;
@@ -386,10 +386,10 @@ public class MainWindow extends JFrame implements GameView
 	{
 		switch(player)
 		{
-			case SELF:
+			case BLUE:
 				this.selfHand.setCanDragFrom(canDrag);
 				break;
-			case OPPONENT:
+			case RED:
 				this.opponentHand.setCanDragFrom(canDrag);
 				break;
 			default:
@@ -410,8 +410,8 @@ public class MainWindow extends JFrame implements GameView
 			this.setCurrentTurn(player);
 			if (player == Player.NONE)
 			{
-				this.allowDraggingFromHand(Player.SELF, false);
-				this.allowDraggingFromHand(Player.OPPONENT, false);
+				this.allowDraggingFromHand(Player.BLUE, false);
+				this.allowDraggingFromHand(Player.RED, false);
 			}
 			else
 			{

@@ -14,9 +14,9 @@ public class TriadGameCloneSpeed
 	{
 		System.out.println(BasicGamePerformance.class.desiredAssertionStatus());
 		BoardState.Builder builder = new BoardState.Builder();
-		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo",
+		builder.setHand(Player.BLUE, CardList.generateHand(Player.BLUE, "Dodo",
 				"Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
-		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT,
+		builder.setHand(Player.RED, CardList.generateHand(Player.RED,
 				"Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		GameAgent ai = new RandomAI();
 		TriadGame mainGame = new TriadGame(
@@ -27,12 +27,12 @@ public class TriadGameCloneSpeed
 			mainGame.clone();
 		}
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 100_000; i++)
+		for (int i = 0; i < 900_000; i++)
 		{
 			mainGame.clone();
 		}
 		System.out
-				.println(100_000.0 / (System.currentTimeMillis() - start) * 1000.0);
+				.println(900_000.0 / (System.currentTimeMillis() - start) * 1000.0);
 	}
 
 }

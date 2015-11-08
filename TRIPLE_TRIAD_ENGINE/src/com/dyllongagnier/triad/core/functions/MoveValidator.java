@@ -100,7 +100,7 @@ public interface MoveValidator
 	public static boolean partialOrderValidator(BoardState currentState,
 			UndeployedCard toPlay, Player player, int row, int col)
 	{
-		if (player == Player.SELF && !currentState.getFirstCardInHand(player).equals(toPlay))
+		if (player == Player.BLUE && !currentState.getFirstCardInHand(player).equals(toPlay))
 			return false;
 		if (currentState.playedCards.isCardInPos(row, col))
 			return false;

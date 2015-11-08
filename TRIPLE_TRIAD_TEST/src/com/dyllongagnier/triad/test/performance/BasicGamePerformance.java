@@ -16,18 +16,18 @@ public class BasicGamePerformance
 	public static Player getRandomPlayer()
 	{
 		if (gen.nextBoolean())
-			return Player.SELF;
+			return Player.BLUE;
 		else
-			return Player.OPPONENT;
+			return Player.RED;
 	}
 
 	public static void main(String[] args)
 	{
 		System.out.println(BasicGamePerformance.class.desiredAssertionStatus());
 		BoardState.Builder builder = new BoardState.Builder();
-		builder.setHand(Player.SELF, CardList.generateHand(Player.SELF, "Dodo",
+		builder.setHand(Player.BLUE, CardList.generateHand(Player.BLUE, "Dodo",
 				"Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
-		builder.setHand(Player.OPPONENT, CardList.generateHand(Player.OPPONENT,
+		builder.setHand(Player.RED, CardList.generateHand(Player.RED,
 				"Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
 		GameAgent ai = new RandomAI();
 		for (int i = 0; i < 100_000; i++)
