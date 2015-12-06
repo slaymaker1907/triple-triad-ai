@@ -3,7 +3,9 @@ package com.dyllongagnier.triad.test.performance;
 import java.util.Random;
 
 import com.dyllongagnier.triad.card.CardList;
+import com.dyllongagnier.triad.card.OrderedCard;
 import com.dyllongagnier.triad.card.Player;
+import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.DefaultListener;
 import com.dyllongagnier.triad.core.TriadGame;
 import com.dyllongagnier.triad.core.BoardState;
@@ -25,10 +27,10 @@ public class BasicGamePerformance
 	{
 		System.out.println(BasicGamePerformance.class.desiredAssertionStatus());
 		BoardState.Builder builder = new BoardState.Builder();
-		builder.setHand(Player.BLUE, CardList.generateHand(Player.BLUE, "Dodo",
+		UndeployedCard[] cards = OrderedCard.convertToOrderedCard(CardList.generateHand(Player.BLUE, "Dodo",
 				"Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
-		builder.setHand(Player.RED, CardList.generateHand(Player.RED,
-				"Dodo", "Gaelicat", "Tonberry", "Sabotender", "Spriggan"));
+		builder.setHand(Player.BLUE, cards);
+		builder.setHand(Player.RED, cards);
 		GameAgent ai = new RandomAI();
 		for (int i = 0; i < 100_000; i++)
 		{
