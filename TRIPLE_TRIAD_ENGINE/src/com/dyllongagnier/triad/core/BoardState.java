@@ -3,6 +3,8 @@ package com.dyllongagnier.triad.core;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -23,7 +25,7 @@ import com.dyllongagnier.triad.core.functions.MoveValidator;
  */
 public class BoardState
 {
-	private final EnumMap<Player, SortedSet<UndeployedCard>> playerHands;
+	private final EnumMap<Player, Set<UndeployedCard>> playerHands;
 	public final Field playedCards;
 	private final Player firstPlayer;
 
@@ -41,7 +43,7 @@ public class BoardState
 	 *            array will be reflected in this state.
 	 */
 	protected BoardState(
-			EnumMap<Player, SortedSet<UndeployedCard>> playerHands,
+			EnumMap<Player, Set<UndeployedCard>> playerHands,
 			Field playedCards, Player firstPlayer)
 	{
 		this.playerHands = playerHands;
@@ -63,7 +65,7 @@ public class BoardState
 	 *            not Player.NONE.
 	 * @return An unmodifiable list view of the hand.
 	 */
-	public SortedSet<UndeployedCard> getHand(Player player)
+	public Set<UndeployedCard> getHand(Player player)
 	{
 		assert player != Player.NONE;
 		assert player != null;
@@ -120,7 +122,7 @@ public class BoardState
 	{
 		assert player != null;
 		assert player != Player.NONE;
-		return this.playerHands.get(player).first();
+		return ((SortedSet<UndeployedCard>)this.playerHands.get(player)).first();
 	}
 
 	/**
@@ -147,11 +149,20 @@ public class BoardState
 		DeployedCard cardToPlay = new DeployedCard(card.deploy(), row, col);
 		assert cardToPlay.card.holdingPlayer == player;
 		Field newField = this.playedCards.playCard(cardToPlay);
-		EnumMap<Player, SortedSet<UndeployedCard>> newHands = new EnumMap<>(
+		EnumMap<Player, Set<UndeployedCard>> newHands = new EnumMap<>(
 				Player.class);
-		newHands.put(player, new TreeSet<>(this.getHand(player)));
+		
+		// Do a check for Order.
+		Set<UndeployedCard> oldChangedCards = this.getHand(player);
+		Set<UndeployedCard> newChangedCards;
+		if (oldChangedCards instanceof TreeSet<?>)
+			newChangedCards = new TreeSet<UndeployedCard>(oldChangedCards);
+		else
+			newChangedCards = new HashSet<UndeployedCard>(oldChangedCards);
+		
+		newChangedCards.remove(card);
+		newHands.put(player, newChangedCards);
 		newHands.put(player.swapPlayer(), this.getHand(player.swapPlayer()));
-		newHands.get(player).remove(card);
 		return new BoardState(newHands, newField, this.firstPlayer);
 	}
 
@@ -393,8 +404,22 @@ public class BoardState
 				default:
 					fieldToUse = new Field(cardComparator, playFunc);
 			}
+			
+			EnumMap<Player, Set<UndeployedCard>> playerHands = new EnumMap<>(Player.class);
+			if (this.isOrder)
+			{
+				playerHands.put(Player.BLUE, new TreeSet<UndeployedCard>());
+				playerHands.put(Player.RED, new TreeSet<UndeployedCard>());
+			}
+			else
+			{
+				playerHands.put(Player.BLUE, new HashSet<UndeployedCard>());
+				playerHands.put(Player.RED, new HashSet<UndeployedCard>());
+			}
+			playerHands.get(Player.BLUE).addAll(this.playerHands.get(Player.BLUE));
+			playerHands.get(Player.RED).addAll(this.playerHands.get(Player.RED));
 
-			return new BoardState(this.playerHands, fieldToUse, firstPlayer);
+			return new BoardState(playerHands, fieldToUse, firstPlayer);
 		}
 
 		/**
