@@ -5,16 +5,26 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ObjectSocket
 {
 	private final Socket socket;
 	private final ObjectOutputStream objectSender;
 	private final ObjectInputStream objectReceiv;
+	private final int id;
+	
+	private static final AtomicInteger idGen = new AtomicInteger(0);
+	
+	private static int generateId()
+	{
+		return idGen.incrementAndGet();
+	}
 	
 	// Assumed to be connected already.
 	public ObjectSocket(Socket socket) throws IOException
 	{
+		this.id = ObjectSocket.generateId();
 		this.socket = socket;
 		this.objectSender = new ObjectOutputStream(this.socket.getOutputStream());
 		this.objectReceiv = new ObjectInputStream(this.socket.getInputStream());
@@ -28,5 +38,30 @@ public class ObjectSocket
 	public Serializable getLastObject() throws ClassNotFoundException, IOException
 	{
 		return (Serializable) this.objectReceiv.readObject();
+	}
+	
+	public int getId()
+	{
+		return this.id;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		try
+		{
+			ObjectSocket other = (ObjectSocket)o;
+			return this.getId() == other.getId();
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return this.getId();
 	}
 }
