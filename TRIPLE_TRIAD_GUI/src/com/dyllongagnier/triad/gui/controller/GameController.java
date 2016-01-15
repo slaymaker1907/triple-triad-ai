@@ -34,7 +34,7 @@ public interface GameController
 	public double getTimeout();
 	public boolean getIsAI(Player player);
 	public AscensionRule getAscensionRule();
-	public void verifyOptionValidity();
+	public void verifyOptionValidity() throws Exception;
 	public void setTimeout(double timeout);
 	public TriadGame startNewGame();
 	public void makeMove(PossibleMove move);
