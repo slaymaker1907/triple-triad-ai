@@ -1,29 +1,45 @@
 package com.dyllongagnier.triad.gui.controller;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.Arrays;
 
+import com.dyllongagnier.triad.card.HandFactory;
 import com.dyllongagnier.triad.card.Player;
 import com.dyllongagnier.triad.card.UndeployedCard;
 import com.dyllongagnier.triad.core.AscensionRule;
 import com.dyllongagnier.triad.core.PossibleMove;
 import com.dyllongagnier.triad.core.TriadGame;
+import com.dyllongagnier.triad.net.*;
 
 public class ClientController implements GameController
 {
+	private ObjectSocket socket;
+	
+	private void setAddress(String address, int port) throws UnknownHostException, IOException
+	{
+		this.socket = new ObjectSocket(address, port);
+	}
+	
+	public ClientController(String address, int port) throws UnknownHostException, IOException
+	{
+		this.setAddress(address, port);
+	}
 
 	@Override
-	public void setAgent(Player player, boolean isAI)
+	public void setAgent(Player player, boolean isAi)
 	{
-		// TODO Auto-generated method stub
-		
+		this.socket.sendObject(new SetAgent(player, isAi));
 	}
 
 	@Override
 	public Iterable<UndeployedCard> setPlayerDeck(Player player, String filename)
 			throws FileNotFoundException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		UndeployedCard[] result = HandFactory.getDeck(player, filename, null);
+		this.socket.sendObject(new PlayerDeck(player, result));
+		return Arrays.asList(result);
 	}
 
 	@Override
