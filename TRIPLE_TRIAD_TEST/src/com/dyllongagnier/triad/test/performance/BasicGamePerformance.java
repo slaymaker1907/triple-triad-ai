@@ -38,7 +38,7 @@ public class BasicGamePerformance
 					ai, new DefaultListener()).startGame();
 		}
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 9000_000; i++)
+		for (int i = 0; i < 900_000; i++)
 		{
 			new TriadGame(BasicGamePerformance.getRandomPlayer(), builder, ai,
 					ai, new DefaultListener()).startGame();

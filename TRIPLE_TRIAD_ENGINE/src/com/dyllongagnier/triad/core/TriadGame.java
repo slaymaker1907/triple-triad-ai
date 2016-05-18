@@ -18,6 +18,8 @@ public class TriadGame
 	protected BoardState currentState;
 	protected int turnCount;
 	private PossibleMove lastMove;
+	
+	// Serial format {"currentPlayer":player," BoardState":{state}, "turnCount":turnCount, "PossibleMove":move}
 
 	private final EnumMap<Player, GameAgent> gameAgentMap;
 	protected final GameListener listener;
