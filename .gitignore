@@ -12,3 +12,9 @@
 hs_err_pid*
 *.pyc
 *.DS_Store
+
+*.json
+*.pickle
+!/python/ttriad/resources/*
+*/venv/*
+*.pyc

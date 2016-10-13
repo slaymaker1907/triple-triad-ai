@@ -1,0 +1,168 @@
+{"name": "Dodo", "strength": {"south": 3, "west": 2, "east": 4, "north": 4}}
+{"name": "Tonberry", "strength": {"south": 7, "west": 2, "east": 2, "north": 2}}
+{"name": "Sabotender", "strength": {"south": 3, "west": 3, "east": 3, "north": 4}}
+{"name": "Spriggan", "strength": {"south": 4, "west": 3, "east": 4, "north": 2}}
+{"name": "Pudding", "strength": {"south": 3, "west": 4, "east": 5, "north": 2}}
+{"name": "Bomb", "strength": {"south": 3, "west": 4, "east": 3, "north": 3}}
+{"name": "Mandragora", "strength": {"south": 5, "west": 2, "east": 3, "north": 4}}
+{"name": "Coblyn", "strength": {"south": 3, "west": 3, "east": 4, "north": 3}}
+{"name": "Morbol", "strength": {"south": 5, "west": 2, "east": 2, "north": 5}}
+{"name": "Coeurl", "strength": {"south": 2, "west": 5, "east": 5, "north": 2}}
+{"name": "Ahriman", "strength": {"south": 2, "west": 5, "east": 2, "north": 5}}
+{"name": "Goobbue", "strength": {"south": 5, "west": 5, "east": 2, "north": 2}}
+{"name": "Chocobo", "strength": {"south": 2, "west": 7, "east": 1, "north": 3}}
+{"name": "Amalj'aa", "strength": {"south": 7, "west": 4, "east": 1, "north": 1}}
+{"name": "Ixal", "strength": {"south": 3, "west": 1, "east": 4, "north": 6}}
+{"name": "Sylph", "strength": {"south": 5, "west": 4, "east": 4, "north": 2}}
+{"name": "Kobold", "strength": {"south": 4, "west": 2, "east": 6, "north": 2}}
+{"name": "Sahagin", "strength": {"south": 3, "west": 5, "east": 3, "north": 4}}
+{"name": "Tataru Taru", "strength": {"south": 3, "west": 2, "east": 2, "north": 7}}
+{"name": "Moogle", "strength": {"south": 3, "west": 1, "east": 7, "north": 2}}
+{"name": "Siren", "strength": {"south": 7, "west": 6, "east": 2, "north": 3}}
+{"name": "Ultros & Typhon", "strength": {"south": 6, "west": 3, "east": 7, "north": 2}}
+{"name": "Demon Wall", "strength": {"south": 2, "west": 7, "east": 3, "north": 6}}
+{"name": "Succubus", "strength": {"south": 2, "west": 3, "east": 6, "north": 7}}
+{"name": "Chimera", "strength": {"south": 2, "west": 7, "east": 2, "north": 7}}
+{"name": "Blue Dragon", "strength": {"south": 7, "west": 2, "east": 7, "north": 2}}
+{"name": "Scarface Bugaal Ja", "strength": {"south": 2, "west": 6, "east": 6, "north": 6}}
+{"name": "Momodi Modi", "strength": {"south": 5, "west": 5, "east": 3, "north": 7}}
+{"name": "Baderon Tenfingers", "strength": {"south": 5, "west": 7, "east": 5, "north": 3}}
+{"name": "Mother Miounne", "strength": {"south": 3, "west": 5, "east": 7, "north": 5}}
+{"name": "Livia sas Junius", "strength": {"south": 7, "west": 7, "east": 1, "north": 3}}
+{"name": "Rhitahtyn sas Arvina", "strength": {"south": 3, "west": 1, "east": 7, "north": 7}}
+{"name": "Biggs & Wedge", "strength": {"south": 7, "west": 3, "east": 5, "north": 5}}
+{"name": "Gerolt", "strength": {"south": 3, "west": 7, "east": 7, "north": 1}}
+{"name": "Frixio", "strength": {"south": 6, "west": 2, "east": 6, "north": 6}}
+{"name": "Mutamix Bubblypots", "strength": {"south": 6, "west": 6, "east": 6, "north": 2}}
+{"name": "Memeroon", "strength": {"south": 6, "west": 6, "east": 2, "north": 6}}
+{"name": "Behemoth", "strength": {"south": 4, "west": 8, "east": 2, "north": 7}}
+{"name": "Gilgamesh & Enkidu", "strength": {"south": 7, "west": 3, "east": 3, "north": 8}}
+{"name": "Ifrit", "strength": {"south": 6, "west": 1, "east": 7, "north": 7}}
+{"name": "Titan", "strength": {"south": 7, "west": 7, "east": 6, "north": 1}}
+{"name": "Garuda", "strength": {"south": 1, "west": 6, "east": 7, "north": 7}}
+{"name": "Good King Moggle Mog XIII", "strength": {"south": 7, "west": 6, "east": 1, "north": 7}}
+{"name": "Raya-O-Senna & A-Ruhn-Senna", "strength": {"south": 6, "west": 6, "east": 6, "north": 5}}
+{"name": "Godbert Manderville", "strength": {"south": 5, "west": 6, "east": 6, "north": 6}}
+{"name": "Thancred", "strength": {"south": 8, "west": 3, "east": 7, "north": 2}}
+{"name": "Nero tol Scaeva", "strength": {"south": 8, "west": 1, "east": 7, "north": 4}}
+{"name": "Papalymo & Yda", "strength": {"south": 8, "west": 7, "east": 2, "north": 3}}
+{"name": "Y'shtola", "strength": {"south": 1, "west": 8, "east": 4, "north": 7}}
+{"name": "Urianger", "strength": {"south": 4, "west": 1, "east": 7, "north": 8}}
+{"name": "Ultima Weapon", "strength": {"south": 9, "west": 8, "east": 1, "north": 7}}
+{"name": "Odin", "strength": {"south": 1, "west": 8, "east": 8, "north": 8}}
+{"name": "Ramuh", "strength": {"south": 8, "west": 1, "east": 8, "north": 8}}
+{"name": "Leviathan", "strength": {"south": 8, "west": 8, "east": 1, "north": 8}}
+{"name": "Shiva", "strength": {"south": 8, "west": 8, "east": 8, "north": 1}}
+{"name": "Minfilia", "strength": {"south": 3, "west": 8, "east": 5, "north": 9}}
+{"name": "Lahabrea", "strength": {"south": 4, "west": 9, "east": 8, "north": 4}}
+{"name": "Cid Garlond", "strength": {"south": 9, "west": 9, "east": 2, "north": 5}}
+{"name": "Alphinaud & Alisaie", "strength": {"south": 3, "west": 3, "east": 9, "north": 9}}
+{"name": "Louisoix Leveilleur", "strength": {"south": 9, "west": 4, "east": 3, "north": 9}}
+{"name": "Bahamut", "strength": {"south": 9, "west": 5, "east": 6, "north": 9}}
+{"name": "Hildibrand & Nashu Mhakaracca", "strength": {"south": 10, "west": 8, "east": 8, "north": 1}}
+{"name": "Nanamo Ul Namo", "strength": {"south": 4, "west": 6, "east": 8, "north": 10}}
+{"name": "Gaius van Baelsar", "strength": {"south": 5, "west": 10, "east": 9, "north": 4}}
+{"name": "Merlwyb Bloefhiswyn", "strength": {"south": 10, "west": 9, "east": 3, "north": 5}}
+{"name": "Kan-E-Senna", "strength": {"south": 1, "west": 10, "east": 7, "north": 9}}
+{"name": "Raubahn Aldynn", "strength": {"south": 9, "west": 2, "east": 10, "north": 6}}
+{"name": "Warrior of Light", "strength": {"south": 5, "west": 2, "east": 10, "north": 10}}
+{"name": "Firion", "strength": {"south": 10, "west": 5, "east": 1, "north": 10}}
+{"name": "Onion Knight", "strength": {"south": 8, "west": 2, "east": 10, "north": 8}}
+{"name": "Cecil Harvey", "strength": {"south": 4, "west": 10, "east": 10, "north": 4}}
+{"name": "Bartz Klauser", "strength": {"south": 10, "west": 4, "east": 10, "north": 4}}
+{"name": "Terra Branford", "strength": {"south": 2, "west": 10, "east": 5, "north": 10}}
+{"name": "Cloud Strife", "strength": {"south": 9, "west": 3, "east": 8, "north": 9}}
+{"name": "Squall Leonhart", "strength": {"south": 10, "west": 10, "east": 1, "north": 6}}
+{"name": "Zidane Tribal", "strength": {"south": 6, "west": 10, "east": 8, "north": 5}}
+{"name": "Tidus", "strength": {"south": 1, "west": 7, "east": 9, "north": 10}}
+{"name": "Shantotto", "strength": {"south": 7, "west": 9, "east": 9, "north": 4}}
+{"name": "Vaan", "strength": {"south": 10, "west": 7, "east": 9, "north": 1}}
+{"name": "Lightning", "strength": {"south": 7, "west": 1, "east": 10, "north": 9}}
+{"name": "Gaelicat", "strength": {"south": 1, "west": 1, "east": 7, "north": 4}}
+{"name": "Vanu Vanu", "strength": {"south": 4, "west": 6, "east": 7, "north": 2}}
+{"name": "Gnath", "strength": {"south": 7, "west": 3, "east": 3, "north": 6}}
+{"name": "Yugiri Mistwalker", "strength": {"south": 1, "west": 7, "east": 3, "north": 7}}
+{"name": "Fat Chocobo", "strength": {"south": 5, "west": 5, "east": 5, "north": 5}}
+{"name": "Griffin", "strength": {"south": 7, "west": 1, "east": 8, "north": 5}}
+{"name": "Tioman", "strength": {"south": 8, "west": 5, "east": 7, "north": 1}}
+{"name": "Estinien", "strength": {"south": 2, "west": 8, "east": 3, "north": 8}}
+{"name": "Lucia goe Junius", "strength": {"south": 3, "west": 2, "east": 8, "north": 8}}
+{"name": "Ysayle", "strength": {"south": 8, "west": 8, "east": 1, "north": 4}}
+{"name": "Hilda", "strength": {"south": 8, "west": 4, "east": 8, "north": 1}}
+{"name": "Matoya", "strength": {"south": 8, "west": 3, "east": 1, "north": 8}}
+{"name": "Count Edmont de Fortemps", "strength": {"south": 3, "west": 8, "east": 8, "north": 1}}
+{"name": "Byblos", "strength": {"south": 1, "west": 4, "east": 7, "north": 8}}
+{"name": "Haurchefant", "strength": {"south": 5, "west": 1, "east": 8, "north": 7}}
+{"name": "Aymeric", "strength": {"south": 9, "west": 5, "east": 9, "north": 1}}
+{"name": "Ravana", "strength": {"south": 8, "west": 7, "east": 1, "north": 9}}
+{"name": "Bismarck", "strength": {"south": 7, "west": 9, "east": 8, "north": 1}}
+{"name": "Nidhogg", "strength": {"south": 3, "west": 7, "east": 8, "north": 10}}
+{"name": "Midgardsormr", "strength": {"south": 10, "west": 8, "east": 7, "north": 3}}
+{"name": "Deepeye", "strength": {"south": 7, "west": 3, "east": 2, "north": 1}}
+{"name": "Archaeornis", "strength": {"south": 6, "west": 4, "east": 5, "north": 5}}
+{"name": "Paissa", "strength": {"south": 3, "west": 6, "east": 6, "north": 4}}
+{"name": "Dhalmel", "strength": {"south": 3, "west": 5, "east": 5, "north": 6}}
+{"name": "Bandersnatch", "strength": {"south": 3, "west": 6, "east": 4, "north": 6}}
+{"name": "Crawler", "strength": {"south": 3, "west": 7, "east": 2, "north": 7}}
+{"name": "Poroggo", "strength": {"south": 7, "west": 3, "east": 3, "north": 6}}
+{"name": "Vedrfolnir", "strength": {"south": 7, "west": 2, "east": 4, "north": 8}}
+{"name": "Coeurlregina", "strength": {"south": 5, "west": 5, "east": 8, "north": 5}}
+{"name": "Progenitrix", "strength": {"south": 3, "west": 6, "east": 6, "north": 6}}
+{"name": "Belladonna", "strength": {"south": 3, "west": 7, "east": 7, "north": 3}}
+{"name": "Echidna", "strength": {"south": 7, "west": 4, "east": 4, "north": 6}}
+{"name": "Pipin Tarupin", "strength": {"south": 6, "west": 5, "east": 6, "north": 6}}
+{"name": "Julyan Manderville", "strength": {"south": 5, "west": 6, "east": 7, "north": 6}}
+{"name": "Moglin", "strength": {"south": 4, "west": 5, "east": 5, "north": 8}}
+{"name": "Charibert", "strength": {"south": 4, "west": 8, "east": 3, "north": 7}}
+{"name": "Roundrox", "strength": {"south": 8, "west": 2, "east": 8, "north": 2}}
+{"name": "Senor Sabotender", "strength": {"south": 7, "west": 5, "east": 6, "north": 9}}
+{"name": "Regula van Hydrus", "strength": {"south": 6, "west": 8, "east": 8, "north": 8}}
+{"name": "Archbishop Thordan VII", "strength": {"south": 10, "west": 1, "east": 9, "north": 7}}
+{"name": "Honoroit", "strength": {"south": 7, "west": 2, "east": 2, "north": 7}}
+{"name": "Hoary Boulder & Coultenet", "strength": {"south": 2, "west": 7, "east": 7, "north": 2}}
+{"name": "Brachiosaur", "strength": {"south": 5, "west": 4, "east": 4, "north": 8}}
+{"name": "Darkscale", "strength": {"south": 4, "west": 8, "east": 7, "north": 2}}
+{"name": "Fenrir", "strength": {"south": 6, "west": 3, "east": 4, "north": 7}}
+{"name": "Kraken", "strength": {"south": 6, "west": 6, "east": 6, "north": 3}}
+{"name": "Vicegerent to the Warden", "strength": {"south": 7, "west": 1, "east": 5, "north": 7}}
+{"name": "Manxome Molaa Ja Ja", "strength": {"south": 2, "west": 7, "east": 8, "north": 3}}
+{"name": "Ferdiad", "strength": {"south": 8, "west": 6, "east": 4, "north": 4}}
+{"name": "Calcabrina", "strength": {"south": 6, "west": 6, "east": 3, "north": 6}}
+{"name": "Kuribu", "strength": {"south": 2, "west": 3, "east": 7, "north": 8}}
+{"name": "Phlegethon", "strength": {"south": 6, "west": 7, "east": 7, "north": 1}}
+{"name": "Artoirel de Fortemps", "strength": {"south": 3, "west": 7, "east": 7, "north": 4}}
+{"name": "Emmanellain de Fortemps", "strength": {"south": 7, "west": 4, "east": 3, "north": 7}}
+{"name": "Xande", "strength": {"south": 6, "west": 4, "east": 7, "north": 9}}
+{"name": "Brute Justice", "strength": {"south": 7, "west": 7, "east": 7, "north": 7}}
+{"name": "Sephirot", "strength": {"south": 8, "west": 8, "east": 6, "north": 6}}
+{"name": "F'lhaminn", "strength": {"south": 3, "west": 7, "east": 7, "north": 9}}
+{"name": "Vidofnir", "strength": {"south": 8, "west": 6, "east": 6, "north": 8}}
+{"name": "Cloud of Darkness", "strength": {"south": 7, "west": 10, "east": 6, "north": 7}}
+{"name": "Lolorito Nanarito", "strength": {"south": 7, "west": 3, "east": 3, "north": 4}}
+{"name": "Gibrillont", "strength": {"south": 3, "west": 6, "east": 6, "north": 2}}
+{"name": "Laniaitte de Haillenarte", "strength": {"south": 3, "west": 6, "east": 3, "north": 7}}
+{"name": "Rhoswen", "strength": {"south": 4, "west": 6, "east": 6, "north": 5}}
+{"name": "Carvallain de Gorgagne", "strength": {"south": 7, "west": 7, "east": 2, "north": 2}}
+{"name": "Kal Myhk", "strength": {"south": 4, "west": 8, "east": 8, "north": 1}}
+{"name": "Waukkeon", "strength": {"south": 7, "west": 6, "east": 7, "north": 1}}
+{"name": "Curator", "strength": {"south": 4, "west": 6, "east": 7, "north": 4}}
+{"name": "Mistbeard", "strength": {"south": 7, "west": 6, "east": 6, "north": 5}}
+{"name": "Unei & Doga", "strength": {"south": 6, "west": 8, "east": 8, "north": 6}}
+{"name": "Tiamat", "strength": {"south": 5, "west": 6, "east": 6, "north": 9}}
+{"name": "Calofisteri", "strength": {"south": 7, "west": 8, "east": 8, "north": 5}}
+{"name": "Hraesvelgr", "strength": {"south": 10, "west": 7, "east": 6, "north": 7}}
+{"name": "Apkallu", "strength": {"south": 4, "west": 4, "east": 1, "north": 3}}
+{"name": "Colibri", "strength": {"south": 4, "west": 1, "east": 1, "north": 6}}
+{"name": "Magitek Death Claw", "strength": {"south": 2, "west": 3, "east": 3, "north": 4}}
+{"name": "Liquid Flame", "strength": {"south": 6, "west": 3, "east": 6, "north": 4}}
+{"name": "Lost Lamb", "strength": {"south": 4, "west": 3, "east": 5, "north": 7}}
+{"name": "Delivery Moogle", "strength": {"south": 6, "west": 5, "east": 3, "north": 5}}
+{"name": "Magitek Colossus", "strength": {"south": 6, "west": 3, "east": 3, "north": 6}}
+{"name": "Strix", "strength": {"south": 1, "west": 7, "east": 7, "north": 5}}
+{"name": "Tozol Huatotl", "strength": {"south": 6, "west": 6, "east": 2, "north": 7}}
+{"name": "Alexander Prime", "strength": {"south": 2, "west": 3, "east": 8, "north": 7}}
+{"name": "Brendt, Brennan, & Bremondt", "strength": {"south": 6, "west": 7, "east": 5, "north": 4}}
+{"name": "Heavensward Thancred", "strength": {"south": 7, "west": 1, "east": 9, "north": 8}}
+{"name": "Heavensward Y'shtola", "strength": {"south": 2, "west": 9, "east": 5, "north": 9}}
+{"name": "Nael van Darnus", "strength": {"south": 3, "west": 9, "east": 9, "north": 3}}
+{"name": "Sophia", "strength": {"south": 5, "west": 8, "east": 6, "north": 10}}
